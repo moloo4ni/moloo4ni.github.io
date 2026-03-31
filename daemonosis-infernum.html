@@ -586,64 +586,61 @@
     margin-right: 2px;
   }
 
-  /* ── Wiki Navigation Bar ── */
+  /* ── Wiki Navbar ── */
   .wiki-nav {
-    background: #070909;
-    border-bottom: 1px solid #1e2830;
-    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
     z-index: 100;
-    animation: fadeDown 0.5s ease both;
+    background: var(--bg);
   }
-
   .wiki-nav-inner {
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 24px;
+    height: 48px;
     display: flex;
     align-items: center;
-    gap: 0;
   }
-
-  .wiki-home-link {
+  .wiki-logo {
     font-family: 'Inconsolata', monospace;
     font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #d8e8f0;
+    color: var(--text-bright);
     text-decoration: none;
-    border: 1px solid #2a3a4a;
-    padding: 5px 14px;
-    margin-right: 16px;
+    padding: 6px 14px;
+    border: 1px solid var(--border-accent);
     flex-shrink: 0;
-    transition: background 0.2s;
+    transition: background 0.15s;
   }
-
-  .wiki-home-link:hover { background: rgba(74,154,184,0.08); }
-
-  .wiki-nav-links {
-    display: flex;
-    gap: 0;
+  .wiki-logo:hover { background: rgba(255,255,255,0.04); }
+  .wiki-back {
     font-family: 'Inconsolata', monospace;
     font-size: 10px;
-    letter-spacing: 0.1em;
-    flex-wrap: wrap;
-  }
-
-  .wiki-nav-link {
-    color: #506070;
-    text-decoration: none;
-    padding: 5px 12px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    transition: color 0.2s, background 0.2s;
-    border-left: 1px solid #1e2830;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-left: 1px solid var(--border);
+    transition: color 0.15s;
     white-space: nowrap;
   }
-
-  .wiki-nav-link:hover { color: #4a9ab8; background: rgba(74,154,184,0.05); }
-  .wiki-nav-link.current { color: #b0bcc8; }
+  .wiki-back:hover { color: var(--text-bright); }
+  .wiki-breadcrumb {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    padding: 0 14px;
+    border-left: 1px solid var(--border);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wiki-breadcrumb span { color: var(--text); }
 
 </style>
 </head>
@@ -651,26 +648,13 @@
 
 <div class="wiki-nav">
   <div class="wiki-nav-inner">
-    <a href="index.html" class="wiki-home-link">Патологиариум</a>
-    <div class="wiki-nav-links">
-      <a href="index.html" class="wiki-nav-link">◂ Каталог</a>
-      <a href="daemonosis-infernum.html" class="wiki-nav-link current">Daemonosis Infernum</a>
-      <a href="felis-nervosa.html" class="wiki-nav-link">Felis-Nervosa</a>
-      <a href="calcium-angel.html" class="wiki-nav-link">Calcangelus Ossificans</a>
-      <a href="acantha-nervosa.html" class="wiki-nav-link">Acantha-Nervosa</a>
-    </div>
+    <a href="index.html" class="wiki-logo">Патологиариум</a>
+    <a href="index.html" class="wiki-back">← Каталог</a>
+    <div class="wiki-breadcrumb"><span>Daemonosis Infernum</span></div>
   </div>
 </div>
 
 <div class="layout">
-
-  <!-- Site header -->
-  <header class="site-header">
-    <div class="site-logo">Патологический Архив</div>
-    <div class="breadcrumb">
-      Лор-материал › Болезни и синдромы › <span>Daemonosis Infernum</span>
-    </div>
-  </header>
 
   <!-- Article header -->
   <div class="article-header">

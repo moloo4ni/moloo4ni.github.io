@@ -58,48 +58,61 @@
     z-index: 1;
   }
 
-  /* ── Site nav ── */
-  .site-nav {
+  /* ── Wiki Navbar ── */
+  .wiki-nav {
     border-bottom: 1px solid var(--border);
-    padding: 14px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+  }
+  .wiki-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 48px;
     display: flex;
     align-items: center;
-    gap: 20px;
-    animation: fadeDown 0.5s ease both;
   }
-
-  .site-logo-full {
+  .wiki-logo {
     font-family: 'Inconsolata', monospace;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.25em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--text-bright);
-    border: 1px solid var(--border-accent);
-    padding: 5px 14px;
     text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--border-accent);
+    flex-shrink: 0;
+    transition: background 0.15s;
   }
-
-  .nav-links {
-    display: flex;
-    gap: 0;
-    margin-left: auto;
+  .wiki-logo:hover { background: rgba(255,255,255,0.04); }
+  .wiki-back {
     font-family: 'Inconsolata', monospace;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-  }
-
-  .nav-link {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--text-dim);
     text-decoration: none;
     padding: 6px 14px;
     border-left: 1px solid var(--border);
-    text-transform: uppercase;
-    transition: color 0.2s, background 0.2s;
+    transition: color 0.15s;
+    white-space: nowrap;
   }
-
-  .nav-link:hover { color: var(--accent); background: rgba(74, 154, 184, 0.05); }
-  .nav-link.active { color: var(--accent); }
+  .wiki-back:hover { color: var(--text-bright); }
+  .wiki-breadcrumb {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    padding: 0 14px;
+    border-left: 1px solid var(--border);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wiki-breadcrumb span { color: var(--text); }
 
   /* ── Hero ── */
   .hero {
@@ -490,17 +503,11 @@
 <body>
 <div class="layout">
 
-  <nav class="site-nav">
-    <a href="index.html" class="site-logo-full">Патологиариум</a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link active">Каталог</a>
-      <a href="daemonosis-infernum.html" class="nav-link">Daemonosis</a>
-      <a href="felis-nervosa.html" class="nav-link">Felis-Nervosa</a>
-      <a href="calcium-angel.html" class="nav-link">Calcangelus</a>
-      <a href="acantha-nervosa.html" class="nav-link">Acantha</a>
-      <a href="fulgor-nervosa.html" class="nav-link">Fulgor</a>
+  <div class="wiki-nav">
+    <div class="wiki-nav-inner">
+      <a href="index.html" class="wiki-logo">Патологиариум</a>
     </div>
-  </nav>
+  </div>
 
   <div class="hero">
     <div class="hero-eyebrow">Вымышленный архив · Лор-материал</div>
