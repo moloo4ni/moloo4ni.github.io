@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;700&display=swap');
+
+:root {
+  --bg: #0f172a;
+  --surface: #111c34;
+  --surface-2: #172543;
+  --text: #dbe7ff;
+  --muted: #9db0d9;
+  --accent: #76a9ff;
+  --accent-2: #4e7ad1;
+  --border: #2a3d66;
+  --ok: #59d199;
+  --warn: #ffbe5c;
+  --danger: #ff768d;
+  --shadow: 0 14px 38px rgba(3, 10, 26, .35);
+}
+
+:root[data-theme='light'] {
+  --bg: #f4f8ff;
+  --surface: #ffffff;
+  --surface-2: #edf4ff;
+  --text: #12213d;
+  --muted: #46608a;
+  --accent: #2d63d8;
+  --accent-2: #274ca1;
+  --border: #c8d7f0;
+  --ok: #1e9f6e;
+  --warn: #b27816;
+  --danger: #c33d53;
+  --shadow: 0 10px 24px rgba(45, 99, 216, .12);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Inter', 'IBM Plex Sans', sans-serif;
+  background: radial-gradient(circle at 15% -10%, rgba(118,169,255,.16), transparent 40%), var(--bg);
+  color: var(--text);
+}
+
+a { color: var(--accent); }
+
+.container { width: min(1100px, 92vw); margin: 0 auto; }
+
+.topbar {
+  position: sticky; top: 0; z-index: 30;
+  backdrop-filter: blur(8px);
+  background: color-mix(in oklab, var(--bg) 84%, transparent);
+  border-bottom: 1px solid var(--border);
+}
+.topbar-inner { display: flex; align-items: center; gap: 10px; padding: 10px 0; }
+.brand { font-weight: 800; text-decoration: none; color: var(--text); letter-spacing: .02em; }
+.spacer { flex: 1; }
+.controls { display: flex; gap: 8px; }
+.btn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.btn:hover, .tag-btn:hover { border-color: var(--accent); }
+
+.hero { padding: 54px 0 28px; }
+.hero h1 { font-size: clamp(30px, 5vw, 54px); margin: 0 0 12px; }
+.hero p { color: var(--muted); font-size: 18px; max-width: 760px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 16px; }
+.card {
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.card h3 { margin-top: 0; margin-bottom: 8px; }
+.card p { color: var(--muted); }
+
+.search-wrap { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 10px 0 24px; }
+.search {
+  width: 100%; border: 1px solid var(--border); border-radius: 12px; padding: 11px 12px;
+  background: var(--surface); color: var(--text);
+}
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag-btn {
+  border: 1px solid var(--border); border-radius: 999px; padding: 7px 10px;
+  background: var(--surface); color: var(--muted); cursor: pointer; font-size: 12px;
+}
+.tag-btn.active { color: var(--text); border-color: var(--accent); }
+
+.meta { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 13px; }
+.section-title { margin: 28px 0 10px; font-size: 26px; }
+
+.article {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+  padding-bottom: 42px;
+}
+.side { position: sticky; top: 76px; align-self: start; }
+
+.info-list { list-style: none; margin: 0; padding: 0; }
+.info-list li { padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--muted); }
+
+.note { border-left: 4px solid var(--accent); padding: 10px 12px; background: var(--surface-2); border-radius: 10px; }
+
+.footer { padding: 24px 0 34px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); }
+
+.lang-en { display: none; }
+:root[data-lang='en'] .lang-ru { display: none; }
+:root[data-lang='en'] .lang-en { display: inline; }
+:root[data-lang='ru'] .lang-en { display: none; }
+:root[data-lang='ru'] .lang-ru { display: inline; }
+
+/* Per-disease color accents */
+body[data-disease='acantha'] { --accent: #d97f35; --accent-2: #a85f2b; }
+body[data-disease='daemonosis'] { --accent: #ff6c80; --accent-2: #c64357; }
+body[data-disease='felis'] { --accent: #59b6c9; --accent-2: #2e8395; }
+body[data-disease='fulgor'] { --accent: #7f95ff; --accent-2: #5168ce; }
+body[data-disease='calcium'] { --accent: #a58ce8; --accent-2: #7159b3; }
+
+@media (max-width: 900px) {
+  .article { grid-template-columns: 1fr; }
+  .side { position: static; }
+  .hero p { font-size: 16px; }
+}
