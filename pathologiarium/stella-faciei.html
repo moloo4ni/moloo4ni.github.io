@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stella Faciei — Синдром Лицевой Звезды</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inconsolata:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:            #09080e;
+    --bg2:           #0e0d16;
+    --bg3:           #141220;
+    --border:        #1e1c2e;
+    --border-accent: #2e2a50;
+    --text:          #c8c4e0;
+    --text-dim:      #5a5470;
+    --text-bright:   #f0ecff;
+    --accent:        #e8d060;    /* звёздный золотой */
+    --accent2:       #2a2418;
+    --accent3:       #1a1810;
+    --star-white:    #f8f4ff;    /* белая звезда (тёмная кожа) */
+    --star-dark:     #1a1520;    /* чёрная звезда (светлая кожа) */
+    --glow-gold:     rgba(232, 208, 96, 0.12);
+    --glow-white:    rgba(248, 244, 255, 0.08);
+    --danger:        #c84848;
+    --warn:          #e89040;
+    --cosmic:        #a090f0;    /* космический фиолетовый */
+    --dust:          #907860;    /* цвет праха */
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Libre Baskerville', serif;
+    font-size: 15px;
+    line-height: 1.8;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.7;
+  }
+
+  /* Звёздное свечение снизу — как свет звезды из-за горизонта */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 50% 30% at 50% 110%, rgba(232,208,96,0.10) 0%, transparent 70%),
+      radial-gradient(ellipse 30% 20% at 20% 0%, rgba(160,144,240,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Wiki Navbar ── */
+  .wiki-nav {
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+  }
+  .wiki-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+  }
+  .wiki-logo {
+    font-family: 'Inconsolata', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+    text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--border-accent);
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .wiki-logo:hover { background: rgba(255,255,255,0.04); }
+  .wiki-back {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-left: 1px solid var(--border);
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+  .wiki-back:hover { color: var(--text-bright); }
+  .wiki-breadcrumb {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    padding: 0 14px;
+    border-left: 1px solid var(--border);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wiki-breadcrumb span { color: var(--accent); }
+
+  /* ── Layout ── */
+  .layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Article header ── */
+  .article-header {
+    padding: 52px 0 36px;
+    border-bottom: 1px solid var(--border);
+    animation: fadeDown 0.7s 0.1s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Звёздный паттерн — декор */
+  .star-deco {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 320px;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.04;
+  }
+
+  .article-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .article-label::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'IM Fell English', serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    color: var(--text-bright);
+    line-height: 1.15;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .sci-name {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .article-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  .meta-item { display: flex; gap: 6px; }
+  .meta-item b { color: var(--text); font-weight: 600; }
+
+  /* ── Content grid ── */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 40px;
+    padding: 40px 0;
+    align-items: start;
+  }
+
+  @media (max-width: 750px) {
+    .content-grid { grid-template-columns: 1fr; }
+    .sidebar { order: -1; }
+  }
+
+  /* ── Infobox ── */
+  .infobox {
+    border: 1px solid var(--border-accent);
+    background: var(--bg2);
+    animation: fadeLeft 0.8s 0.3s ease both;
+    position: sticky;
+    top: 56px;
+  }
+
+  .infobox-title {
+    background: var(--accent2);
+    padding: 10px 16px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+    border-bottom: 1px solid var(--border-accent);
+  }
+
+  .infobox-body { padding: 0; }
+
+  .infobox-row {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .infobox-row:last-child { border-bottom: none; }
+
+  .infobox-key {
+    background: var(--bg3);
+    padding: 9px 12px;
+    width: 110px;
+    flex-shrink: 0;
+    color: var(--text-dim);
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+  }
+
+  .infobox-val {
+    padding: 9px 12px;
+    color: var(--text);
+    flex: 1;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+
+  .infobox-val.danger { color: var(--danger); font-weight: 700; }
+  .infobox-val.warning { color: var(--warn); }
+  .infobox-val.ok { color: var(--accent); }
+  .infobox-val em { color: var(--accent); font-style: italic; }
+  .infobox-val.cosmic { color: var(--cosmic); }
+
+  .tags {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border: 1px solid var(--border-accent);
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    animation: fadeIn 0.6s 0.4s ease both;
+  }
+
+  .toc-title {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .toc ol { padding-left: 16px; font-size: 13px; line-height: 2; }
+  .toc a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+  .toc a:hover { color: var(--star-white); }
+  .toc .sub { padding-left: 16px; list-style: none; font-size: 12px; }
+  .toc .sub li::before { content: '↳ '; color: var(--text-dim); }
+
+  /* ── Article body ── */
+  .article-body { animation: fadeIn 0.7s 0.25s ease both; }
+  section { margin-bottom: 48px; }
+
+  h2 {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.55rem;
+    color: var(--text-bright);
+    border-bottom: 1px solid var(--border-accent);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  h2 .sec-num {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+
+  p { margin-bottom: 14px; color: var(--text); }
+
+  .lead {
+    font-size: 1.05rem;
+    color: var(--text-bright);
+    line-height: 1.9;
+    border-left: 2px solid var(--accent);
+    padding-left: 18px;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  /* ── Stage cards ── */
+  .stage-card {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    margin: 20px 0;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .stage-card:hover { border-color: var(--border-accent); }
+
+  .stage-header {
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stage-num {
+    font-family: 'Inconsolata', monospace;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .stage-card.s1 .stage-num { color: #907840; opacity: 0.5; }
+  .stage-card.s2 .stage-num { color: #c8a840; opacity: 0.65; }
+  .stage-card.s3 .stage-num { color: var(--accent); opacity: 0.8; }
+  .stage-card.s4 .stage-num { color: var(--accent); opacity: 0.95; text-shadow: 0 0 12px rgba(232,208,96,0.4); }
+  .stage-card.s5 .stage-num { color: var(--star-white); opacity: 0.9; text-shadow: 0 0 20px rgba(248,244,255,0.5); }
+  .stage-card.s6 .stage-num { color: var(--dust); opacity: 0.7; }
+
+  .stage-title-block h3 { margin: 0; font-size: 1.05rem; color: var(--text-bright); }
+
+  .stage-subtitle {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  .stage-duration {
+    margin-left: auto;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .stage-badge {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--accent2);
+    color: var(--accent);
+    padding: 2px 8px;
+    margin-left: 6px;
+  }
+
+  .stage-badge.fatal { background: #2a0e0e; color: var(--danger); }
+  .stage-badge.cosmic { background: #1a1830; color: var(--cosmic); }
+  .stage-badge.dust { background: #1e1810; color: var(--dust); }
+
+  .stage-body { padding: 16px 18px; }
+
+  .stage-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  @media (max-width: 580px) { .stage-cols { grid-template-columns: 1fr; } }
+
+  .stage-block-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .symptom-list { list-style: none; font-size: 13.5px; line-height: 1.7; }
+
+  .symptom-list li {
+    padding: 3px 0 3px 14px;
+    position: relative;
+    color: var(--text);
+  }
+
+  .symptom-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 10px;
+    top: 5px;
+  }
+
+  .stage-card.s5 .symptom-list li::before { color: var(--star-white); opacity: 0.8; }
+  .stage-card.s6 .symptom-list li::before { color: var(--dust); }
+
+  .mechanism-text {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* ── Boxes ── */
+  .warning-box {
+    border: 1px solid var(--danger);
+    background: rgba(200, 72, 72, 0.06);
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .note-box {
+    border: 1px solid var(--border-accent);
+    background: rgba(232, 208, 96, 0.04);
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    color: var(--text-dim);
+  }
+
+  .cosmic-box {
+    border: 1px solid #2e2a5a;
+    background: rgba(160, 144, 240, 0.05);
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .dust-box {
+    border: 1px solid #3a2e1a;
+    background: rgba(144, 120, 96, 0.06);
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    color: var(--text-dim);
+  }
+
+  .warning-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; color: var(--danger); }
+  .note-icon    { flex-shrink: 0; margin-top: 2px; color: var(--accent); }
+  .cosmic-icon  { flex-shrink: 0; margin-top: 2px; color: var(--cosmic); font-style: normal; }
+  .dust-icon    { flex-shrink: 0; margin-top: 2px; color: var(--dust); }
+
+  /* ── Star color diagram ── */
+  .star-color-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  .star-color-cell {
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .star-color-cell.dark-skin {
+    background: #140e0a;
+  }
+
+  .star-color-cell.light-skin {
+    background: #12101a;
+  }
+
+  .star-color-header {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .star-color-cell.dark-skin .star-color-header { color: #a09080; }
+  .star-color-cell.light-skin .star-color-header { color: #8080a0; }
+
+  .star-sample {
+    width: 48px;
+    height: 48px;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    flex-shrink: 0;
+  }
+
+  .star-sample.white-star {
+    background: var(--star-white);
+    box-shadow: 0 0 20px rgba(248,244,255,0.4), 0 0 40px rgba(248,244,255,0.15);
+  }
+
+  .star-sample.black-star {
+    background: var(--star-dark);
+    box-shadow: 0 0 12px rgba(26,21,32,0.6), 0 0 30px rgba(160,144,240,0.10);
+  }
+
+  .star-color-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .star-color-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .star-temp {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--warn);
+    margin-top: 4px;
+  }
+
+  /* ── Stat row ── */
+  .stat-row {
+    display: flex;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  .stat-cell {
+    flex: 1;
+    padding: 14px 16px;
+    background: var(--bg2);
+    font-family: 'Inconsolata', monospace;
+  }
+
+  .stat-val {
+    font-size: 20px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .stat-label {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .stat-cell.s-gold .stat-val { color: var(--accent); }
+  .stat-cell.s-white .stat-val { color: var(--star-white); text-shadow: 0 0 10px rgba(248,244,255,0.3); }
+  .stat-cell.s-cosmic .stat-val { color: var(--cosmic); }
+  .stat-cell.s-red .stat-val { color: var(--danger); }
+
+  /* ── Progression bar ── */
+  .prog-bar-wrap {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 16px 18px;
+    margin: 20px 0;
+  }
+
+  .prog-bar-title {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+
+  .prog-stages {
+    display: flex;
+    height: 10px;
+    gap: 2px;
+  }
+
+  .prog-seg {
+    flex: 1;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+
+  .prog-seg:hover { opacity: 1; }
+
+  .prog-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Treatment table ── */
+  .treatment-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin: 20px 0;
+    border: 1px solid var(--border);
+  }
+
+  .treatment-table th {
+    background: var(--bg3);
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border-accent);
+  }
+
+  .treatment-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .treatment-table tr:last-child td { border-bottom: none; }
+  .treatment-table tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+
+  .stage-pill {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border: 1px solid var(--border-accent);
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  .prog-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .prog-ok   { background: var(--accent); }
+  .prog-warn { background: var(--warn); }
+  .prog-bad  { background: var(--danger); }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-note {
+    font-style: italic;
+    font-family: 'IM Fell English', serif;
+    font-size: 12px;
+    color: var(--accent);
+    opacity: 0.6;
+    letter-spacing: 0;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Subtle star pulse on s4-s5 stage headers */
+  .stage-card.s4 .stage-header,
+  .stage-card.s5 .stage-header {
+    background: rgba(232, 208, 96, 0.03);
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <div class="wiki-nav">
+    <div class="wiki-nav-inner">
+      <a href="index.html" class="wiki-logo">Патологиариум</a>
+      <a href="index.html" class="wiki-back">← Архив</a>
+      <div class="wiki-breadcrumb">Остеокожное · <span>Stella Faciei</span></div>
+    </div>
+  </div>
+
+  <div class="article-header">
+    <!-- Декоративная звезда -->
+    <svg class="star-deco" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="160,20 185,110 280,110 205,165 230,255 160,200 90,255 115,165 40,110 135,110" fill="white"/>
+    </svg>
+
+    <div class="article-label">Остеокожная трансформация · Фотоизлучающее · Высокий приоритет</div>
+    <h1>Синдром Лицевой Звезды</h1>
+    <span class="sci-name">Stella Faciei</span>
+    <div class="article-meta">
+      <div class="meta-item">Тип: <b>Костно-кожная трансформация</b></div>
+      <div class="meta-item">Стадий: <b>6</b></div>
+      <div class="meta-item">Летальность: <b>~90% (ст. VI)</b></div>
+      <div class="meta-item">Лечение: <b>Только ст. I–II</b></div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <main class="article-body">
+
+      <div class="toc">
+        <div class="toc-title">Содержание</div>
+        <ol>
+          <li><a href="#overview">Общее описание</a></li>
+          <li><a href="#mechanism">Механизм действия</a></li>
+          <li><a href="#star-color">Феномен инверсии пигментации</a></li>
+          <li><a href="#stages">Стадии прогрессии</a>
+            <ul class="sub">
+              <li><a href="#s1">I — Лицевая боль</a></li>
+              <li><a href="#s2">II — Протозвезда</a></li>
+              <li><a href="#s3">III — Коронация</a></li>
+              <li><a href="#s4">IV — Космический интерес</a></li>
+              <li><a href="#s5">V — Световой транс</a></li>
+              <li><a href="#s6">VI — Распад звезды</a></li>
+            </ul>
+          </li>
+          <li><a href="#treatment">Лечение и прогноз</a></li>
+          <li><a href="#threat">Угроза для окружающих</a></li>
+        </ol>
+      </div>
+
+      <!-- §1 Overview -->
+      <section id="overview">
+        <h2><span class="sec-num">§1</span> Общее описание</h2>
+        <p class="lead">Stella Faciei — единственный известный патоген, следствием которого является рост светящегося костно-кожного образования в форме звезды непосредственно на лице носителя. Звезда горяча, видима, излучает свет — и в конечном счёте убивает своего хозяина, рассыпаясь в пыль.</p>
+        <p>Болезнь протекает в шести последовательных стадиях. На начальных — носитель испытывает боль в области лица без видимых внешних изменений. Затем на коже начинает формироваться характерное образование, которое постепенно разрастается, перекрывая нос, глаза, лоб и брови. Несмотря на масштаб перекрытия, дыхание и зрение носителя остаются функциональными — вирус модифицирует соответствующие рецепторы и каналы для работы в обход физических барьеров.</p>
+        <p>Параллельно с физической трансформацией развивается характерный поведенческий синдром: носитель начинает испытывать нарастающее влечение к астрономии, космосу, экзистенциальным вопросам о смысле существования. В поздних стадиях это влечение достигает такой интенсивности, что носитель входит в коматозный транс с полным свечением тела.</p>
+
+        <div class="stat-row">
+          <div class="stat-cell s-gold">
+            <span class="stat-val">6 стадий</span>
+            <span class="stat-label">Прогрессия</span>
+          </div>
+          <div class="stat-cell s-white">
+            <span class="stat-val">≈37–42°C</span>
+            <span class="stat-label">Температура звезды</span>
+          </div>
+          <div class="stat-cell s-cosmic">
+            <span class="stat-val">Инверсия</span>
+            <span class="stat-label">Пигментация звезды</span>
+          </div>
+          <div class="stat-cell s-red">
+            <span class="stat-val">~90%</span>
+            <span class="stat-label">Летальность (ст. VI)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- §2 Mechanism -->
+      <section id="mechanism">
+        <h2><span class="sec-num">§2</span> Механизм действия</h2>
+        <p>Возбудитель проникает через слизистые оболочки носа и рта и немедленно мигрирует в надкостницу лицевых костей — прежде всего лобной кости, носовых костей и верхнечелюстного сустава. Именно этим объясняется первичная симптоматика: боль концентрируется там, где вирус наиболее активен.</p>
+        <p>В отличие от большинства известных патогенов, Stella Faciei не разрушает ткань хоста, а перепрограммирует остеобласты — клетки, ответственные за рост костной ткани. Они начинают продуцировать модифицированный остеоид с высокой концентрацией биолюминесцентных белков. Этот материал выходит сквозь кожу, формируя характерную звёздную структуру снаружи черепа.</p>
+        <p>Одновременно вирус реорганизует рецепторный слой под звездой: зрительные нервы переориентируются, образуя прямые проводящие пути в обход физических преград, а дыхательные каналы получают дополнительную иннервацию через нёбо. Субъективно носитель видит и дышит нормально — хотя объективно нос и глаза закрыты звёздной пластиной.</p>
+
+        <div class="note-box">
+          <span class="note-icon">★</span>
+          <span>Механизм сохранения зрения и дыхания под звездой остаётся наименее изученным аспектом болезни. Существующие гипотезы включают прямую фотопроводимость через материал звезды и формирование новых нейронных маршрутов в обход рецепторов.</span>
+        </div>
+      </section>
+
+      <!-- §3 Star color -->
+      <section id="star-color">
+        <h2><span class="sec-num">§3</span> Феномен инверсии пигментации</h2>
+        <p>Одной из наиболее характерных особенностей Stella Faciei является строгая пигментационная инверсия звезды относительно цвета кожи носителя. Материал звезды формируется в зависимости от концентрации меланина в коже хоста — и всегда оказывается на противоположном конце спектра.</p>
+
+        <div class="star-color-grid">
+          <div class="star-color-cell dark-skin">
+            <div class="star-color-header">Тёмная кожа носителя</div>
+            <div class="star-color-row">
+              <div class="star-sample white-star"></div>
+              <div>
+                <div class="star-color-desc">Звезда формируется белой или бледно-жемчужной. Контраст с кожей носителя максимален. Излучает тёплый равномерный свет.</div>
+                <div class="star-temp">≈ 40–42°C на поверхности</div>
+              </div>
+            </div>
+          </div>
+          <div class="star-color-cell light-skin">
+            <div class="star-color-header">Светлая кожа носителя</div>
+            <div class="star-color-row">
+              <div class="star-sample black-star"></div>
+              <div>
+                <div class="star-color-desc">Звезда формируется чёрной или антрацитовой. Поглощает свет, но излучает его по краям — едва видимое фиолетовое мерцание.</div>
+                <div class="star-temp">≈ 37–39°C на поверхности</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p>Температура поверхности звезды стабильно превышает температуру тела носителя на 1–4 градуса. Прикосновение к звезде другим человеком ощущается как прикосновение к нагретому металлу — неприятно, но не опасно на ранних стадиях. На поздних стадиях интенсивность излучения возрастает до уровня заметного свечения даже при дневном освещении.</p>
+
+        <div class="cosmic-box">
+          <span class="cosmic-icon">◈</span>
+          <span>Ряд наблюдателей фиксировал, что носители с белой звездой описывают её как «тёплую» и «живую», тогда как носители с чёрной звездой склонны описывать её как «холодную пустоту, которая всё равно горит». Это различие в субъективном восприятии исследователи связывают с разными механизмами теплопроводности материала.</span>
+        </div>
+      </section>
+
+      <!-- §4 Stages -->
+      <section id="stages">
+        <h2><span class="sec-num">§4</span> Стадии прогрессии</h2>
+        <p>Болезнь протекает в шести последовательных стадиях. Первые три связаны преимущественно с физической трансформацией лица; четвёртая — с психологической и поведенческой трансформацией; пятая и шестая — с финальным космическим событием.</p>
+
+        <div class="prog-bar-wrap">
+          <div class="prog-bar-title">Прогрессия · Визуальная шкала</div>
+          <div class="prog-stages">
+            <div class="prog-seg" style="background:#604010;" title="I"></div>
+            <div class="prog-seg" style="background:#907830;" title="II"></div>
+            <div class="prog-seg" style="background:#c8a840;" title="III"></div>
+            <div class="prog-seg" style="background:#e8d060;" title="IV"></div>
+            <div class="prog-seg" style="background:#f8f4ff;" title="V"></div>
+            <div class="prog-seg" style="background:#907860;" title="VI"></div>
+          </div>
+          <div class="prog-labels">
+            <span>I · Боль</span>
+            <span>II · Почка</span>
+            <span>III · Звезда</span>
+            <span>IV · Транс</span>
+            <span>V · Свечение</span>
+            <span>VI · Распад</span>
+          </div>
+        </div>
+
+        <!-- Stage 1 -->
+        <div class="stage-card s1" id="s1">
+          <div class="stage-header">
+            <div class="stage-num">I</div>
+            <div class="stage-title-block">
+              <h3>Лицевая боль <span class="stage-badge">Начало</span></h3>
+              <div class="stage-subtitle">Миграция возбудителя · Надкостничная фаза</div>
+            </div>
+            <div class="stage-duration">Недели 1–3<br><span style="color:var(--accent);font-size:10px">★ ЛАТЕНТНАЯ</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Первая стадия проходит без каких-либо видимых внешних проявлений. Носитель ощущает нарастающую боль в лицевой области — преимущественно в районе переносицы, лба, глазниц и верхней челюсти. Боль носит тупой, давящий характер и часто принимается за синусит или мигрень.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>Давящая боль в районе переносицы и лба</li>
+                  <li>Боль в глазницах — ощущение «давления изнутри»</li>
+                  <li>Ноющая боль в верхних зубах и дёснах</li>
+                  <li>Лёгкая субфебрильная температура (37.2–37.6°C)</li>
+                  <li>Повышенная фоточувствительность</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Возбудитель мигрирует по надкостнице лицевых костей, раздражая болевые рецепторы в местах активного встраивания. Болевые ощущения соответствуют точкам будущего роста звезды — в этом смысле боль первой стадии является точной «картой» финальной структуры.</div>
+              </div>
+            </div>
+            <div class="note-box">
+              <span class="note-icon">★</span>
+              <span>На первой стадии болезнь с высокой вероятностью диагностируется как синусит, невралгия тройничного нерва или кластерная головная боль. Специфическая диагностика Stella Faciei возможна только по биопсии надкостницы или характерному паттерну боли.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="stage-card s2" id="s2">
+          <div class="stage-header">
+            <div class="stage-num">II</div>
+            <div class="stage-title-block">
+              <h3>Протозвезда <span class="stage-badge">Прорыв</span></h3>
+              <div class="stage-subtitle">Выход костного материала · Первый луч</div>
+            </div>
+            <div class="stage-duration">Недели 3–6<br><span style="color:var(--accent);font-size:10px">★ ВИДИМАЯ</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">На коже лба и переносицы появляются характерные уплотнения — точки прорыва костного материала сквозь кожу. Кожа над ними натягивается и приобретает странный блеск. Вскоре из этих точек начинают расти первые «лучи» — костные отростки, покрытые биолюминесцентным материалом. На данной стадии они невелики — несколько миллиметров.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>Уплотнения на коже лба — до 4–5 точек</li>
+                  <li>Первые лучи 2–8 мм длиной</li>
+                  <li>Слабое тепловое излучение в области прорывов</li>
+                  <li>Боль в точках прорыва — острая, кратковременная</li>
+                  <li>Незначительное свечение в темноте</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Модифицированные остеобласты формируют плотный биолюминесцентный остеоид, который механически раздвигает слои кожи. Процесс напоминает прорезывание зуба, но происходит на поверхности лица. Инверсия пигментации уже выражена — даже маленькие лучи имеют характерный белый или чёрный цвет.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 3 -->
+        <div class="stage-card s3" id="s3">
+          <div class="stage-header">
+            <div class="stage-num">III</div>
+            <div class="stage-title-block">
+              <h3>Коронация <span class="stage-badge">Формирование</span></h3>
+              <div class="stage-subtitle">Полный рост звезды · Перекрытие черт лица</div>
+            </div>
+            <div class="stage-duration">Месяц 2–4<br><span style="color:var(--accent);font-size:10px">★ ПОЛНАЯ ЗВЕЗДА</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Звезда достигает своих финальных размеров. Лучи разрастаются, перекрывая переносицу, нос, оба глаза, брови и лоб целиком. Несмотря на то что нос и глаза физически закрыты пластиной звезды — носитель дышит и видит в полном объёме. Звезда заметно тёплая на ощупь и светится в темноте достаточно ярко, чтобы освещать руки на расстоянии нескольких сантиметров.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Наблюдаемые изменения</div>
+                <ul class="symptom-list">
+                  <li>Звезда перекрывает нос, глаза, брови, лоб</li>
+                  <li>Дыхание и зрение носителя сохранены полностью</li>
+                  <li>Постоянное тепловое излучение звезды</li>
+                  <li>Видимое свечение в условиях слабого освещения</li>
+                  <li>Болевые ощущения первых стадий полностью уходят</li>
+                  <li>Лицо ниже звезды — рот и подбородок — не затронуто</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Биолюминесцентный материал звезды обладает частичной фотопроводимостью — свет проходит сквозь него направленно, достигая зрительных нервов. Дыхание перенаправлено преимущественно через рот и дополнительные субназальные каналы, сформированные вирусом. Болевые рецепторы в надкостнице деактивированы после завершения роста.</div>
+              </div>
+            </div>
+            <div class="cosmic-box">
+              <span class="cosmic-icon">◈</span>
+              <span>Носители третьей стадии нередко описывают исчезновение боли как «освобождение». Часть из них сообщала об ощущении тепла как комфортном, почти медитативном. Это субъективное благополучие является одной из причин, по которым носители отказываются от лечения на данном этапе.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 4 -->
+        <div class="stage-card s4" id="s4">
+          <div class="stage-header">
+            <div class="stage-num">IV</div>
+            <div class="stage-title-block">
+              <h3 style="text-shadow: 0 0 14px rgba(232,208,96,0.3);">Космический интерес <span class="stage-badge cosmic">Поведенческое</span></h3>
+              <div class="stage-subtitle">Когнитивная трансформация · Экзистенциальный поиск</div>
+            </div>
+            <div class="stage-duration">Месяцы 4–8<br><span style="color:var(--cosmic);font-size:10px">◈ КОГНИТИВНОЕ</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">На четвёртой стадии к физической трансформации добавляется выраженное поведенческое изменение. Носитель начинает испытывать нарастающее, порой навязчивое влечение к темам космоса, астрономии, звёзд, смысла жизни и природы существования. Это не психоз — интерес вполне структурирован и может проявляться в глубоком изучении физики, философии или теологии.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Поведенческие изменения</div>
+                <ul class="symptom-list">
+                  <li>Навязчивый интерес к астрономии и космологии</li>
+                  <li>Чтение научных и философских текстов о бытии</li>
+                  <li>Многочасовое созерцание ночного неба</li>
+                  <li>Ощущение родства со звёздами — не метафорическое</li>
+                  <li>Отстранённость от бытовых забот</li>
+                  <li>Нарастающая яркость свечения звезды</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Возбудитель достигает лимбической системы и изменяет профиль дофаминергических путей, связанных с вознаграждением. Созерцание звёзд и размышления о бесконечности начинают вызывать мощный нейрохимический отклик. Это биологически обусловленное влечение — а не расстройство личности.</div>
+              </div>
+            </div>
+            <div class="warning-box">
+              <span class="warning-icon">⚠</span>
+              <span>Поведенческие изменения четвёртой стадии часто принимаются за симптомы психического расстройства. Важно: это нейрохимическая трансформация, а не шизофрения. Попытки психиатрического лечения не только неэффективны, но и ускоряют прогрессию болезни через стресс-индуцированный механизм.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 5 -->
+        <div class="stage-card s5" id="s5">
+          <div class="stage-header">
+            <div class="stage-num">V</div>
+            <div class="stage-title-block">
+              <h3 style="color:#f8f4ff; text-shadow:0 0 20px rgba(248,244,255,0.3);">Световой транс <span class="stage-badge cosmic">Критическое</span></h3>
+              <div class="stage-subtitle">Коматозное свечение тела · Полная иммобилизация</div>
+            </div>
+            <div class="stage-duration">Дни–недели<br><span style="color:var(--danger);font-size:10px">✕ КРИТИЧНО</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Пятая стадия наступает внезапно. Носитель впадает в коматозное состояние — но не тёмное: его тело начинает светиться. Свечение охватывает всё тело целиком, включая конечности, но наиболее интенсивно — в области звезды на лице. Носитель недвижим, не реагирует на внешние раздражители, дышит медленно и равномерно.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Наблюдаемые проявления</div>
+                <ul class="symptom-list">
+                  <li>Коматозное состояние — нет реакции на внешние стимулы</li>
+                  <li>Полное свечение тела, наиболее яркое — звезда</li>
+                  <li>Температура тела повышена до 39–40°C</li>
+                  <li>Медленное, глубокое, регулярное дыхание</li>
+                  <li>ЭЭГ фиксирует необычные синхронизированные паттерны</li>
+                  <li>Звезда горяча настолько, что прикосновение болезненно</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Вирус полностью захватывает управление биолюминесцентными белками и запускает максимальную выработку. Биоэлектрические поля тела перестраиваются в единый синхронизированный паттерн. Мозговая активность при этом не угасает — напротив, фиксируются паттерны, аналогичные глубокой медитации или осознанному сновидению. Носитель субъективно «где-то далеко».</div>
+              </div>
+            </div>
+            <div class="warning-box">
+              <span class="warning-icon">☣</span>
+              <span>Носитель пятой стадии внешне выглядит мирно, однако находится в критическом состоянии. Попытки прервать транс — электрошок, сильные болевые стимулы, введение адреналина — зафиксированно ускоряют переход к шестой стадии. Рекомендуется мониторинг без вмешательства.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 6 -->
+        <div class="stage-card s6" id="s6">
+          <div class="stage-header">
+            <div class="stage-num">VI</div>
+            <div class="stage-title-block">
+              <h3 style="color:#b09070;">Распад звезды <span class="stage-badge dust">Финальная</span></h3>
+              <div class="stage-subtitle">Дезинтеграция · Оголённая плоть · Смерть</div>
+            </div>
+            <div class="stage-duration">Часы<br><span style="color:var(--danger);font-size:10px">✕ ЛЕТАЛЬНО</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Финальная стадия наступает из транса без предупреждения. Звезда начинает крошиться — сначала по краям лучей, затем от периферии к центру — и буквально рассыпается в мелкую тёплую пыль. Пыль оседает на кожу носителя и на поверхности вокруг. Под звездой нет кожи: только обнажённая плоть, мышцы, кости лицевого черепа без какого-либо покрова.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Ход распада</div>
+                <ul class="symptom-list">
+                  <li>Звезда начинает крошиться по краям лучей</li>
+                  <li>Дезинтеграция от периферии к центру — за 1–3 часа</li>
+                  <li>Под звездой — нет кожи, только оголённая плоть</li>
+                  <li>Пыль тёплая, светящаяся несколько минут после распада</li>
+                  <li>Носитель выходит из транса в момент или после распада</li>
+                  <li>Смерть от болевого шока и сепсиса — в ~90% случаев</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Биолюминесцентный остеоид утрачивает структурные связи — белковая матрица разрушается. Материал звезды не просто отмирает, а переходит в аморфное состояние — рассыпается. Кожа под звездой за время роста полностью атрофировалась: вирус подавлял её регенерацию, используя ресурсы для поддержания звезды. После распада — обнажённая раневая поверхность на большей части лица.</div>
+              </div>
+            </div>
+            <div class="dust-box">
+              <span class="dust-icon">◦</span>
+              <span>Единственный зафиксированный выживший после шестой стадии описывал момент выхода из транса как «возвращение из очень далёкого места». Он не помнил транс субъективно — лишь ощущение, что «побывал среди звёзд». Выживание стало возможным благодаря немедленному хирургическому вмешательству и кожной пластике в первые минуты после распада.</span>
+            </div>
+            <div class="warning-box">
+              <span class="warning-icon">☣</span>
+              <span>Носитель шестой стадии требует немедленной реанимационной помощи: противошоковая терапия, антибиотики широкого спектра, экстренная кожная пластика. Без вмешательства смерть от болевого шока и сепсиса наступает в течение 6–18 часов.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- §5 Treatment -->
+      <section id="treatment">
+        <h2><span class="sec-num">§5</span> Лечение и прогноз</h2>
+        <p>Лечение возможно только на первых двух стадиях, пока звезда не сформировалась полностью. После формирования звезда интегрируется с лицевыми костями на молекулярном уровне — её хирургическое удаление влечёт необратимое повреждение лицевого скелета. Антивирусная терапия первых стадий основана на препаратах, подавляющих репрограммирование остеобластов.</p>
+        <table class="treatment-table">
+          <thead>
+            <tr>
+              <th>Стадия</th>
+              <th>Прогноз</th>
+              <th>Протокол</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="stage-pill">Стадия I</span></td>
+              <td><span class="prog-dot prog-ok"></span> Благоприятный</td>
+              <td>Антиостеобластные ингибиторы. При раннем вмешательстве — полная ремиссия без следов. Мониторинг 12 недель.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия II</span></td>
+              <td><span class="prog-dot prog-warn"></span> Осторожный</td>
+              <td>Подавление роста + хирургическое иссечение начальных лучей. Возможен рецидив. Рубцевание в местах прорыва.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия III</span></td>
+              <td><span class="prog-dot prog-bad"></span> Неблагоприятный</td>
+              <td>Лечение невозможно. Симптоматическая поддержка. Мониторинг прогрессии. Психологическая помощь.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия IV</span></td>
+              <td><span class="prog-dot prog-bad"></span> Паллиативный</td>
+              <td>Социальная адаптация. Категорически не применять психиатрические препараты. Наблюдение за поведением.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия V</span></td>
+              <td><span class="prog-dot prog-bad"></span> Критический</td>
+              <td>Наблюдение без вмешательства. Мониторинг витальных функций. Готовность к экстренной помощи при распаде.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия VI</span></td>
+              <td><span class="prog-dot prog-bad"></span> Около 10% выживших</td>
+              <td>Реанимация. Противошоковая терапия. Антибиотики. Экстренная кожная пластика. Счёт — на минуты.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note-box">
+          <span class="note-icon">★</span>
+          <span>Не существует задокументированных случаев самостоятельной остановки болезни после второй стадии. После полного формирования звезды прогрессия до шестой стадии — вопрос времени, а не вмешательства.</span>
+        </div>
+      </section>
+
+      <!-- §6 Threat -->
+      <section id="threat">
+        <h2><span class="sec-num">§6</span> Угроза для окружающих</h2>
+        <p>Stella Faciei не является контагиозной в классическом смысле — вирус не передаётся воздушно-капельным путём. Пути передачи остаются предметом изучения; наиболее вероятен прямой контакт со слизистыми оболочками носителя или контакт с пылью от распада звезды шестой стадии.</p>
+        <p>Основная угроза носителей для окружающих носит социальный, а не биологический характер. Носители четвёртой стадии склонны к эзотерическим интерпретациям своего состояния и могут оказывать сильное эмоциональное влияние на окружающих, формируя связи с уязвимыми людьми. Носители пятой стадии в световом трансе создают непредсказуемую ситуацию в общественных местах.</p>
+        <div class="warning-box">
+          <span class="warning-icon">⚠</span>
+          <span>Пыль от распада звезды шестой стадии требует немедленной уборки в условиях защиты дыхательных путей. Контакт пыли со слизистыми оболочками — потенциальный путь передачи. Помещение после события шестой стадии должно быть обработано по протоколу биологического загрязнения.</span>
+        </div>
+        <div class="cosmic-box">
+          <span class="cosmic-icon">◈</span>
+          <span>Несколько наблюдателей за носителями пятой стадии сообщали о субъективном ощущении «тепла и умиротворения» при нахождении рядом со светящимся телом. Биологической основы этого феномена не установлено.</span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="infobox">
+        <div class="infobox-title">Stella Faciei</div>
+        <div class="infobox-body">
+          <div class="infobox-row">
+            <div class="infobox-key">Тип</div>
+            <div class="infobox-val">Остеокожная трансформация</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Возбудитель</div>
+            <div class="infobox-val"><em>не классифицирован</em><br>остеотропный вирус</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Пути</div>
+            <div class="infobox-val warning">Слизистые оболочки<br>Пыль ст. VI (вероятно)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Инкубация</div>
+            <div class="infobox-val">1–3 недели</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Стадий</div>
+            <div class="infobox-val">6</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Летальность</div>
+            <div class="infobox-val danger">~90% (ст. VI)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Лечение</div>
+            <div class="infobox-val warning">Только ст. I–II</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Вакцина</div>
+            <div class="infobox-val danger">Отсутствует</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Угроза</div>
+            <div class="infobox-val warning">Высокий приоритет</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Пигментация</div>
+            <div class="infobox-val cosmic">Инверсия к коже</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Темп. звезды</div>
+            <div class="infobox-val warning">37–42°C</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Зрение</div>
+            <div class="infobox-val ok">Сохранено (ст. III+)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Дыхание</div>
+            <div class="infobox-val ok">Сохранено (ст. III+)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Под звездой</div>
+            <div class="infobox-val danger">Нет кожи после ст.VI</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag">лор</span>
+          <span class="tag">звезда</span>
+          <span class="tag">кость</span>
+          <span class="tag">свечение</span>
+          <span class="tag">космос</span>
+          <span class="tag">лицо</span>
+          <span class="tag">вымысел</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    <div>Патологиариум · Вымышленный архив · Авторский лор-материал</div>
+    <div class="footer-note">«Она смотрела на небо — а небо смотрело из неё.»</div>
+  </footer>
+
+</div>
+</body>
+</html>
