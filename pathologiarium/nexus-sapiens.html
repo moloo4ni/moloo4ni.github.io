@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus Sapiens — Вирус Нексуса Разума</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inconsolata:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080e09;
+    --bg2: #0c130e;
+    --bg3: #111a12;
+    --border: #1a241b;
+    --border-accent: #243a28;
+    --text: #b0c8b2;
+    --text-dim: #4a6050;
+    --text-bright: #d8f0da;
+    --accent: #3ab870;       /* симбиотический изумруд */
+    --accent2: #1a3a22;
+    --accent3: #0e2015;
+    --danger: #c82828;       /* некроз-красный */
+    --decay: #7a2010;        /* гниль */
+    --gold: #c8a840;         /* IQ-маркер */
+    --neuro: #50d890;        /* нейронная активность */
+    --rot: #8a3020;          /* разложение */
+    --glow-s: rgba(58, 184, 112, 0.10);
+    --glow-d: rgba(200, 40, 40, 0.08);
+    --warn: #c8a040;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Libre Baskerville', serif;
+    font-size: 15px;
+    line-height: 1.8;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 100%, rgba(58,184,112,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 100%, rgba(200,40,40,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Wiki Navbar ── */
+  .wiki-nav {
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+  }
+  .wiki-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+  }
+  .wiki-logo {
+    font-family: 'Inconsolata', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+    text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--border-accent);
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .wiki-logo:hover { background: rgba(255,255,255,0.04); }
+  .wiki-back {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-left: 1px solid var(--border);
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+  .wiki-back:hover { color: var(--text-bright); }
+  .wiki-breadcrumb {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    padding: 0 14px;
+    border-left: 1px solid var(--border);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wiki-breadcrumb span { color: var(--accent); }
+
+  /* ── Layout ── */
+  .layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Article header ── */
+  .article-header {
+    padding: 52px 0 36px;
+    border-bottom: 1px solid var(--border);
+    animation: fadeDown 0.7s 0.1s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .article-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--neuro);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .article-label::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--neuro);
+  }
+
+  h1 {
+    font-family: 'IM Fell English', serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    color: var(--text-bright);
+    line-height: 1.15;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .sci-name {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .article-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  .meta-item { display: flex; gap: 6px; }
+  .meta-item b { color: var(--text); font-weight: 600; }
+
+  /* ── Content grid ── */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 40px;
+    padding: 40px 0;
+    align-items: start;
+  }
+
+  @media (max-width: 750px) {
+    .content-grid { grid-template-columns: 1fr; }
+    .sidebar { order: -1; }
+  }
+
+  /* ── Infobox ── */
+  .infobox {
+    border: 1px solid var(--border-accent);
+    background: var(--bg2);
+    animation: fadeLeft 0.8s 0.3s ease both;
+    position: sticky;
+    top: 56px;
+  }
+
+  .infobox-title {
+    background: var(--accent2);
+    padding: 10px 16px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+  }
+
+  .infobox-body { padding: 0; }
+
+  .infobox-row {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .infobox-row:last-child { border-bottom: none; }
+
+  .infobox-key {
+    background: var(--bg3);
+    padding: 9px 12px;
+    width: 110px;
+    flex-shrink: 0;
+    color: var(--text-dim);
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+  }
+
+  .infobox-val {
+    padding: 9px 12px;
+    color: var(--text);
+    flex: 1;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+
+  .infobox-val.danger { color: var(--danger); font-weight: 700; }
+  .infobox-val.warning { color: var(--warn); }
+  .infobox-val.ok { color: var(--neuro); }
+  .infobox-val em { color: var(--neuro); font-style: italic; }
+
+  .tags {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border: 1px solid var(--border-accent);
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    animation: fadeIn 0.6s 0.4s ease both;
+  }
+
+  .toc-title {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .toc ol {
+    padding-left: 16px;
+    font-size: 13px;
+    line-height: 2;
+  }
+
+  .toc a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .toc a:hover { color: var(--neuro); }
+  .toc .sub { padding-left: 16px; list-style: none; font-size: 12px; }
+  .toc .sub li::before { content: '↳ '; color: var(--text-dim); }
+
+  /* ── Article body ── */
+  .article-body { animation: fadeIn 0.7s 0.25s ease both; }
+  section { margin-bottom: 48px; }
+
+  h2 {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.55rem;
+    color: var(--text-bright);
+    border-bottom: 1px solid var(--border-accent);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  h2 .sec-num {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+
+  p { margin-bottom: 14px; color: var(--text); }
+
+  .lead {
+    font-size: 1.05rem;
+    color: var(--text-bright);
+    line-height: 1.9;
+    border-left: 2px solid var(--accent);
+    padding-left: 18px;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  /* ── Scenario split block ── */
+  .scenario-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 24px 0;
+  }
+
+  @media (max-width: 580px) { .scenario-split { grid-template-columns: 1fr; } }
+
+  .scenario-block {
+    padding: 20px 22px;
+  }
+
+  .scenario-block.symbiosis {
+    background: rgba(58,184,112,0.05);
+  }
+
+  .scenario-block.necrosis {
+    background: rgba(200,40,40,0.05);
+  }
+
+  .scenario-header {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .scenario-block.symbiosis .scenario-header { color: var(--neuro); }
+  .scenario-block.necrosis .scenario-header { color: var(--danger); }
+
+  .scenario-iq {
+    font-family: 'Inconsolata', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .scenario-block.symbiosis .scenario-iq { color: var(--accent); }
+  .scenario-block.necrosis .scenario-iq { color: var(--danger); }
+
+  .scenario-name {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.1rem;
+    color: var(--text-bright);
+    margin-bottom: 10px;
+    display: block;
+    font-style: italic;
+  }
+
+  .scenario-body {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* ── Stat row ── */
+  .stat-row {
+    display: flex;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  .stat-cell {
+    flex: 1;
+    padding: 14px 16px;
+    background: var(--bg2);
+    font-family: 'Inconsolata', monospace;
+  }
+
+  .stat-val {
+    font-size: 20px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .stat-label {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .stat-cell.s-green .stat-val { color: var(--accent); }
+  .stat-cell.s-red .stat-val { color: var(--danger); }
+  .stat-cell.s-gold .stat-val { color: var(--gold); }
+
+  /* ── Stage cards ── */
+  .stage-card {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    margin: 20px 0;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .stage-card:hover { border-color: var(--border-accent); }
+
+  .stage-header {
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stage-num {
+    font-family: 'Inconsolata', monospace;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  /* Symbiosis stages */
+  .stage-card.sym-1 .stage-num { color: #3aaa60; opacity: 0.6; }
+  .stage-card.sym-2 .stage-num { color: #3ab870; opacity: 0.75; }
+  .stage-card.sym-3 .stage-num { color: var(--neuro); opacity: 0.9; }
+
+  /* Necrosis stages */
+  .stage-card.nec-1 .stage-num { color: #c05020; opacity: 0.6; }
+  .stage-card.nec-2 .stage-num { color: #c82020; opacity: 0.8; }
+  .stage-card.nec-3 .stage-num { color: #e82020; opacity: 0.9; }
+
+  .stage-title-block h3 { margin: 0; font-size: 1.05rem; color: var(--text-bright); }
+
+  .stage-subtitle {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  .stage-duration {
+    margin-left: auto;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .stage-badge {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    margin-left: 6px;
+  }
+
+  .badge-sym { background: #0e2a18; color: var(--neuro); }
+  .badge-nec { background: #2a0e0e; color: var(--danger); }
+
+  .stage-body { padding: 16px 18px; }
+
+  .stage-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  @media (max-width: 580px) { .stage-cols { grid-template-columns: 1fr; } }
+
+  .stage-block-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .symptom-list { list-style: none; font-size: 13.5px; line-height: 1.7; }
+
+  .symptom-list li {
+    padding: 3px 0 3px 14px;
+    position: relative;
+    color: var(--text);
+  }
+
+  .symptom-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 10px;
+    top: 5px;
+  }
+
+  .sym-list li::before { color: var(--neuro); }
+  .nec-list li::before { color: var(--danger); }
+
+  .mechanism-text {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* Boxes */
+  .warning-box {
+    border: 1px solid var(--danger);
+    background: rgba(200, 40, 40, 0.06);
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .success-box {
+    border: 1px solid var(--accent);
+    background: rgba(58, 184, 112, 0.06);
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .note-box {
+    border: 1px solid var(--border-accent);
+    background: rgba(58, 184, 112, 0.04);
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    color: var(--text-dim);
+  }
+
+  .warning-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; color: var(--danger); }
+  .success-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; color: var(--neuro); }
+  .note-icon { color: var(--gold); flex-shrink: 0; margin-top: 2px; }
+
+  /* IQ threshold display */
+  .iq-threshold {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    margin: 24px 0;
+    overflow: hidden;
+  }
+
+  .iq-bar {
+    height: 36px;
+    display: flex;
+    align-items: stretch;
+    position: relative;
+  }
+
+  .iq-zone-death {
+    background: linear-gradient(90deg, rgba(120,20,10,0.6), rgba(200,40,40,0.4));
+    flex: 134;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    color: rgba(200,80,80,0.9);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-right: 2px solid var(--gold);
+  }
+
+  .iq-zone-life {
+    background: linear-gradient(90deg, rgba(20,100,40,0.4), rgba(58,184,112,0.3));
+    flex: 66;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 12px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    color: rgba(80,200,140,0.9);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .iq-marker {
+    position: absolute;
+    top: 0;
+    left: calc(134/200 * 100%);
+    transform: translateX(-50%);
+    height: 100%;
+    width: 2px;
+    background: var(--gold);
+  }
+
+  .iq-marker::after {
+    content: 'IQ 135';
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .iq-threshold-labels {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 12px 12px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Treatment table */
+  .treatment-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin: 20px 0;
+    border: 1px solid var(--border);
+  }
+
+  .treatment-table th {
+    background: var(--bg3);
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border-accent);
+  }
+
+  .treatment-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .treatment-table tr:last-child td { border-bottom: none; }
+  .treatment-table tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+
+  .stage-pill {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border: 1px solid var(--border-accent);
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  .prog-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .prog-ok { background: var(--accent); }
+  .prog-warn { background: var(--warn); }
+  .prog-bad { background: var(--danger); }
+
+  /* Metabolism bar */
+  .meta-bar-wrap {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+
+  .meta-bar-title {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .meta-bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 0;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+
+  .meta-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3ab870, #c8e840, #c8a040, #c84040);
+  }
+
+  .meta-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  /* ── Timeline (necrosis countdown) ── */
+  .necrosis-timeline {
+    border: 1px solid var(--decay);
+    background: rgba(122,32,16,0.07);
+    margin: 20px 0;
+    padding: 20px;
+  }
+
+  .timeline-title {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--danger);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .timeline-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline-item {
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .timeline-day {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--danger);
+    width: 60px;
+    flex-shrink: 0;
+    font-weight: 700;
+    padding-top: 2px;
+  }
+
+  .timeline-line {
+    width: 1px;
+    background: var(--decay);
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .timeline-line::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: -3px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--danger);
+  }
+
+  .timeline-text {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    padding-bottom: 20px;
+    padding-top: 0px;
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    margin-top: 0;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-note {
+    font-style: italic;
+    font-family: 'IM Fell English', serif;
+    font-size: 12px;
+    color: var(--accent);
+    opacity: 0.6;
+    letter-spacing: 0;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Section heading variant colors */
+  .sym-heading { color: var(--neuro) !important; }
+  .nec-heading { color: var(--danger) !important; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <div class="wiki-nav">
+    <div class="wiki-nav-inner">
+      <a href="index.html" class="wiki-logo">Патологиариум</a>
+      <a href="index.html" class="wiki-back">← Архив</a>
+      <div class="wiki-breadcrumb">Вирусные · <span>Nexus Sapiens</span></div>
+    </div>
+  </div>
+
+  <div class="article-header">
+    <div class="article-label">Нейровирусное · Когнитивно-обусловленный исход · Высший приоритет</div>
+    <h1>Вирус Нексуса Разума</h1>
+    <span class="sci-name">Nexus Sapiens</span>
+    <div class="article-meta">
+      <div class="meta-item">Тип: <b>Ретровирус нейросинхронизации</b></div>
+      <div class="meta-item">Порог активации: <b>IQ 135</b></div>
+      <div class="meta-item">Сценариев исхода: <b>2</b></div>
+      <div class="meta-item">Возбудитель: <b>Нейровирусный</b></div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <main class="article-body">
+
+      <div class="toc">
+        <div class="toc-title">Содержание</div>
+        <ol>
+          <li><a href="#overview">Общее описание</a></li>
+          <li><a href="#mechanism">Механизм действия</a></li>
+          <li><a href="#threshold">Порог совместимости</a></li>
+          <li><a href="#scenario-a">Сценарий I — Симбиоз</a>
+            <ul class="sub">
+              <li><a href="#sym-mechanics">Параметры регенерации</a></li>
+              <li><a href="#sym-cost">Метаболическая плата</a></li>
+            </ul>
+          </li>
+          <li><a href="#scenario-b">Сценарий II — Деструкция</a>
+            <ul class="sub">
+              <li><a href="#nec-timeline">Хронология некроза</a></li>
+              <li><a href="#nec-terminal">Терминальная стадия</a></li>
+            </ul>
+          </li>
+          <li><a href="#treatment">Лечение и прогноз</a></li>
+          <li><a href="#threat">Угроза для окружающих</a></li>
+        </ol>
+      </div>
+
+      <!-- §1 Overview -->
+      <section id="overview">
+        <h2><span class="sec-num">§1</span> Общее описание</h2>
+        <p class="lead">Nexus Sapiens — единственный известный патоген, чья клиническая картина определяется не видом ткани или иммунным статусом хоста, а исключительно вычислительной мощностью его нервной системы. Один и тот же вирус дарует одним абсолютную регенерацию — и планомерно пожирает других изнутри.</p>
+        <p>Вирус проникает через слизистые оболочки или непосредственный контакт с биологическими жидкостями носителя. Инкубационный период составляет от 72 до 120 часов, в ходе которых возбудитель интегрируется в нейронную сеть и производит оценку частоты нейронных импульсов хоста. По завершении этой фазы активируется один из двух несовместимых сценариев — и смена сценария после активации невозможна.</p>
+        <p>Патоген не имеет промежуточных состояний. Порог IQ 135 — абсолютная бинарная граница. Один балл ниже — и вирус переходит в режим выживания за счёт хоста.</p>
+
+        <div class="stat-row">
+          <div class="stat-cell s-gold">
+            <span class="stat-val">IQ 135</span>
+            <span class="stat-label">Порог совместимости</span>
+          </div>
+          <div class="stat-cell s-green">
+            <span class="stat-val">500 000/с</span>
+            <span class="stat-label">Стволовых клеток (симбиоз)</span>
+          </div>
+          <div class="stat-cell s-red">
+            <span class="stat-val">День 21</span>
+            <span class="stat-label">Терминальная стадия (деструкция)</span>
+          </div>
+          <div class="stat-cell s-red">
+            <span class="stat-val">250 мм рт.ст.</span>
+            <span class="stat-label">ВЧД при несовместимости</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- §2 Mechanism -->
+      <section id="mechanism">
+        <h2><span class="sec-num">§2</span> Механизм действия</h2>
+        <p>Nexus Sapiens является ретровирусом с нейротропной специализацией. После проникновения в организм возбудитель движется по периферическим нервным волокнам к центральной нервной системе, где встраивается в синаптические мембраны нейронов префронтальной коры. В этот момент начинается фаза оценки.</p>
+        <p>Вирус измеряет частоту и паттерны нейронных импульсов, сравнивая их с требуемым минимальным порогом. Этот процесс занимает 72–120 часов и субъективно может не ощущаться носителем или проявляться лёгкой головной болью и повышенной температурой. По завершении оценки вирус необратимо выбирает один из двух режимов работы.</p>
+
+        <div class="note-box">
+          <span class="note-icon">◈</span>
+          <span>Вирус не «знает» и не «оценивает» интеллект в социальном смысле. Он реагирует исключительно на физическую характеристику — частоту нейронных импульсов, которая у людей с IQ 135+ достигает порогового значения, достаточного для синхронизации белковой матрицы возбудителя.</span>
+        </div>
+      </section>
+
+      <!-- §3 Threshold -->
+      <section id="threshold">
+        <h2><span class="sec-num">§3</span> Порог совместимости</h2>
+        <p>Граница IQ 135 является не произвольной, а физически обусловленной: именно при этом уровне когнитивного развития нервная система генерирует нейронные импульсы с частотой, необходимой для стабилизации белковой матрицы вируса. Ниже этого порога матрица нестабильна, и возбудитель переходит в режим паразитарного выживания.</p>
+
+        <div class="iq-threshold">
+          <div class="iq-bar">
+            <div class="iq-zone-death">Деструкция · IQ &lt;135</div>
+            <div class="iq-zone-life">Симбиоз · IQ 135+</div>
+            <div class="iq-marker"></div>
+          </div>
+          <div class="iq-threshold-labels">
+            <span>IQ 70 — минимальный</span>
+            <span>IQ 100 — средний</span>
+            <span>IQ 135 — порог</span>
+            <span>IQ 200 — максимальный</span>
+          </div>
+        </div>
+
+        <div class="scenario-split">
+          <div class="scenario-block symbiosis">
+            <div class="scenario-header">✦ Сценарий I</div>
+            <span class="scenario-iq">IQ ≥ 135</span>
+            <span class="scenario-name">Успешный симбиоз</span>
+            <div class="scenario-body">Мозг выдаёт необходимую вычислительную мощность. Вирус синхронизируется с нейронной сетью и начинает вырабатывать тотипотентные стволовые клетки. Хост получает полный волевой контроль над регенерацией.</div>
+          </div>
+          <div class="scenario-block necrosis">
+            <div class="scenario-header">✕ Сценарий II</div>
+            <span class="scenario-iq">IQ &lt; 135</span>
+            <span class="scenario-name">Аппаратная несовместимость</span>
+            <div class="scenario-body">Мозг не способен выдать нужную частоту импульсов. Происходит троттлинг метаболического цикла. Возбудитель переходит в режим выживания и начинает пожирать нейронную ткань хоста для восполнения энергии.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- §4 Scenario A — Symbiosis -->
+      <section id="scenario-a">
+        <h2><span class="sec-num sym-heading">§4</span> Сценарий I — Симбиоз</h2>
+        <p>При успешной синхронизации вирус становится частью метаболической системы хоста. Нейронная сеть носителя поставляет возбудителю стабильную энергетическую базу, а тот в ответ начинает производить тотипотентные стволовые клетки со скоростью 500 000 единиц в секунду — ресурс, достаточный для любой регенерации.</p>
+        <p>Ключевой особенностью симбиотического сценария является полный волевой контроль носителя над процессами перестройки ДНК. Регенерация не является автоматической — она инициируется и управляется сознательным усилием хоста, что требует значительной когнитивной нагрузки.</p>
+
+        <div class="success-box">
+          <span class="success-icon">◈</span>
+          <span>Симбиотический носитель не является «бессмертным» в стандартном смысле. Регенерация требует ресурсов — прежде всего калорийного питания — и сознательного усилия. При нехватке любого из компонентов процесс восстановления приостанавливается.</span>
+        </div>
+
+        <div id="sym-mechanics">
+          <h2 style="font-size:1.2rem; margin-top:24px;"><span class="sec-num">§4.1</span> Параметры регенерации</h2>
+
+          <!-- Limb regrowth -->
+          <div class="stage-card sym-2" id="sym-limb">
+            <div class="stage-header">
+              <div class="stage-num">A</div>
+              <div class="stage-title-block">
+                <h3>Регенерация конечности <span class="stage-badge badge-sym">168 ч</span></h3>
+                <div class="stage-subtitle">Полное отращивание · От сустава</div>
+              </div>
+              <div class="stage-duration">7 суток<br><span style="color:var(--neuro);font-size:10px">◈ СИМБИОЗ</span></div>
+            </div>
+            <div class="stage-body">
+              <p style="font-size:13.5px; margin-bottom:12px;">Полное отращивание новой конечности — от плечевого или тазобедренного сустава — занимает ровно 168 часов непрерывной регенерации. Процесс начинается с формирования костного каркаса, затем последовательно нарастают мышечные волокна, сосудистая сеть, нервные пути и кожные покровы.</p>
+              <div class="stage-cols">
+                <div>
+                  <div class="stage-block-label">Процесс</div>
+                  <ul class="symptom-list sym-list">
+                    <li>Формирование периостальной почки на 1–6 часов</li>
+                    <li>Рост костного каркаса: 24–72 часа</li>
+                    <li>Иннервация и васкуляризация: 72–120 часов</li>
+                    <li>Наращивание мышечной массы: параллельно с 48 ч</li>
+                    <li>Финальная дифференцировка кожи: 140–168 часов</li>
+                  </ul>
+                </div>
+                <div>
+                  <div class="stage-block-label">Условия</div>
+                  <div class="mechanism-text">Непрерывный волевой контроль носителя обязателен — достаточно нескольких часов когнитивного «отключения» (сон без концентрации, потеря сознания), чтобы регенерация остановилась. Возобновление после паузы — возможно, но добавляет время. Суточный расход: 8500 ккал строго обязателен.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Organ regeneration -->
+          <div class="stage-card sym-3" id="sym-organ">
+            <div class="stage-header">
+              <div class="stage-num">B</div>
+              <div class="stage-title-block">
+                <h3>Регенерация тяжёлого органа <span class="stage-badge badge-sym">34 ч</span></h3>
+                <div class="stage-subtitle">Сердце, печень · Полное восстановление</div>
+              </div>
+              <div class="stage-duration">1,4 суток<br><span style="color:var(--neuro);font-size:10px">◈ СИМБИОЗ</span></div>
+            </div>
+            <div class="stage-body">
+              <p style="font-size:13.5px; margin-bottom:12px;">Регенерация критически повреждённых внутренних органов — в первую очередь сердца и печени — требует 34 часов непрерывного процесса. Поскольку орган должен сохранять функцию в ходе восстановления, вирус применяет послойную замену тканей, не прерывая работу органа.</p>
+              <div class="stage-cols">
+                <div>
+                  <div class="stage-block-label">Возможности</div>
+                  <ul class="symptom-list sym-list">
+                    <li>Восстановление до 80% объёма сердечной мышцы</li>
+                    <li>Полная регенерация долей печени</li>
+                    <li>Восстановление сосудистой сети органа</li>
+                    <li>Замена рубцовой ткани функциональной</li>
+                    <li>Восстановление иннервации органа</li>
+                  </ul>
+                </div>
+                <div>
+                  <div class="stage-block-label">Механизм</div>
+                  <div class="mechanism-text">Стволовые клетки направляются к повреждённому органу концентрированным потоком. Временные «строительные леса» из белковых матриц удерживают форму органа в ходе замены клеточных слоёв. Носитель в этот период испытывает выраженную усталость и требует усиленного питания.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="sym-cost">
+          <h2 style="font-size:1.2rem; margin-top:24px;"><span class="sec-num">§4.2</span> Метаболическая плата</h2>
+          <p>Симбиоз не бесплатен. Базовый метаболизм носителя разгоняется до уровня, требующего потребления строго 8500 килокалорий в сутки. Это примерно в 3,5–4 раза превышает норму среднего взрослого человека.</p>
+
+          <div class="meta-bar-wrap">
+            <div class="meta-bar-title">Суточная потребность в калориях · Сравнение</div>
+            <div class="meta-bar">
+              <div class="meta-bar-fill" style="width: 100%;"></div>
+            </div>
+            <div class="meta-bar-labels">
+              <span>Норма: ~2000 ккал</span>
+              <span>Спортсмен: ~4000 ккал</span>
+              <span style="color: var(--accent);">Nexus Sapiens: 8500 ккал</span>
+            </div>
+          </div>
+
+          <div class="warning-box">
+            <span class="warning-icon">⚠</span>
+            <span>При дефиците калорийного поступления регенерация немедленно ставится на паузу. Если носитель не способен обеспечить себя едой в ходе восстановительного процесса (при потере конечностей), требуется внешняя поддержка питания — иначе регенерация остановится и никогда не завершится.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- §5 Scenario B — Necrosis -->
+      <section id="scenario-b">
+        <h2><span class="sec-num nec-heading">§5</span> Сценарий II — Деструкция</h2>
+        <p>При несовместимости вирус не способен стабилизировать белковую матрицу — ему не хватает энергии, которую нейронная сеть с недостаточной частотой импульсов обеспечить не может. Тогда возбудитель переходит в режим паразитарного выживания: он начинает расщеплять миелиновые оболочки нейронов и астроциты — клетки поддержки нервной системы — для восполнения энергетического дефицита.</p>
+        <p>Этот процесс запускает каскад разрушений, которые носитель не может ни контролировать, ни остановить. Смерть неизбежна. Единственный вопрос — скорость.</p>
+
+        <div class="warning-box">
+          <span class="warning-icon">☣</span>
+          <span>Сценарий II необратим с момента активации. Никакое лечение не способно остановить процесс демиелинизации после того, как вирус перешёл в режим выживания. Все известные вмешательства лишь незначительно замедляют прогрессию или облегчают симптоматику.</span>
+        </div>
+
+        <div id="nec-timeline">
+          <h2 style="font-size:1.2rem; margin-top:24px;"><span class="sec-num">§5.1</span> Хронология некроза</h2>
+
+          <div class="stage-card nec-1" id="nec-stage1">
+            <div class="stage-header">
+              <div class="stage-num">I</div>
+              <div class="stage-title-block">
+                <h3>Гипертензионный криз <span class="stage-badge badge-nec">День 0–3</span></h3>
+                <div class="stage-subtitle">Внутричерепная гипертензия · Некупируемая боль</div>
+              </div>
+              <div class="stage-duration">72 ч<br><span style="color:var(--danger);font-size:10px">✕ ДЕСТРУКЦИЯ</span></div>
+            </div>
+            <div class="stage-body">
+              <p style="font-size:13.5px; margin-bottom:12px;">Немедленно после активации деструктивного сценария внутричерепное давление скачком фиксируется на отметке 250 мм рт. ст. — значение, вдвое превышающее опасный порог. Это давление не является результатом воспаления или отёка — оно поддерживается вирусом принудительно как побочный эффект его метаболической активности.</p>
+              <div class="stage-cols">
+                <div>
+                  <div class="stage-block-label">Симптомы</div>
+                  <ul class="symptom-list nec-list">
+                    <li>ВЧД 250 мм рт. ст. — постоянное, немгновенное</li>
+                    <li>Непрерывная головная боль максимальной интенсивности</li>
+                    <li>Полная резистентность к опиатам и НПВС</li>
+                    <li>Нарушение зрения — отёк диска зрительного нерва</li>
+                    <li>Тошнота, рвота, нарушения сознания</li>
+                  </ul>
+                </div>
+                <div>
+                  <div class="stage-block-label">Механизм</div>
+                  <div class="mechanism-text">Вирус использует воздействие на ликвородинамику как механизм «принудительного питания»: повышенное давление ускоряет перфузию нейронной ткани и облегчает возбудителю доступ к миелину. Болевые рецепторы активированы напрямую — анальгетики не достигают места приложения.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stage-card nec-2" id="nec-stage2">
+            <div class="stage-header">
+              <div class="stage-num">II</div>
+              <div class="stage-title-block">
+                <h3>Периферическая ампутация <span class="stage-badge badge-nec">День 14</span></h3>
+                <div class="stage-subtitle">Некроз конечностей · Отторжение</div>
+              </div>
+              <div class="stage-duration">День 14<br><span style="color:var(--danger);font-size:10px">✕ НЕОБРАТИМО</span></div>
+            </div>
+            <div class="stage-body">
+              <p style="font-size:13.5px; margin-bottom:12px;">На четырнадцатый день после инфицирования — независимо от каких-либо внешних условий — вирус принудительно обрубает периферическую нервную систему. Лишённые иннервации ткани конечностей начинают стремительно некротизировать: кожа чернеет, мышцы теряют тонус, сосуды тромбируются.</p>
+              <div class="stage-cols">
+                <div>
+                  <div class="stage-block-label">Симптомы</div>
+                  <ul class="symptom-list nec-list">
+                    <li>Внезапная потеря чувствительности во всех конечностях</li>
+                    <li>Быстрый некроз тканей — конечности чернеют</li>
+                    <li>Отторжение конечностей на день 14</li>
+                    <li>Гангренозный запах без внешней инфекции</li>
+                    <li>Иллюзорная краткосрочная потеря боли (шок нервной системы)</li>
+                  </ul>
+                </div>
+                <div>
+                  <div class="stage-block-label">Механизм</div>
+                  <div class="mechanism-text">Вирус «жертвует» периферией ради концентрации ресурсов на центральной нервной системе. Обрыв периферических нервных пучков освобождает дополнительный миелин для расщепления и снижает суммарный энергетический запрос организма — продлевая выживание самого вируса.</div>
+                </div>
+              </div>
+              <div class="warning-box">
+                <span class="warning-icon">☣</span>
+                <span>Хирургическая ампутация до дня 14 не предотвращает процесс — вирус инициирует некроз тканей на «культях» в тот же момент. Изменить этот срок медицинскими методами невозможно.</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="nec-terminal">
+          <div class="stage-card nec-3" id="nec-stage3">
+            <div class="stage-header">
+              <div class="stage-num">III</div>
+              <div class="stage-title-block">
+                <h3>Терминальная стадия — Ликвация коры <span class="stage-badge badge-nec">День 21</span></h3>
+                <div class="stage-subtitle">Деструкция префронтальной коры · Смерть</div>
+              </div>
+              <div class="stage-duration">День 21<br><span style="color:var(--danger);font-size:10px">✕ ЛЕТАЛЬНО</span></div>
+            </div>
+            <div class="stage-body">
+              <p style="font-size:13.5px; margin-bottom:12px;">На двадцать первый день вирус достигает предела доступного нейронного ресурса. К этому моменту объём серого вещества префронтальной коры выедается до 40% от изначального — носитель полностью утрачивает личность, высшие когнитивные функции, способность к речи и целенаправленному поведению. Смерть наступает от мультиорганной недостаточности в тот же период.</p>
+              <div class="stage-cols">
+                <div>
+                  <div class="stage-block-label">Финальное состояние носителя</div>
+                  <ul class="symptom-list nec-list">
+                    <li>Утрата личности и всех когнитивных функций</li>
+                    <li>60% объёма серого вещества ПФК — уничтожено</li>
+                    <li>Полная потеря способности к речи и коммуникации</li>
+                    <li>Отсутствие конечностей (следствие дня 14)</li>
+                    <li>Сохранение примитивных вегетативных функций до момента смерти</li>
+                    <li>Смерть от полиорганной недостаточности</li>
+                  </ul>
+                </div>
+                <div>
+                  <div class="stage-block-label">Документальное описание</div>
+                  <div class="mechanism-text">Инфицированный в терминальной стадии описывается наблюдателями как «пустая оболочка». Реакции носят исключительно рефлекторный характер. Способность к страданию — включая болевую реакцию — к этому моменту также утрачена в результате деструкции соответствующих корковых структур.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <!-- Necrosis timeline -->
+        <div class="necrosis-timeline">
+          <div class="timeline-title">☣ Хронология деструктивного сценария · Отсчёт от инфицирования</div>
+          <div class="timeline-items">
+            <div class="timeline-item">
+              <div class="timeline-day">День 0</div>
+              <div class="timeline-line"></div>
+              <div class="timeline-text">Заражение. Инкубационный период: 72–120 ч. Вирус оценивает нейронную частоту.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-day">День 3–5</div>
+              <div class="timeline-line"></div>
+              <div class="timeline-text">Активация деструктивного сценария. ВЧД скачком до 250 мм рт. ст. Некупируемая головная боль. Начало демиелинизации.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-day">День 7</div>
+              <div class="timeline-line"></div>
+              <div class="timeline-text">Прогрессирующая демиелинизация. Нарастание неврологической симптоматики. Первые признаки периферической нейропатии.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-day">День 14</div>
+              <div class="timeline-line"></div>
+              <div class="timeline-text">Принудительное обрубание периферической нервной системы. Стремительный некроз конечностей — чернение, отторжение.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-day">День 17–19</div>
+              <div class="timeline-line"></div>
+              <div class="timeline-text">Расширенная деструкция коры. Утрата личности, высших когнитивных функций, речи. «Пустая оболочка».</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-day">День 21</div>
+              <div class="timeline-line"></div>
+              <div class="timeline-text">Терминальная стадия. 60% ПФК уничтожено. Полиорганная недостаточность. Смерть.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- §6 Treatment -->
+      <section id="treatment">
+        <h2><span class="sec-num">§6</span> Лечение и прогноз</h2>
+        <p>Лечение принципиально различается в зависимости от активированного сценария. При симбиотическом сценарии носитель не нуждается в лечении — вирус является частью его метаболизма. При деструктивном сценарии лечение невозможно: патоген необратимо интегрирован в нейронную ткань, и его удаление означало бы удаление самих нейронов.</p>
+        <table class="treatment-table">
+          <thead>
+            <tr>
+              <th>Сценарий / Стадия</th>
+              <th>Прогноз</th>
+              <th>Протокол</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="stage-pill" style="border-color:var(--accent); color:var(--accent);">Симбиоз</span></td>
+              <td><span class="prog-dot prog-ok"></span> Благоприятный</td>
+              <td>Диетическая поддержка 8500+ ккал/сут. Обучение волевому управлению регенерацией. Мониторинг метаболических показателей.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Деструкция · Дни 0–5</span></td>
+              <td><span class="prog-dot prog-bad"></span> Абсолютно летальный</td>
+              <td>Симптоматическое лечение. Обезболивание (частично неэффективно). Паллиативный уход. Изоляция при агрессии.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Деструкция · День 14</span></td>
+              <td><span class="prog-dot prog-bad"></span> Терминальный</td>
+              <td>Хирургическая обработка культей (неэффективна для остановки некроза). Антибиотикотерапия вторичных инфекций. Паллиатив.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Деструкция · День 21</span></td>
+              <td><span class="prog-dot prog-bad"></span> Нет методов</td>
+              <td>Поддержание жизненных функций дистанционно. Паллиативная седация по показаниям. Смерть неизбежна.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note-box">
+          <span class="note-icon">◈</span>
+          <span>Единственным известным способом предотвращения деструктивного сценария является предупреждение инфицирования. После активации вируса и определения сценария — какое-либо вмешательство в сценарий II не имеет задокументированного успеха.</span>
+        </div>
+      </section>
+
+      <!-- §7 Threat -->
+      <section id="threat">
+        <h2><span class="sec-num">§7</span> Угроза для окружающих</h2>
+        <p>Nexus Sapiens уникален среди патологий архива принципиально асимметричным воздействием: для людей с IQ ниже 135 он является гарантированно летальным патогеном, для людей с IQ 135+ — потенциальным благом. Это создаёт исключительно сложную этическую и эпидемиологическую ситуацию.</p>
+        <p>Симбиотические носители биологически здоровы и ведут нормальную жизнедеятельность, однако остаются переносчиками и могут заражать окружающих. В отсутствие протокола скрининга IQ перед контактом — это создаёт высокую угрозу для населения в целом, поскольку большинство людей (статистически) не достигают порога IQ 135.</p>
+        <div class="warning-box">
+          <span class="warning-icon">⚠</span>
+          <span>Симбиотический носитель не имеет субъективных признаков болезни. Он не ощущает себя больным и может не осознавать угрозу, которую представляет для окружающих с более низким IQ. Протоколы изоляции и информирования критически важны.</span>
+        </div>
+        <div class="note-box">
+          <span class="note-icon">◈</span>
+          <span>Зафиксированы случаи, когда симбиотические носители описывают свой опыт как «эволюционный скачок» и активно отказывались от изоляции, считая её дискриминационной. Этот паттерн поведения представляет отдельную социальную угрозу.</span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="infobox">
+        <div class="infobox-title">Nexus Sapiens</div>
+        <div class="infobox-body">
+          <div class="infobox-row">
+            <div class="infobox-key">Тип</div>
+            <div class="infobox-val">Ретровирус нейросинхронизации</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Возбудитель</div>
+            <div class="infobox-val"><em>Nexus Sapiens v.1</em><br>нейротропный ретровирус</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Пути</div>
+            <div class="infobox-val warning">Биологические жидкости<br>Слизистые оболочки<br>Прямой контакт</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Инкубация</div>
+            <div class="infobox-val">72–120 часов</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Порог</div>
+            <div class="infobox-val warning">IQ 135 (абсолютный)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Сценарий I</div>
+            <div class="infobox-val ok">Симбиоз (IQ ≥ 135)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Сценарий II</div>
+            <div class="infobox-val danger">Деструкция (IQ &lt; 135)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Летальность</div>
+            <div class="infobox-val danger">100% при IQ &lt;135</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Срок смерти</div>
+            <div class="infobox-val danger">21 день (деструкция)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Лечение</div>
+            <div class="infobox-val danger">Отсутствует (сц. II)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Вакцина</div>
+            <div class="infobox-val danger">Отсутствует</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Угроза</div>
+            <div class="infobox-val danger">Высший приоритет</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Метаболизм</div>
+            <div class="infobox-val warning">8500 ккал/сут (сц. I)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Стволовые</div>
+            <div class="infobox-val ok">500 000/с (сц. I)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">ВЧД</div>
+            <div class="infobox-val danger">250 мм рт.ст. (сц. II)</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag">лор</span>
+          <span class="tag">вирус</span>
+          <span class="tag">нейро</span>
+          <span class="tag">регенерация</span>
+          <span class="tag">некроз</span>
+          <span class="tag">IQ</span>
+          <span class="tag">вымысел</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    <div>Патологиариум · Вымышленный архив · Авторский лор-материал</div>
+    <div class="footer-note">«Умный выживает. Остальные — нет.»</div>
+  </footer>
+
+</div>
+</body>
+</html>
