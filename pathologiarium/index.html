@@ -50,21 +50,14 @@
     z-index: 0;
   }
 
-  .layout {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 24px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* ── Wiki Navbar ── */
+  /* ── Wiki Navbar ── OUTSIDE .layout, always full-width */
   .wiki-nav {
     border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
     z-index: 100;
     background: var(--bg);
+    width: 100%;
   }
   .wiki-nav-inner {
     max-width: 1100px;
@@ -114,9 +107,18 @@
   }
   .wiki-breadcrumb span { color: var(--text); }
 
+  /* ── Layout ── */
+  .layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
   /* ── Hero ── */
   .hero {
-    padding: 80px 0 56px;
+    padding: 64px 0 48px;
     text-align: center;
     border-bottom: 1px solid var(--border);
     animation: fadeDown 0.6s 0.1s ease both;
@@ -145,9 +147,14 @@
     background: var(--border-accent);
   }
 
+  @media (max-width: 480px) {
+    .hero-eyebrow::before,
+    .hero-eyebrow::after { width: 24px; }
+  }
+
   .hero-title {
     font-family: 'IM Fell English', serif;
-    font-size: clamp(3rem, 8vw, 6rem);
+    font-size: clamp(2.4rem, 10vw, 6rem);
     color: var(--text-bright);
     line-height: 1;
     margin-bottom: 12px;
@@ -157,29 +164,29 @@
   .hero-subtitle {
     font-family: 'IM Fell English', serif;
     font-style: italic;
-    font-size: 1.3rem;
+    font-size: clamp(1rem, 3vw, 1.3rem);
     color: var(--text-dim);
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
   .hero-description {
     max-width: 580px;
-    margin: 0 auto 36px;
+    margin: 0 auto 32px;
     font-size: 14px;
     color: var(--text-dim);
     line-height: 1.9;
+    padding: 0 8px;
   }
 
   .hero-stats {
-    display: flex;
-    justify-content: center;
-    gap: 0;
-    border: 1px solid var(--border);
     display: inline-flex;
+    border: 1px solid var(--border);
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .hero-stat {
-    padding: 10px 28px;
+    padding: 10px 24px;
     border-right: 1px solid var(--border);
     font-family: 'Inconsolata', monospace;
     font-size: 11px;
@@ -191,6 +198,12 @@
   .hero-stat:last-child { border-right: none; }
   .hero-stat b { display: block; font-size: 20px; color: var(--text-bright); letter-spacing: 0; margin-bottom: 2px; }
 
+  @media (max-width: 480px) {
+    .hero-stat { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+    .hero-stat:nth-child(2n) { border-right: none; }
+    .hero-stat:nth-last-child(-n+2) { border-bottom: none; }
+  }
+
   /* ── Disease grid ── */
   .section-label {
     font-family: 'Inconsolata', monospace;
@@ -198,7 +211,7 @@
     letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--text-dim);
-    padding: 40px 0 20px;
+    padding: 36px 0 18px;
     display: flex;
     align-items: center;
     gap: 16px;
@@ -222,13 +235,13 @@
     margin-bottom: 1px;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 650px) {
     .disease-grid { grid-template-columns: 1fr; }
   }
 
   .disease-card {
     background: var(--bg2);
-    padding: 32px 28px;
+    padding: 28px 24px;
     text-decoration: none;
     display: block;
     position: relative;
@@ -254,19 +267,23 @@
   .card-threat {
     font-family: 'Inconsolata', monospace;
     font-size: 9px;
-    letter-spacing: 0.25em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--card-color);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .card-threat::before {
     content: '';
     display: block;
-    width: 14px;
+    width: 12px;
+    min-width: 12px;
     height: 1px;
     background: var(--card-color);
     opacity: 0.7;
@@ -275,7 +292,7 @@
   .card-name-sci {
     font-family: 'IM Fell English', serif;
     font-style: italic;
-    font-size: 1.55rem;
+    font-size: clamp(1.2rem, 3vw, 1.55rem);
     color: var(--text-bright);
     line-height: 1.2;
     margin-bottom: 4px;
@@ -286,7 +303,7 @@
     font-family: 'Libre Baskerville', serif;
     font-size: 13px;
     color: var(--text-dim);
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     display: block;
   }
 
@@ -294,21 +311,21 @@
     font-size: 13px;
     color: var(--text-dim);
     line-height: 1.7;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
 
   .card-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 16px;
+    gap: 5px;
+    margin-bottom: 14px;
   }
 
   .card-tag {
     font-family: 'Inconsolata', monospace;
     font-size: 9px;
     letter-spacing: 0.1em;
-    padding: 2px 8px;
+    padding: 2px 7px;
     border: 1px solid var(--border-accent);
     color: var(--text-dim);
     text-transform: uppercase;
@@ -337,8 +354,8 @@
 
   .card-arrow {
     position: absolute;
-    right: 24px;
-    bottom: 24px;
+    right: 20px;
+    bottom: 20px;
     font-family: 'Inconsolata', monospace;
     font-size: 11px;
     color: var(--card-color);
@@ -356,9 +373,10 @@
   .threat-spectrum {
     border: 1px solid var(--border);
     background: var(--bg2);
-    padding: 24px 28px;
+    padding: 20px 24px;
     margin-bottom: 1px;
     animation: fadeIn 0.7s 0.5s ease both;
+    overflow: hidden;
   }
 
   .threat-label {
@@ -367,13 +385,14 @@
     letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--text-dim);
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
 
   .threat-bar {
     display: flex;
     gap: 4px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    min-width: 0;
   }
 
   .threat-seg {
@@ -384,12 +403,14 @@
     justify-content: center;
     font-family: 'Inconsolata', monospace;
     font-size: 9px;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.05em;
     color: rgba(0,0,0,0.7);
     font-weight: 700;
     text-transform: uppercase;
     transition: opacity 0.2s;
     cursor: default;
+    min-width: 0;
+    overflow: hidden;
   }
 
   .threat-seg:hover { opacity: 0.85; }
@@ -398,12 +419,19 @@
     display: flex;
     gap: 4px;
     font-family: 'Inconsolata', monospace;
-    font-size: 9px;
+    font-size: 8px;
     color: var(--text-dim);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.03em;
   }
 
-  .threat-names span { flex: 1; text-align: center; }
+  .threat-names span {
+    flex: 1;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
 
   /* ── About / intro ── */
   .about-grid {
@@ -417,13 +445,13 @@
     margin-bottom: 48px;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 650px) {
     .about-grid { grid-template-columns: 1fr; }
   }
 
   .about-block {
     background: var(--bg2);
-    padding: 24px 28px;
+    padding: 20px 24px;
   }
 
   .about-title {
@@ -467,7 +495,7 @@
   /* ── Footer ── */
   footer {
     border-top: 1px solid var(--border);
-    padding: 24px 0;
+    padding: 20px 0;
     font-family: 'Inconsolata', monospace;
     font-size: 11px;
     color: var(--text-dim);
@@ -501,13 +529,15 @@
 </style>
 </head>
 <body>
-<div class="layout">
 
-  <div class="wiki-nav">
-    <div class="wiki-nav-inner">
-      <a href="index.html" class="wiki-logo">Патологиариум</a>
-    </div>
+<!-- NAVBAR: outside .layout so it's always 100% width -->
+<nav class="wiki-nav">
+  <div class="wiki-nav-inner">
+    <a href="index.html" class="wiki-logo">Патологиариум</a>
   </div>
+</nav>
+
+<div class="layout">
 
   <div class="hero">
     <div class="hero-eyebrow">Вымышленный архив · Лор-материал</div>
@@ -524,10 +554,8 @@
 
   <div class="section-label">Каталог болезней</div>
 
-  <!-- Disease cards -->
   <div class="disease-grid">
 
-    <!-- Daemonosis Infernum -->
     <a href="daemonosis-infernum.html" class="disease-card" style="--card-color: #c82828;">
       <div class="card-threat">Экзистенциальная угроза</div>
       <span class="card-name-sci">Daemonosis Infernum</span>
@@ -548,7 +576,6 @@
       <div class="card-arrow">→ Читать</div>
     </a>
 
-    <!-- Felis-Nervosa -->
     <a href="felis-nervosa.html" class="disease-card" style="--card-color: #3a9ab8;">
       <div class="card-threat">Нейроповеденческое · Средний приоритет</div>
       <span class="card-name-sci">Felis-Nervosa</span>
@@ -569,7 +596,6 @@
       <div class="card-arrow">→ Читать</div>
     </a>
 
-    <!-- Calcangelus Ossificans -->
     <a href="calcium-angel.html" class="disease-card" style="--card-color: #d4c89a;">
       <div class="card-threat">Костно-неврологическое · Высокий приоритет</div>
       <span class="card-name-sci">Calcangelus Ossificans</span>
@@ -590,7 +616,6 @@
       <div class="card-arrow">→ Читать</div>
     </a>
 
-    <!-- Acantha-Nervosa -->
     <a href="acantha-nervosa.html" class="disease-card" style="--card-color: #c8860a;">
       <div class="card-threat">Паразитарное · Высший приоритет</div>
       <span class="card-name-sci">Acantha-Nervosa</span>
@@ -611,7 +636,6 @@
       <div class="card-arrow">→ Читать</div>
     </a>
 
-    <!-- Fulgor-Nervosa -->
     <a href="fulgor-nervosa.html" class="disease-card" style="--card-color: #6a7adc;">
       <div class="card-threat">Электрофизиологическое · Высокий приоритет</div>
       <span class="card-name-sci">Fulgor-Nervosa</span>
@@ -632,12 +656,11 @@
       <div class="card-arrow">→ Читать</div>
     </a>
 
-    <!-- Nexus Sapiens -->
     <a href="nexus-sapiens.html" class="disease-card" style="--card-color: #3ab870;">
       <div class="card-threat">Вирусное · Высший приоритет · Когнитивно-обусловленный исход</div>
       <span class="card-name-sci">Nexus Sapiens</span>
       <span class="card-name-ru">Вирус Нексуса Разума</span>
-      <p class="card-desc">Единственный патоген, чей исход определяется интеллектом хоста. IQ ≥ 135 — симбиоз: регенерация конечностей, 500 000 стволовых клеток в секунду, волевой контроль над ДНК. IQ < 135 — демиелинизация, некроз конечностей на день 14, смерть с расплавленным мозгом на день 21.</p>
+      <p class="card-desc">Единственный патоген, чей исход определяется интеллектом хоста. IQ ≥ 135 — симбиоз: регенерация конечностей, 500 000 стволовых клеток в секунду, волевой контроль над ДНК. IQ &lt; 135 — демиелинизация, некроз конечностей на день 14, смерть с расплавленным мозгом на день 21.</p>
       <div class="card-tags">
         <span class="card-tag">вирус</span>
         <span class="card-tag">регенерация</span>
@@ -653,7 +676,6 @@
       <div class="card-arrow">→ Читать</div>
     </a>
 
-    <!-- Stella Faciei -->
     <a href="stella-faciei.html" class="disease-card" style="--card-color: #e8d060;">
       <div class="card-threat">Остеокожная трансформация · Высокий приоритет</div>
       <span class="card-name-sci">Stella Faciei</span>
