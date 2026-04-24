@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Синдром Древесного Проникновения — Xylonema Arboris</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inconsolata:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:            #090b08;
+    --bg2:           #0e110c;
+    --bg3:           #131610;
+    --border:        #1e261a;
+    --border-accent: #2a3a22;
+    --text:          #b0bca8;
+    --text-dim:      #50603a;
+    --text-bright:   #d0dcc0;
+    --accent:        #6a9a3a;
+    --accent2:       #1e3a10;
+    --special:       #a07840;
+    --danger:        #c86030;
+    --warn:          #b09030;
+    --ok:            #5aaa60;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Libre Baskerville', serif;
+    font-size: 15px;
+    line-height: 1.8;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 50% at 50% 110%, rgba(20, 60, 10, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wiki-nav {
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+  }
+  .wiki-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+  }
+  .wiki-logo {
+    font-family: 'Inconsolata', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+    text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--border-accent);
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .wiki-logo:hover { background: rgba(255,255,255,0.04); }
+  .wiki-back {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-left: 1px solid var(--border);
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+  .wiki-back:hover { color: var(--text-bright); }
+  .wiki-breadcrumb {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    padding: 0 14px;
+    border-left: 1px solid var(--border);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wiki-breadcrumb span { color: var(--accent); }
+
+  .layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .article-header {
+    padding: 52px 0 36px;
+    border-bottom: 1px solid var(--border);
+    animation: fadeDown 0.7s 0.1s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .article-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--special);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .article-label::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--special);
+  }
+
+  h1 {
+    font-family: 'IM Fell English', serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    color: var(--text-bright);
+    line-height: 1.15;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .sci-name {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .article-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+  .meta-item { display: flex; gap: 6px; }
+  .meta-item b { color: var(--text); font-weight: 600; }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 40px;
+    padding: 40px 0;
+    align-items: start;
+  }
+  @media (max-width: 750px) {
+    .content-grid { grid-template-columns: 1fr; }
+    .sidebar { order: -1; }
+  }
+
+  .infobox {
+    border: 1px solid var(--border-accent);
+    background: var(--bg2);
+    animation: fadeLeft 0.8s 0.3s ease both;
+    position: sticky;
+    top: 56px;
+  }
+  .infobox-title {
+    background: var(--accent2);
+    padding: 10px 16px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+  }
+  .infobox-body { padding: 0; }
+  .infobox-row {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .infobox-row:last-child { border-bottom: none; }
+  .infobox-key {
+    background: var(--bg3);
+    padding: 9px 12px;
+    width: 110px;
+    flex-shrink: 0;
+    color: var(--text-dim);
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+  }
+  .infobox-val {
+    padding: 9px 12px;
+    color: var(--text);
+    flex: 1;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .infobox-val.danger  { color: var(--danger); font-weight: 700; }
+  .infobox-val.warning { color: var(--warn); }
+  .infobox-val.ok      { color: var(--ok); }
+  .infobox-val em      { color: var(--special); font-style: italic; }
+
+  .tags {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border: 1px solid var(--border-accent);
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .toc {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    animation: fadeIn 0.6s 0.4s ease both;
+  }
+  .toc-title {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+  .toc ol { padding-left: 16px; font-size: 13px; line-height: 2; }
+  .toc a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+  .toc a:hover { color: var(--special); }
+  .toc .sub { padding-left: 16px; list-style: none; font-size: 12px; }
+  .toc .sub li::before { content: '↳ '; color: var(--text-dim); }
+
+  .article-body { animation: fadeIn 0.7s 0.25s ease both; }
+  section { margin-bottom: 48px; }
+
+  h2 {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.55rem;
+    color: var(--text-bright);
+    border-bottom: 1px solid var(--border-accent);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  h2 .sec-num {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+
+  p { margin-bottom: 14px; color: var(--text); }
+
+  .lead {
+    font-size: 1.05rem;
+    color: var(--text-bright);
+    line-height: 1.9;
+    border-left: 2px solid var(--accent);
+    padding-left: 18px;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .stage-card {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    margin: 20px 0;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .stage-card:hover { border-color: var(--border-accent); }
+
+  .stage-header {
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stage-num {
+    font-family: 'Inconsolata', monospace;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  .stage-card.s1 .stage-num { color: #6a8a50; }
+  .stage-card.s2 .stage-num { color: var(--accent); }
+  .stage-card.s3 .stage-num { color: var(--special); }
+  .stage-card.s4 .stage-num { color: var(--warn); }
+  .stage-card.s5 .stage-num { color: #c87840; opacity: 0.9; }
+
+  .stage-title-block h3 { margin: 0; font-size: 1.05rem; color: var(--text-bright); }
+  .stage-subtitle {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .stage-duration {
+    margin-left: auto;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .stage-badge {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--accent2);
+    color: var(--text-bright);
+    padding: 2px 8px;
+    margin-left: 6px;
+  }
+
+  .stage-body { padding: 16px 18px; }
+
+  .stage-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+  @media (max-width: 580px) { .stage-cols { grid-template-columns: 1fr; } }
+
+  .stage-block-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .symptom-list {
+    list-style: none;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .symptom-list li {
+    padding: 3px 0;
+    padding-left: 14px;
+    position: relative;
+    color: var(--text);
+  }
+  .symptom-list li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  .mechanism-text {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .note-box {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(106, 154, 58, 0.07);
+    border-left: 2px solid var(--accent);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-top: 14px;
+  }
+  .note-icon { color: var(--accent); flex-shrink: 0; font-size: 14px; }
+
+  .warning-box {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(200, 96, 48, 0.08);
+    border-left: 2px solid var(--danger);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-top: 14px;
+  }
+  .warning-icon { color: var(--danger); flex-shrink: 0; font-size: 14px; }
+
+  .special-box {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(160, 120, 64, 0.08);
+    border-left: 2px solid var(--special);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-top: 14px;
+  }
+  .special-icon { color: var(--special); flex-shrink: 0; font-size: 14px; }
+
+  table.treatment-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-top: 20px;
+  }
+  .treatment-table th {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-accent);
+    background: var(--bg3);
+  }
+  .treatment-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .treatment-table tr:last-child td { border-bottom: none; }
+
+  .stage-pill {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    background: var(--bg3);
+    border: 1px solid var(--border-accent);
+    padding: 2px 10px;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .prog-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    flex-shrink: 0;
+    vertical-align: middle;
+  }
+  .prog-ok   { background: var(--ok); }
+  .prog-warn { background: var(--warn); }
+  .prog-bad  { background: var(--danger); }
+
+  .stage-progress { margin: 24px 0; }
+  .stage-progress-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .stage-track {
+    display: flex;
+    height: 6px;
+    gap: 2px;
+    border-radius: 0;
+    overflow: hidden;
+  }
+  .seg { flex: 1; }
+  .seg-1 { background: #4a7a30; }
+  .seg-2 { background: #6a9a3a; }
+  .seg-3 { background: #a07840; }
+  .seg-4 { background: #b09030; }
+  .seg-5 { background: #c87840; }
+  .stage-labels {
+    display: flex;
+    margin-top: 5px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+  .stage-labels span { flex: 1; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .footer-note { font-style: italic; color: #3a5028; }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(16px); }
+    to   { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="wiki-nav">
+  <div class="wiki-nav-inner">
+    <a href="index.html" class="wiki-logo">Патологиариум</a>
+    <a href="index.html" class="wiki-back">← Архив</a>
+    <div class="wiki-breadcrumb">Паразитарное · <span>Xylonema Arboris</span></div>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <div class="article-header">
+    <div class="article-label">Паразитарное расстройство · Высший приоритет · Дендробиотическое</div>
+    <h1>Синдром Древесного Проникновения</h1>
+    <span class="sci-name">Xylonema Arboris — X.A.</span>
+    <div class="article-meta">
+      <div class="meta-item"><b>Тип:</b> Паразитарный гельминтоз</div>
+      <div class="meta-item"><b>Стадий:</b> 5</div>
+      <div class="meta-item"><b>Летальность:</b> ~10–30% (V ст., почв. фактор)</div>
+      <div class="meta-item"><b>Лечение:</b> Только ст. I–II</div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+
+    <main class="article-body">
+
+      <nav class="toc">
+        <div class="toc-title">Содержание</div>
+        <ol>
+          <li><a href="#overview">Общее описание</a></li>
+          <li><a href="#etiology">Этиология и патогенез</a></li>
+          <li><a href="#mechanism">Механизм дендрификации</a></li>
+          <li><a href="#stages">Стадии прогрессии</a>
+            <ul class="sub">
+              <li><a href="#s1">I — Инкубация</a></li>
+              <li><a href="#s2">II — Поведенческая адаптация</a></li>
+              <li><a href="#s3">III — Первичная дендрификация</a></li>
+              <li><a href="#s4">IV — Активное замещение</a></li>
+              <li><a href="#s5">V — Полное одревеснение</a></li>
+            </ul>
+          </li>
+          <li><a href="#amputation">Феномен ампутации</a></li>
+          <li><a href="#treatment">Лечение и прогноз</a></li>
+          <li><a href="#threat">Угроза для окружающих</a></li>
+        </ol>
+      </nav>
+
+      <!-- §1 ОБЩЕЕ ОПИСАНИЕ -->
+      <section id="overview">
+        <h2><span class="sec-num">§1</span> Общее описание</h2>
+
+        <p class="lead">Xylonema Arboris — паразитарное заражение древесными нематодами вида <em>Xylonema silvestre</em>, проникающими в организм человека через контакт с корой, древесиной и растительным волокном. Итогом нелеченой инфекции является полное замещение костно-тканевых структур носителя биоорганическим материалом, идентичным по составу исходному дереву-вектору.</p>
+
+        <p>Болезнь примечательна своим парадоксом: по мере прогрессирования инфекции носитель всё менее склонен воспринимать происходящее как патологию. На поздних стадиях большинство инфицированных убеждены, что находятся в оптимальном состоянии — и нередко искренни в этом. Это делает Xylonema Arboris одним из наиболее социально опасных паразитозов архива: не из-за агрессивного распространения, а из-за систематического сопротивления носителей любой форме вмешательства.</p>
+
+        <p>Уникальной особенностью является также финальный адаптивный сценарий: если к моменту полного одревеснения носитель находится на пригодной почве, симбиотический организм способен перейти к минеральному питанию, поддерживая жизнедеятельность хоста в изменённой форме. Часть задокументированных носителей V стадии, по имеющимся данным, ведут функциональное существование.</p>
+
+        <div class="note-box">
+          <span class="note-icon">⚡</span>
+          <span>В народной традиции болезнь иногда называют «дровяной хворью» или «болезнью лесоруба» — из-за профессионального профиля наиболее часто поражаемых групп.</span>
+        </div>
+      </section>
+
+      <!-- §2 ЭТИОЛОГИЯ -->
+      <section id="etiology">
+        <h2><span class="sec-num">§2</span> Этиология и патогенез</h2>
+        <p>Возбудитель — нематода <em>Xylonema silvestre</em>, микроскопический древесный червь, обитающий в сосудистых тканях ряда деревьев. Личинки паразита проникают в организм человека через повреждения кожи при контакте с заражённой корой, свежесрубленной древесиной, щепой или растительным волокном. Простого прикосновения к гладкой поверхности, как правило, недостаточно — необходима механическая травматизация эпидермиса.</p>
+
+        <p><strong style="color:var(--special)">Гипотеза ксилотрансформации.</strong> Основная исследовательская концепция предполагает, что паразит в ходе своего жизненного цикла выделяет вещества, постепенно перепрограммирующие клеточный матрикс носителя — запуская замену синтеза коллагена на синтез целлюлозо-подобного биополимера с характеристиками древесины.</p>
+
+        <p><strong style="color:var(--special)">Гипотеза нейрохимической маскировки.</strong> На поведенческой стадии (II) паразит предположительно воздействует на систему обработки болевых и тревожных сигналов, подавляя реакцию на изменения в теле. Механизм остаётся невыясненным — предположительно, через секрецию нейромодулирующих пептидов.</p>
+
+        <p><strong style="color:var(--special)">Гипотеза вектор-детерминизма.</strong> Ряд наблюдений указывает на то, что итоговый состав и текстура замещённой ткани соответствует исходному дереву-вектору: кора дуба даёт тёмно-серую, грубую структуру; берёза — белёсую, гладкую; сосна — янтарно-золотистую. Данная зависимость не объяснена.</p>
+      </section>
+
+      <!-- §3 МЕХАНИЗМ -->
+      <section id="mechanism">
+        <h2><span class="sec-num">§3</span> Механизм дендрификации</h2>
+        <p>Процесс замещения тканей разворачивается постепенно и не сопровождается болевым синдромом — предположительно, из-за нейрохимического подавления болевых рецепторов паразитом. Видимые изменения сначала затрагивают дистальные структуры с относительно низким кровоснабжением: ногти, концы пальцев, — а затем распространяются проксимально.</p>
+
+        <div class="stage-progress">
+          <div class="stage-progress-label">Прогрессия дендрификации по стадиям</div>
+          <div class="stage-track">
+            <div class="seg seg-1"></div>
+            <div class="seg seg-2"></div>
+            <div class="seg seg-3"></div>
+            <div class="seg seg-4"></div>
+            <div class="seg seg-5"></div>
+          </div>
+          <div class="stage-labels">
+            <span>I · Скрыто</span>
+            <span>II · Поведение</span>
+            <span>III · Пальцы</span>
+            <span>IV · Суставы</span>
+            <span>V · Полностью</span>
+          </div>
+        </div>
+
+        <p>Замещённые структуры сохраняют частичную функциональность за счёт того, что нематоды формируют в них квазисосудистую сеть — подобие ксилемы, способную проводить питательные вещества. Именно поэтому носитель на IV–V стадии способен двигать замещёнными конечностями, хотя точность и чувствительность значительно снижены.</p>
+
+        <p>Параллельно с дендрификацией у носителя начиная со II стадии нарастает специфическая нейрохимическая «удовлетворённость» — вероятно, паразитарного происхождения, — которая подавляет тревогу относительно изменений в собственном теле и блокирует мотивацию к лечению.</p>
+      </section>
+
+      <!-- §4 СТАДИИ -->
+      <section id="stages">
+        <h2><span class="sec-num">§4</span> Стадии прогрессии</h2>
+
+        <!-- СТАДИЯ I -->
+        <div class="stage-card s1" id="s1">
+          <div class="stage-header">
+            <div class="stage-num">I</div>
+            <div class="stage-title-block">
+              <h3 style="color:#6a8a50; margin:0;">Инкубация <span class="stage-badge" style="background:#1a2e10">Латентная</span></h3>
+              <div class="stage-subtitle">Паразит приживается и размножается · Внешние признаки отсутствуют</div>
+            </div>
+            <div class="stage-duration">
+              2–8 нед.<br>
+              <span style="color:var(--ok);font-size:10px">↻ ОБРАТИМО</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Личинки <em>X. silvestre</em> проникают через кожу, мигрируют в подкожные ткани и начинают колонизацию. Внешних симптомов нет; носитель не подозревает о заражении. Единственный диагностически значимый признак — постепенное изменение цвета и консистенции каловых масс, которые приобретают оттенок, характерный для древесины дерева-вектора, а также становятся заметно более твёрдыми и компактными.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>Изменение цвета кала в сторону коричнево-серого или охристого</li>
+                  <li>Увеличение плотности и твёрдости каловых масс</li>
+                  <li>Слабое, периодическое зудение в месте контакта</li>
+                  <li>Отсутствие субъективных жалоб</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Нематоды активно питаются, выделяя метаболиты в кишечник через лимфатическую систему. Целлюлозные компоненты экскрементов паразита окрашивают и уплотняют стул. Паразит ещё не воздействует на ЦНС.</div>
+              </div>
+            </div>
+            <div class="note-box" style="margin-top:14px">
+              <span class="note-icon">⚡</span>
+              <span>I стадия — единственное терапевтическое окно с высокой эффективностью. Противогельминтная терапия в сочетании с поддерживающим лечением даёт полную ремиссию в большинстве случаев.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- СТАДИЯ II -->
+        <div class="stage-card s2" id="s2">
+          <div class="stage-header">
+            <div class="stage-num">II</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--accent); margin:0;">Поведенческая адаптация <span class="stage-badge" style="background:#1a2e10">Нейрохимическая</span></h3>
+              <div class="stage-subtitle">Паразит воздействует на ЦНС · Снижение критического мышления к себе</div>
+            </div>
+            <div class="stage-duration">
+              1–4 мес.<br>
+              <span style="color:var(--warn);font-size:10px">⚠ ОБРАТИМОСТЬ СНИЖЕНА</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Колония достигает достаточной численности, чтобы начать нейрохимическое воздействие на хоста. Носитель по-прежнему выглядит внешне нормально, однако демонстрирует специфическую поведенческую картину: нарастающее равнодушие к любым сигналам, касающимся собственного здоровья, и мягкий, но устойчивый отказ от медицинской помощи. В части случаев наблюдается эпизодический отказ от уже назначенного лечения без объяснимой причины.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>Нарастающее безразличие к тревожным сигналам о здоровье</li>
+                  <li>Мягкий, немотивированный отказ от медицинских консультаций</li>
+                  <li>Рационализация отказа от лечения («само пройдёт»)</li>
+                  <li>Продолжение изменений кала (цвет, консистенция)</li>
+                  <li>Возможно: слабая ломкость ногтей, не замеченная носителем</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Предположительно, нематоды начинают секрецию нейромодуляторов, подавляющих тревожные реакции лимбической системы. Паразиту эволюционно выгодно, чтобы хост оставался неизлеченным — отсюда системное подавление поведения, направленного на лечение.</div>
+              </div>
+            </div>
+            <div class="warning-box">
+              <span class="warning-icon">⚠</span>
+              <span>II стадия — последний момент, когда противопаразитарное лечение ещё может дать стабильный результат. После перехода в III стадию терапевтическое окно закрывается. Особую сложность создаёт то, что носитель на II стадии активно уклоняется от лечения.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- СТАДИЯ III -->
+        <div class="stage-card s3" id="s3">
+          <div class="stage-header">
+            <div class="stage-num">III</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--special); margin:0;">Первичная дендрификация <span class="stage-badge" style="background:#2a2010">Морфологическая</span></h3>
+              <div class="stage-subtitle">Замещение дистальных структур · Носитель не осознаёт изменений</div>
+            </div>
+            <div class="stage-duration">
+              2–6 мес.<br>
+              <span style="color:var(--danger);font-size:10px">✕ НЕОБРАТИМО</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Паразит достигает достаточной биомассы для начала активного структурного замещения. Первыми трансформируются ногтевые пластины и концевые фаланги пальцев — они постепенно приобретают текстуру и цвет коры или древесины дерева-вектора. Нейрохимическая маскировка к этому моменту полностью сформирована: носитель либо не замечает изменений, либо, будучи прямо указан на них, убеждает окружающих, что «так и надо» или «мне даже нравится».</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы и изменения</div>
+                <ul class="symptom-list">
+                  <li>Ногти приобретают характерный цвет и текстуру (кора/древесина)</li>
+                  <li>Кончики пальцев твердеют и визуально «деревенеют»</li>
+                  <li>Снижение тактильной чувствительности в поражённых зонах</li>
+                  <li>Носитель отрицает изменения или доволен ими</li>
+                  <li>Полный отказ от обращения за помощью</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Колония нематод формирует «фронт замещения» — зону, в которой клетки-фибробласты хоста переключаются на производство целлюлозоподобного биополимера вместо коллагена. Паразиты формируют квазисосудистую сеть в замещённой ткани, обеспечивая минимальное питание.</div>
+              </div>
+            </div>
+            <div class="special-box" style="margin-top:14px;">
+              <span class="special-icon">◈</span>
+              <span>Задокументировано: носители III стадии нередко демонстрируют повышенную гордость поражёнными конечностями. В ряде случаев — публично показывают «деревянные» пальцы как достопримечательность. Исследователи расценивают это как прямой поведенческий эффект нейрохимии паразита.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- СТАДИЯ IV -->
+        <div class="stage-card s4" id="s4">
+          <div class="stage-header">
+            <div class="stage-num">IV</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--warn); margin:0;">Активное замещение <span class="stage-badge" style="background:#302010">Структурная</span></h3>
+              <div class="stage-subtitle">Суставы, уши, нос, ступни · Глубокая трансформация</div>
+            </div>
+            <div class="stage-duration">
+              3–12 мес.<br>
+              <span style="color:var(--danger);font-size:10px">✕ КРИТИЧЕСКИ</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Фронт замещения смещается проксимально, захватывая структурно более значимые части тела: коленные чашечки, кисти целиком, ушные раковины, нос, ступни. Носитель сохраняет подвижность за счёт квазисосудистой сети паразита, хотя точность движений падает. Нейрохимическое подавление к этому моменту настолько глубоко, что большинство носителей категорически отрицают какую-либо проблему — и ведут обычную социальную жизнь.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы и изменения</div>
+                <ul class="symptom-list">
+                  <li>Коленные чашечки, кисти — видимая «деревянная» структура</li>
+                  <li>Уши и нос: замещение хрящевой ткани</li>
+                  <li>Ступни: частичная или полная дендрификация</li>
+                  <li>Снижение точности движений, моторики</li>
+                  <li>Характерный звук при постукивании по поражённым зонам</li>
+                  <li>Носитель по-прежнему категорически «доволен»</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Колония перешла к активной экспансии — нематоды питаются минеральными и органическими ресурсами хоста, одновременно производя замещающий биополимер. Суставная жидкость частично замещается соком-аналогом. Квазисосудистая сеть теперь обеспечивает питание крупных структур.</div>
+              </div>
+            </div>
+            <div class="warning-box">
+              <span class="warning-icon">⚠</span>
+              <span>Любая попытка принудительного лечения или изоляции носителя на IV стадии встречает активное сопротивление. Носитель способен убеждать окружающих в своём «нормальном» состоянии и внешне выглядит достаточно функциональным для поддержания этой позиции.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- СТАДИЯ V -->
+        <div class="stage-card s5" id="s5">
+          <div class="stage-header">
+            <div class="stage-num">V</div>
+            <div class="stage-title-block">
+              <h3 style="color:#c87840; margin:0;">Полное одревеснение <span class="stage-badge" style="background:#2a1408; color:#c87840">Финальная</span></h3>
+              <div class="stage-subtitle">Тотальная дендрификация · Сохранение базовых функций</div>
+            </div>
+            <div class="stage-duration">
+              Бессрочно<br>
+              <span style="color:#c87840;font-size:10px">◈ СИМБИОЗ / ЛЕТАЛЬНО</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">К этому моменту практически весь скелетно-мышечный аппарат носителя замещён биополимером паразита. Тем не менее носитель сохраняет способность дышать, есть, говорить и передвигаться — за счёт обширной квазисосудистой сети нематод. Кожные покровы приобретают вид и текстуру коры дерева-вектора. Носитель, как правило, полностью удовлетворён своим состоянием.</p>
+            <p style="font-size:13.5px; margin-bottom:12px;">Если в момент финальной трансформации носитель находился на пригодной почве — богатой минералами, с достаточной влажностью — организм способен перейти в режим частичного минерального питания: корнеподобные структуры из ступней врастают в почву, обеспечивая доступ к воде и минеральным веществам. В этом сценарии паразит и носитель переходят в состояние устойчивого симбиоза.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Сохранённые функции</div>
+                <ul class="symptom-list">
+                  <li>Дыхание (через модифицированные лёгкие)</li>
+                  <li>Речь и слух (частично)</li>
+                  <li>Питание через пищеварительную систему</li>
+                  <li>Ограниченная подвижность</li>
+                  <li>При почвенном контакте — минеральное питание</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Паразитарная квазисосудистая сеть полностью интегрирована с остаточными органическими структурами хоста. В почвенном сценарии нематоды формируют ризоидные структуры, способные к осмотическому поглощению минеральных растворов. Ресурсы делятся между паразитом и хостом.</div>
+              </div>
+            </div>
+            <div class="special-box" style="margin-top:14px;">
+              <span class="special-icon">◈</span>
+              <span>Носители V стадии в почвенном сценарии описывались очевидцами как «неподвижные, но явно живые». По имеющимся данным, они способны поддерживать разговор и выражать субъективное благополучие. Исходы «почвенного» сценария в долгосрочной перспективе не изучены. «Внепочвенные» носители V стадии имеют существенно худший прогноз.</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- §5 ФЕНОМЕН АМПУТАЦИИ -->
+      <section id="amputation">
+        <h2><span class="sec-num">§5</span> Феномен ампутации</h2>
+        <p>Хирургическое удаление конечностей, замещённых паразитом, на стадиях III и выше сопряжено с непредсказуемыми последствиями, не поддающимися систематизации. Зафиксированные исходы варьировались от клинически нейтральных до биологически экстраординарных.</p>
+
+        <p>На месте ампутации в ряде случаев начинался рост новой структуры из культи («кольца» — как называют это исследователи). Варианты роста: точная регенерация ампутированной конечности в деревянной форме; рост конечности альтернативной морфологии — задокументированы случаи появления структур, не соответствующих человеческой анатомии, но обладающих частичной функциональностью.</p>
+
+        <div class="warning-box">
+          <span class="warning-icon">⚠</span>
+          <span>Ампутация поражённых конечностей не рекомендуется как терапевтический метод, начиная со стадии III. Непредсказуемость регенерации делает вмешательство потенциально более опасным, чем сохранение статус-кво. Задокументированы случаи, когда регенерировавшая структура была функциональной, и случаи, когда она существенно ухудшала состояние носителя.</span>
+        </div>
+
+        <div class="note-box" style="margin-top:14px">
+          <span class="note-icon">⚡</span>
+          <span>Природа регенеративного феномена не объяснена. Предполагается, что нематоды в зоне культи сохраняют «морфологическую память» о первоначальной структуре — однако механизм её воспроизведения (или нарушения воспроизведения) не установлен.</span>
+        </div>
+      </section>
+
+      <!-- §6 ЛЕЧЕНИЕ -->
+      <section id="treatment">
+        <h2><span class="sec-num">§6</span> Лечение и прогноз</h2>
+        <p>Эффективное лечение возможно исключительно в пределах стадий I–II. Начиная со стадии III паразит необратимо интегрируется в структурные ткани хоста, и элиминация колонии без разрушения носителя невозможна. Дополнительную сложность создаёт нейрохимический эффект стадии II: носитель активно уклоняется от лечения именно тогда, когда оно ещё могло бы помочь.</p>
+        <table class="treatment-table">
+          <thead>
+            <tr>
+              <th>Стадия</th>
+              <th>Прогноз</th>
+              <th>Протокол</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="stage-pill">Стадия I</span></td>
+              <td><span class="prog-dot prog-ok"></span> Благоприятный</td>
+              <td>Противогельминтная терапия. Полная ремиссия при раннем вмешательстве. Рекомендован скрининг лиц, работающих с древесиной.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия II</span></td>
+              <td><span class="prog-dot prog-warn"></span> Осторожный</td>
+              <td>Расширенная противопаразитарная схема. Ремиссия достигается в ~60% случаев. Основная сложность — согласие носителя на лечение. Нередко требуется опека или принудительная госпитализация.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия III</span></td>
+              <td><span class="prog-dot prog-bad"></span> Неблагоприятный</td>
+              <td>Замедление прогрессии. Лечение паразита невозможно без ущерба для носителя. Задача — предотвращение перехода в IV стадию; успех крайне редок.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия IV</span></td>
+              <td><span class="prog-dot prog-bad"></span> Критический</td>
+              <td>Паллиативная поддержка. Поддержание функций питания и дыхания. Изоляция для наблюдения. Ампутация не показана.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия V</span></td>
+              <td><span class="prog-dot prog-bad"></span> Неопределённый</td>
+              <td>Медицинское вмешательство не имеет прецедентов успеха. При почвенном сценарии — поддерживающее наблюдение. При внепочвенном — паллиатив, прогноз летальный.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- §7 УГРОЗА -->
+      <section id="threat">
+        <h2><span class="sec-num">§7</span> Угроза для окружающих</h2>
+        <p>Xylonema Arboris не передаётся от человека к человеку — заражение происходит исключительно через контакт с деревом-вектором. Социальная угроза носит иной характер: носители стадий II–V активно сопротивляются изоляции и лечению, что существенно затрудняет эпидемиологический контроль.</p>
+        <p>Носитель на поздних стадиях внешне достаточно функционален, чтобы продолжать социальное взаимодействие. Это создаёт сложности для окружения: запущенный случай X.A. нередко выглядит как «странный, но живой» — а не как неотложная медицинская ситуация.</p>
+        <div class="note-box">
+          <span class="note-icon">⚡</span>
+          <span>Задокументированы случаи, когда носитель IV стадии убеждал родственников и соседей, что «чувствует себя лучше, чем когда-либо» — при том, что обе кисти были полностью дендрифицированы.</span>
+        </div>
+        <div class="warning-box">
+          <span class="warning-icon">⚠</span>
+          <span>При обнаружении носителя с видимыми признаками дендрификации (III стадия и выше) следует избегать физического противостояния. Носитель не представляет прямой агрессивной угрозы, однако активно уклоняется от медицинского контакта. Рекомендуется уведомить санитарную службу и не пытаться инициировать ампутацию самостоятельно.</span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="infobox">
+        <div class="infobox-title">Xylonema Arboris</div>
+        <div class="infobox-body">
+          <div class="infobox-row">
+            <div class="infobox-key">Тип</div>
+            <div class="infobox-val">Паразитарный гельминтоз · Дендробиотический</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Возбудитель</div>
+            <div class="infobox-val"><em>Xylonema silvestre</em><br>нематода древесная</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Пути</div>
+            <div class="infobox-val warning">Контакт с заражённой корой<br>Свежесрубленная древесина<br>Щепа, растительное волокно</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Инкубация</div>
+            <div class="infobox-val">2–8 недель<br><em>бессимптомно</em></div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Стадий</div>
+            <div class="infobox-val">5</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Летальность</div>
+            <div class="infobox-val danger">~10–30%<br>(V ст., внепочвенный)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Лечение</div>
+            <div class="infobox-val warning">Только ст. I–II</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Вакцина</div>
+            <div class="infobox-val danger">Отсутствует</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Угроза</div>
+            <div class="infobox-val warning">Высший приоритет</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Вектор</div>
+            <div class="infobox-val"><em>Детерминирует тип древесины</em></div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Ампутация</div>
+            <div class="infobox-val danger">Непредсказуемо<br>с ст. III</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Симбиоз</div>
+            <div class="infobox-val ok">Возможен (ст. V,<br>почвенный сценарий)</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag">паразит</span>
+          <span class="tag">дерево</span>
+          <span class="tag">трансформация</span>
+          <span class="tag">нематода</span>
+          <span class="tag">симбиоз</span>
+          <span class="tag">необратимо</span>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    <div>Патологический Архив · Лор-материал</div>
+    <div class="footer-note">«Дерево не болеет — оно просто растёт туда, куда ему велит природа.»</div>
+  </footer>
+
+</div>
+</body>
+</html>
