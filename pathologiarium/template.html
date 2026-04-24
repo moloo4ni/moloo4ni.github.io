@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[НАЗВАНИЕ НА РУССКОМ] — [НАУЧНОЕ НАЗВАНИЕ]</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inconsolata:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  /*
+  ═══════════════════════════════════════════════════════════════
+   ПАТОЛОГИАРИУМ — ШАБЛОН СТРАНИЦЫ
+  ═══════════════════════════════════════════════════════════════
+
+  КАК ИСПОЛЬЗОВАТЬ:
+  1. Замените все [ПЛЕЙСХОЛДЕРЫ] реальными данными
+  2. Настройте цветовую схему в секции :root (см. комментарии)
+  3. Выберите нужные стадии и удалите лишние stage-card блоки
+  4. Заполните infobox строками в sidebar
+  5. Добавьте/удалите секции в main по необходимости
+
+  ЦВЕТОВЫЕ ПРЕСЕТЫ (скопируйте нужный в :root):
+  ── Электро/синий (Fulgor-Nervosa):
+       --accent: #6a7adc; --accent2: #2a2a7a; --danger: #c83060; --special: #8ab8f8;
+  ── Кошачий/морской (Felis-Nervosa):
+       --accent: #3a9ab8; --accent2: #1a5a7a; --danger: #c8401a; --special: #7a9ab8;
+  ── Инфернальный/красный (Daemonosis):
+       --accent: #c82828; --accent2: #8a1a3a; --danger: #ff2020; --special: #e05010;
+  ── Зелёный/вирусный (Nexus Sapiens):
+       --accent: #3ab870; --accent2: #1a3a22; --danger: #c82828; --special: #50d890;
+  ── Костный/кремовый (Calcangelus):
+       --accent: #4ab0d8; --accent2: #1a5a7a; --danger: #c83a1a; --special: #d4c89a;
+  ── Янтарный/паразит (Acantha):
+       --accent: #c8860a; --accent2: #8a3a1a; --danger: #c83a1a; --special: #d4a84a;
+  ── Золотой/звёздный (Stella Faciei):
+       --accent: #e8d060; --accent2: #2a2418; --danger: #c84848; --special: #a090f0;
+  ═══════════════════════════════════════════════════════════════
+  */
+
+  :root {
+    /* ── Фон и поверхности ── */
+    --bg:            #09090e;   /* основной фон страницы */
+    --bg2:           #0e0e16;   /* фон карточек и инфобокса */
+    --bg3:           #13131c;   /* фон ячеек ключей */
+
+    /* ── Границы ── */
+    --border:        #1e1e2e;   /* основные границы */
+    --border-accent: #2a2a5a;   /* акцентные границы (infobox и т.д.) */
+
+    /* ── Текст ── */
+    --text:          #b8bcd8;   /* основной текст */
+    --text-dim:      #5a5a80;   /* приглушённый текст (метки, ключи) */
+    --text-bright:   #d8dcf8;   /* яркий текст (заголовки) */
+
+    /* ── Акценты — ИЗМЕНИТЕ ПОД ВАШУ БОЛЕЗНЬ ── */
+    --accent:        #6a7adc;   /* основной акцент (ссылки, метки, маркеры) */
+    --accent2:       #2a2a7a;   /* тёмный акцент (фон infobox-title) */
+    --special:       #8ab8f8;   /* специальный цвет (уникальный для темы) */
+
+    /* ── Статусные цвета ── */
+    --danger:        #c83060;   /* опасность, летальность */
+    --warn:          #c8b040;   /* предупреждение */
+    --ok:            #5aaa80;   /* норма, обратимо */
+  }
+
+  /* ══ СБРОС И BASE ══════════════════════════════════════════ */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Libre Baskerville', serif;
+    font-size: 15px;
+    line-height: 1.8;
+    min-height: 100vh;
+  }
+
+  /* Шумовая текстура фона */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* Радиальное свечение снизу (необязательно — удалите если не нужно) */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 50% at 50% 110%, rgba(40, 40, 120, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    /* Настройте цвет свечения под вашу тему */
+  }
+
+  /* ══ НАВБАР ════════════════════════════════════════════════ */
+  .wiki-nav {
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+  }
+  .wiki-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+  }
+  .wiki-logo {
+    font-family: 'Inconsolata', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+    text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--border-accent);
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .wiki-logo:hover { background: rgba(255,255,255,0.04); }
+  .wiki-back {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-left: 1px solid var(--border);
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+  .wiki-back:hover { color: var(--text-bright); }
+  .wiki-breadcrumb {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    padding: 0 14px;
+    border-left: 1px solid var(--border);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wiki-breadcrumb span { color: var(--accent); }
+
+  /* ══ ЛЭЙАУТ ════════════════════════════════════════════════ */
+  .layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ══ ШАПКА СТАТЬИ ══════════════════════════════════════════ */
+  .article-header {
+    padding: 52px 0 36px;
+    border-bottom: 1px solid var(--border);
+    animation: fadeDown 0.7s 0.1s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .article-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--special);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .article-label::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--special);
+  }
+
+  h1 {
+    font-family: 'IM Fell English', serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    color: var(--text-bright);
+    line-height: 1.15;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .sci-name {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .article-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+  .meta-item { display: flex; gap: 6px; }
+  .meta-item b { color: var(--text); font-weight: 600; }
+
+  /* ══ СЕТКА КОНТЕНТА ════════════════════════════════════════ */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 40px;
+    padding: 40px 0;
+    align-items: start;
+  }
+  @media (max-width: 750px) {
+    .content-grid { grid-template-columns: 1fr; }
+    .sidebar { order: -1; }
+  }
+
+  /* ══ ИНФОБОКС (SIDEBAR) ════════════════════════════════════ */
+  .infobox {
+    border: 1px solid var(--border-accent);
+    background: var(--bg2);
+    animation: fadeLeft 0.8s 0.3s ease both;
+    position: sticky;
+    top: 56px;
+  }
+  .infobox-title {
+    background: var(--accent2);
+    padding: 10px 16px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+  }
+  .infobox-body { padding: 0; }
+  .infobox-row {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .infobox-row:last-child { border-bottom: none; }
+  .infobox-key {
+    background: var(--bg3);
+    padding: 9px 12px;
+    width: 110px;
+    flex-shrink: 0;
+    color: var(--text-dim);
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+  }
+  .infobox-val {
+    padding: 9px 12px;
+    color: var(--text);
+    flex: 1;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  /* Модификаторы значений инфобокса */
+  .infobox-val.danger  { color: var(--danger); font-weight: 700; }
+  .infobox-val.warning { color: var(--warn); }
+  .infobox-val.ok      { color: var(--ok); }
+  .infobox-val em      { color: var(--special); font-style: italic; }
+
+  /* Теги в инфобоксе */
+  .tags {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border: 1px solid var(--border-accent);
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* ══ ОГЛАВЛЕНИЕ ════════════════════════════════════════════ */
+  .toc {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    animation: fadeIn 0.6s 0.4s ease both;
+  }
+  .toc-title {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+  .toc ol { padding-left: 16px; font-size: 13px; line-height: 2; }
+  .toc a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+  .toc a:hover { color: var(--special); }
+  .toc .sub { padding-left: 16px; list-style: none; font-size: 12px; }
+  .toc .sub li::before { content: '↳ '; color: var(--text-dim); }
+
+  /* ══ ТЕЛО СТАТЬИ ═══════════════════════════════════════════ */
+  .article-body { animation: fadeIn 0.7s 0.25s ease both; }
+  section { margin-bottom: 48px; }
+
+  h2 {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.55rem;
+    color: var(--text-bright);
+    border-bottom: 1px solid var(--border-accent);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  h2 .sec-num {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+
+  p { margin-bottom: 14px; color: var(--text); }
+
+  /* Вводный абзац */
+  .lead {
+    font-size: 1.05rem;
+    color: var(--text-bright);
+    line-height: 1.9;
+    border-left: 2px solid var(--accent);
+    padding-left: 18px;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  /* ══ КАРТОЧКИ СТАДИЙ ═══════════════════════════════════════ */
+  .stage-card {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    margin: 20px 0;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .stage-card:hover { border-color: var(--border-accent); }
+
+  .stage-header {
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stage-num {
+    font-family: 'Inconsolata', monospace;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0.7;
+    /* Цвет задаётся через модификаторы .s1–.s8 ниже */
+  }
+
+  /*
+   ЦВЕТА НОМЕРОВ СТАДИЙ — настройте под вашу тему:
+   Логика: от мягкого/нейтрального к опасному/финальному.
+  */
+  .stage-card.s1 .stage-num { color: #6070b8; }
+  .stage-card.s2 .stage-num { color: var(--accent); }
+  .stage-card.s3 .stage-num { color: var(--special); }
+  .stage-card.s4 .stage-num { color: var(--warn); }
+  .stage-card.s5 .stage-num { color: #e07040; }
+  .stage-card.s6 .stage-num { color: var(--danger); opacity: 0.85; }
+  .stage-card.s7 .stage-num { color: var(--danger); opacity: 1; }
+  .stage-card.s8 .stage-num { color: #fff; opacity: 0.9; }
+
+  .stage-title-block h3 { margin: 0; font-size: 1.05rem; color: var(--text-bright); }
+  .stage-subtitle {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .stage-duration {
+    margin-left: auto;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Бейдж в заголовке стадии */
+  .stage-badge {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--accent2);
+    color: var(--text-bright);
+    padding: 2px 8px;
+    margin-left: 6px;
+  }
+  /* Бейдж опасной стадии */
+  .stage-badge.fatal { background: #3a0a0a; color: var(--danger); }
+
+  .stage-body { padding: 16px 18px; }
+
+  /* Двухколоночная сетка внутри карточки */
+  .stage-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+  @media (max-width: 580px) { .stage-cols { grid-template-columns: 1fr; } }
+
+  .stage-block-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Список симптомов */
+  .symptom-list { list-style: none; font-size: 13.5px; line-height: 1.7; }
+  .symptom-list li {
+    padding: 3px 0 3px 14px;
+    position: relative;
+    color: var(--text);
+  }
+  .symptom-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 10px;
+    top: 5px;
+  }
+  /* Маркеры опасных стадий */
+  .stage-card.s5 .symptom-list li::before,
+  .stage-card.s6 .symptom-list li::before,
+  .stage-card.s7 .symptom-list li::before,
+  .stage-card.s8 .symptom-list li::before { color: var(--danger); }
+
+  /* Курсив механизма */
+  .mechanism-text {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* ══ БЛОКИ УВЕДОМЛЕНИЙ ═════════════════════════════════════ */
+
+  /* Предупреждение (красный) */
+  .warning-box {
+    border: 1px solid var(--danger);
+    background: rgba(200, 48, 96, 0.06);
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .warning-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; color: var(--danger); }
+
+  /* Заметка (акцентный) */
+  .note-box {
+    border: 1px solid var(--border-accent);
+    background: rgba(106, 122, 220, 0.05);
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    color: var(--text-dim);
+  }
+  .note-icon { color: var(--special); flex-shrink: 0; margin-top: 2px; }
+
+  /* Специальный блок (уникальный для темы) */
+  .special-box {
+    border: 1px solid #2a3a7a;
+    background: rgba(106, 122, 220, 0.07);
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    color: var(--text-dim);
+    font-style: italic;
+    /* Измените цвет border и background под вашу тему */
+  }
+  .special-icon { color: var(--special); flex-shrink: 0; margin-top: 2px; font-style: normal; }
+
+  /* ══ ПРОГРЕСС-БАР СТАДИЙ ════════════════════════════════════ */
+  .stage-progress {
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 14px 18px;
+  }
+  .stage-progress-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+  .stage-track {
+    display: flex;
+    height: 6px;
+    gap: 3px;
+    margin-bottom: 8px;
+  }
+  /* Сегменты: замените цвета под вашу тему */
+  .stage-track .seg { flex: 1; height: 100%; }
+  .stage-track .seg-1 { background: #404880; opacity: 0.5; }
+  .stage-track .seg-2 { background: var(--accent); opacity: 0.55; }
+  .stage-track .seg-3 { background: var(--special); opacity: 0.6; }
+  .stage-track .seg-4 { background: var(--warn); opacity: 0.7; }
+  .stage-track .seg-5 { background: #e07040; opacity: 0.75; }
+  .stage-track .seg-6 { background: var(--danger); opacity: 0.85; }
+  .stage-track .seg-7 { background: var(--danger); opacity: 0.95; }
+  .stage-track .seg-8 { background: #fff; opacity: 0.9; }
+  .stage-labels {
+    display: flex;
+    gap: 3px;
+  }
+  .stage-labels span {
+    flex: 1;
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  /* ══ ТАБЛИЦА ЛЕЧЕНИЯ ═══════════════════════════════════════ */
+  .treatment-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-top: 16px;
+  }
+  .treatment-table th {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border-accent);
+    background: var(--bg3);
+    font-weight: 600;
+  }
+  .treatment-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .treatment-table tr:hover td { background: var(--bg2); }
+
+  /* Точки прогноза */
+  .prog-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .prog-ok   { background: var(--ok); }
+  .prog-warn { background: var(--warn); }
+  .prog-bad  { background: var(--danger); }
+
+  /* Пилюли стадий */
+  .stage-pill {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    border: 1px solid var(--border-accent);
+    padding: 2px 8px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    letter-spacing: 0.06em;
+  }
+
+  /* ══ ФУТЕР ══════════════════════════════════════════════════ */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .footer-note {
+    font-style: italic;
+    font-family: 'IM Fell English', serif;
+    font-size: 12px;
+    color: var(--accent);
+    opacity: 0.7;
+    letter-spacing: 0;
+  }
+
+  /* ══ АНИМАЦИИ ═══════════════════════════════════════════════ */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(12px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ══ RESPONSIVE ═════════════════════════════════════════════ */
+  @media (max-width: 480px) {
+    .article-meta { gap: 12px; }
+    .stage-header { flex-wrap: wrap; }
+    .stage-duration { margin-left: 0; }
+  }
+</style>
+  <link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+
+<!-- ══ НАВБАР ══════════════════════════════════════════════════ -->
+<div class="wiki-nav">
+  <div class="wiki-nav-inner">
+    <a href="index.html" class="wiki-logo">Патологиариум</a>
+    <a href="index.html" class="wiki-back">← Каталог</a>
+    <!-- breadcrumb: замените на научное название болезни -->
+    <div class="wiki-breadcrumb"><span>[НАУЧНОЕ НАЗВАНИЕ]</span></div>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- ══ ШАПКА СТАТЬИ ═══════════════════════════════════════════ -->
+  <div class="article-header">
+    <!--
+      article-label: подкатегория и тип угрозы.
+      Примеры: "Вымышленный синдром · Электрофизиологическое расстройство"
+               "Нейроповеденческое расстройство · Вымышленная вселенная"
+               "Паразитарное · Высший приоритет"
+    -->
+    <div class="article-label">[ПОДКАТЕГОРИЯ] · [ТИП УГРОЗЫ / УРОВЕНЬ ОПАСНОСТИ]</div>
+
+    <!-- h1: русское название -->
+    <h1>[НАЗВАНИЕ НА РУССКОМ]</h1>
+
+    <!-- Научное латинское название -->
+    <span class="sci-name">[Научное Название] — [Аббревиатура]</span>
+
+    <!-- Краткие мета-данные в строку -->
+    <div class="article-meta">
+      <div class="meta-item"><b>Тип:</b> [тип]</div>
+      <div class="meta-item"><b>Стадий:</b> [N]</div>
+      <div class="meta-item"><b>Летальность:</b> [%]</div>
+      <div class="meta-item"><b>Лечение:</b> [условие]</div>
+    </div>
+  </div>
+
+  <!-- ══ ОСНОВНАЯ СЕТКА ══════════════════════════════════════════ -->
+  <div class="content-grid">
+
+    <!-- ── ЛЕВАЯ КОЛОНКА: ОСНОВНОЙ ТЕКСТ ─────────────────────── -->
+    <main class="article-body">
+
+      <!-- ОГЛАВЛЕНИЕ -->
+      <nav class="toc">
+        <div class="toc-title">Содержание</div>
+        <ol>
+          <li><a href="#overview">Общее описание</a></li>
+          <li><a href="#etiology">Этиология и патогенез</a></li>
+          <!--
+            Добавьте дополнительные секции по необходимости.
+            Примеры: "Механизм накопления заряда", "Морфологические изменения",
+                     "Пути передачи", "Порог совместимости"
+          -->
+          <li><a href="#stages">Стадии прогрессии</a>
+            <ul class="sub">
+              <li><a href="#s1">I — [Название стадии]</a></li>
+              <li><a href="#s2">II — [Название стадии]</a></li>
+              <li><a href="#s3">III — [Название стадии]</a></li>
+              <!-- Добавьте или удалите строки -->
+            </ul>
+          </li>
+          <li><a href="#treatment">Лечение и прогноз</a></li>
+          <li><a href="#threat">Угроза для окружающих</a></li>
+        </ol>
+      </nav>
+
+      <!-- ── §1 ОБЩЕЕ ОПИСАНИЕ ──────────────────────────────────── -->
+      <section id="overview">
+        <h2><span class="sec-num">§1</span> Общее описание</h2>
+
+        <!-- Лид-абзац: краткая суть болезни, 2-4 предложения -->
+        <p class="lead">[ОПИСАНИЕ БОЛЕЗНИ — краткая суть: что происходит с носителем, чем уникально, каков итог]</p>
+
+        <p>[Расширенный первый абзац: как протекает, что делает с носителем, почему интересна]</p>
+        <p>[Второй абзац: ключевые особенности или парадоксы болезни]</p>
+
+        <!-- Необязательная заметка: особый феномен, терминология, народное название и т.д. -->
+        <!-- <div class="note-box">
+          <span class="note-icon">⚡</span>
+          <span>[Дополнительное наблюдение или уточнение об особенностях синдрома]</span>
+        </div> -->
+      </section>
+
+      <!-- ── §2 ЭТИОЛОГИЯ ─────────────────────────────────────────── -->
+      <section id="etiology">
+        <h2><span class="sec-num">§2</span> Этиология и патогенез</h2>
+        <p>Природа возбудителя не установлена. [ОПИСАНИЕ предполагаемых причин и гипотез о происхождении]</p>
+        <p><strong style="color:var(--special)">[Гипотеза 1].</strong> [Описание первой гипотезы о причине болезни]</p>
+        <p><strong style="color:var(--special)">[Гипотеза 2].</strong> [Описание второй гипотезы]</p>
+        <p><strong style="color:var(--special)">[Гипотеза 3].</strong> [Описание третьей гипотезы, если нужна]</p>
+      </section>
+
+      <!--
+      ══ ДОПОЛНИТЕЛЬНЫЕ СЕКЦИИ ══════════════════════════════════════
+      Раскомментируйте и заполните нужные. Удалите остальные.
+
+      ── Секция механизма (для болезней с особым механизмом):
+      <section id="mechanism">
+        <h2><span class="sec-num">§3</span> [Название механизма]</h2>
+        <p>[Описание]</p>
+
+        Прогресс-бар стадий (необязательно):
+        <div class="stage-progress">
+          <div class="stage-progress-label">Прогрессия по стадиям</div>
+          <div class="stage-track">
+            <div class="seg seg-1"></div>
+            <div class="seg seg-2"></div>
+            <div class="seg seg-3"></div>
+            ...
+          </div>
+          <div class="stage-labels">
+            <span>I</span><span>II</span><span>III</span>...
+          </div>
+        </div>
+
+        <p>[Продолжение описания механизма]</p>
+      </section>
+      ═══════════════════════════════════════════════════════════════
+      -->
+
+      <!-- ── §3 СТАДИИ ───────────────────────────────────────────── -->
+      <section id="stages">
+        <h2><span class="sec-num">§3</span> Стадии прогрессии</h2>
+
+        <!-- ────────────────── СТАДИЯ I ─────────────────────────── -->
+        <div class="stage-card s1" id="s1">
+          <div class="stage-header">
+            <div class="stage-num">I</div>
+            <div class="stage-title-block">
+              <!--
+                Цвет h3: используйте CSS-переменные или hex.
+                Бейдж: "Латентная", "Субклиническая", "Инкубационная" и т.д.
+                Бейдж-стиль: background можно менять (тёмный вариант акцента).
+              -->
+              <h3 style="color:#7080c8; margin:0;">[Название стадии] <span class="stage-badge" style="background:#1e1e5a">[Тип стадии]</span></h3>
+              <div class="stage-subtitle">[Краткое описание · Ключевые признаки]</div>
+            </div>
+            <!--
+              Статус обратимости:
+              Обратимо:        "↻ ОБРАТИМО"      color:#7080c8 или var(--ok)
+              Снижена:         "⚠ ОБРАТИМОСТЬ СНИЖЕНА"  color:var(--warn)
+              Необратимо:      "✕ НЕОБРАТИМО"    color:var(--danger)
+              Летально:        "✕ ЛЕТАЛЬНО"      color:var(--danger)
+            -->
+            <div class="stage-duration">
+              [Срок]<br>
+              <span style="color:var(--ok);font-size:10px">↻ ОБРАТИМО</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">[Описание стадии: что происходит, что чувствует носитель, почему сложно диагностировать]</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>[Симптом 1]</li>
+                  <li>[Симптом 2]</li>
+                  <li>[Симптом 3]</li>
+                  <li>[Симптом 4]</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">[Биологическое/физиологическое объяснение симптомов. Что именно происходит на клеточном/нейронном/физическом уровне]</div>
+              </div>
+            </div>
+            <!-- Заметка для первой стадии (как правило — о терапевтическом окне) -->
+            <div class="note-box" style="margin-top:14px">
+              <span class="note-icon">⚡</span>
+              <span>[Первая и/или вторая стадии — единственное терапевтическое окно. Описание возможностей лечения]</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ────────────────── СТАДИЯ II ────────────────────────── -->
+        <div class="stage-card s2" id="s2">
+          <div class="stage-header">
+            <div class="stage-num">II</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--accent); margin:0;">[Название стадии] <span class="stage-badge" style="background:#1a2a5a">[Тип стадии]</span></h3>
+              <div class="stage-subtitle">[Краткое описание · Ключевые признаки]</div>
+            </div>
+            <div class="stage-duration">
+              [Срок]<br>
+              <span style="color:var(--warn);font-size:10px">⚠ ОБРАТИМОСТЬ СНИЖЕНА</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">[Описание стадии]</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>[Симптом 1]</li>
+                  <li>[Симптом 2]</li>
+                  <li>[Симптом 3]</li>
+                  <li>[Симптом 4]</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">[Механизм]</div>
+              </div>
+            </div>
+            <div class="warning-box">
+              <span class="warning-icon">⚠</span>
+              <span>[Предупреждение: последний шанс на лечение, необходимость изоляции и т.д.]</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ────────────────── СТАДИЯ III ───────────────────────── -->
+        <div class="stage-card s3" id="s3">
+          <div class="stage-header">
+            <div class="stage-num">III</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--special); margin:0;">[Название стадии] <span class="stage-badge" style="background:#2a3060">[Тип стадии]</span></h3>
+              <div class="stage-subtitle">[Краткое описание · Ключевые признаки]</div>
+            </div>
+            <div class="stage-duration">
+              [Срок]<br>
+              <span style="color:var(--danger);font-size:10px">✕ НЕОБРАТИМО</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">[Описание стадии — часто парадоксальная: симптомы «улучшаются», но на деле идёт адаптация к патологии]</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>[Симптом 1]</li>
+                  <li>[Симптом 2]</li>
+                  <li>[Симптом 3]</li>
+                  <li>[Симптом 4]</li>
+                  <li>[Симптом 5]</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">[Механизм]</div>
+              </div>
+            </div>
+            <!-- Специальный блок (наблюдения, цитаты, особые феномены) -->
+            <div class="special-box" style="margin-top:14px;">
+              <span class="special-icon">◈</span>
+              <span>[Задокументированные наблюдения, субъективный опыт носителей, особый феномен стадии]</span>
+            </div>
+          </div>
+        </div>
+
+        <!--
+        ══ ШАБЛОНЫ ДОПОЛНИТЕЛЬНЫХ СТАДИЙ ══════════════════════════
+        Скопируйте нужное количество. Меняйте: id, класс (.s4/.s5 и т.д.),
+        цвет h3, бейдж, статус в stage-duration.
+
+        ── Стадия IV (активная, критическая):
+        <div class="stage-card s4" id="s4">
+          <div class="stage-header">
+            <div class="stage-num">IV</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--warn); margin:0;">[Название] <span class="stage-badge" style="background:#3a3010">[Тип]</span></h3>
+              <div class="stage-subtitle">[Подзаголовок]</div>
+            </div>
+            <div class="stage-duration">[Срок]<br><span style="color:var(--danger);font-size:10px">✕ КРИТИЧЕСКИ</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">[Описание]</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы и способности</div>
+                <ul class="symptom-list"><li>[...]</li></ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">[...]</div>
+              </div>
+            </div>
+            <div class="warning-box">
+              <span class="warning-icon">⚠</span>
+              <span>[Угроза для окружающих]</span>
+            </div>
+          </div>
+        </div>
+
+        ── Терминальная стадия (V или последняя):
+        <div class="stage-card s5" id="s5">
+          <div class="stage-header">
+            <div class="stage-num">V</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--danger); margin:0;">[Название] <span class="stage-badge fatal">[Тип]</span></h3>
+              <div class="stage-subtitle">[Подзаголовок]</div>
+            </div>
+            <div class="stage-duration">[Срок]<br><span style="color:var(--danger);font-size:10px">✕ ЛЕТАЛЬНО</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">[Описание]</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list"><li>[...]</li></ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">[...]</div>
+              </div>
+            </div>
+            <div class="warning-box">
+              <span class="warning-icon">☣</span>
+              <span>[Максимальная угроза. Изоляция обязательна]</span>
+            </div>
+          </div>
+        </div>
+        ═══════════════════════════════════════════════════════════ -->
+
+      </section>
+
+      <!-- ── §4 ЛЕЧЕНИЕ ─────────────────────────────────────────── -->
+      <section id="treatment">
+        <h2><span class="sec-num">§4</span> Лечение и прогноз</h2>
+        <p>[Общее описание подхода к лечению: почему возможно только на ранних стадиях, почему невозможно на поздних]</p>
+        <table class="treatment-table">
+          <thead>
+            <tr>
+              <th>Стадия</th>
+              <th>Прогноз</th>
+              <th>Протокол</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="stage-pill">Стадия I</span></td>
+              <td><span class="prog-dot prog-ok"></span> Благоприятный</td>
+              <td>[Описание протокола. При раннем вмешательстве — полная ремиссия.]</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия II</span></td>
+              <td><span class="prog-dot prog-warn"></span> Осторожный</td>
+              <td>[Описание протокола. Возможна стабилизация.]</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия III</span></td>
+              <td><span class="prog-dot prog-bad"></span> Неблагоприятный</td>
+              <td>[Симптоматическое лечение. Замедление прогрессии — единственная цель.]</td>
+            </tr>
+            <!--
+              Добавьте строки для остальных стадий:
+              <tr>
+                <td><span class="stage-pill">Стадия IV</span></td>
+                <td><span class="prog-dot prog-bad"></span> Абсолютно летальный</td>
+                <td>[Паллиативная поддержка. Изоляция.]</td>
+              </tr>
+            -->
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ── §5 УГРОЗА ──────────────────────────────────────────── -->
+      <section id="threat">
+        <h2><span class="sec-num">§5</span> Угроза для окружающих</h2>
+        <p>[Описание угрозы для окружающих: почему опасен, с какой стадии, какой механизм угрозы]</p>
+        <p>[Особые сложности: что мешает ранней диагностике, почему носители не хотят изолироваться]</p>
+        <div class="note-box">
+          <span class="note-icon">⚡</span>
+          <span>[Задокументированные наблюдения о поведении носителей в критических стадиях]</span>
+        </div>
+        <div class="warning-box">
+          <span class="warning-icon">⚠</span>
+          <span>При обнаружении носителя с признаками [N] стадии и выше — [инструкции по протоколу безопасности].</span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ── ПРАВАЯ КОЛОНКА: ИНФОБОКС ────────────────────────────── -->
+    <aside class="sidebar">
+      <div class="infobox">
+        <!-- Заголовок инфобокса: научное название -->
+        <div class="infobox-title">[Научное Название]</div>
+        <div class="infobox-body">
+
+          <!-- ОБЯЗАТЕЛЬНЫЕ СТРОКИ -->
+          <div class="infobox-row">
+            <div class="infobox-key">Тип</div>
+            <div class="infobox-val">[Тип расстройства]</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Возбудитель</div>
+            <div class="infobox-val"><em>не установлен</em><br>[уточнение]</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Пути</div>
+            <div class="infobox-val warning">[Путь 1]<br>[Путь 2]</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Инкубация</div>
+            <div class="infobox-val">[Срок]<br><em>[уточнение]</em></div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Стадий</div>
+            <div class="infobox-val">[N]</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Летальность</div>
+            <div class="infobox-val danger">[%] ([условие])</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Лечение</div>
+            <div class="infobox-val warning">[Только ст. I–II / Отсутствует]</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Вакцина</div>
+            <div class="infobox-val danger">Отсутствует</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Угроза</div>
+            <div class="infobox-val warning">[Высокий / Средний / Экзистенциальный] приоритет</div>
+          </div>
+
+          <!--
+            ДОПОЛНИТЕЛЬНЫЕ СТРОКИ — добавьте по необходимости:
+
+            <div class="infobox-row">
+              <div class="infobox-key">Особое</div>
+              <div class="infobox-val">[Уникальная особенность болезни]</div>
+            </div>
+            <div class="infobox-row">
+              <div class="infobox-key">Радиус</div>
+              <div class="infobox-val danger">[N м (ст. X)]</div>
+            </div>
+          -->
+        </div>
+
+        <!-- ТЕГИ -->
+        <div class="tags">
+          <span class="tag">лор</span>
+          <span class="tag">[тег2]</span>
+          <span class="tag">[тег3]</span>
+          <span class="tag">[тег4]</span>
+        </div>
+      </div>
+    </aside>
+
+  </div><!-- /content-grid -->
+
+  <!-- ══ ФУТЕР ════════════════════════════════════════════════════ -->
+  <footer>
+    <div>Патологический Архив · Лор-материал</div>
+    <!-- Цитата — краткая, атмосферная, связанная с сутью болезни -->
+    <div class="footer-note">«[ЦИТАТА]»</div>
+  </footer>
+
+</div><!-- /layout -->
+</body>
+</html>
