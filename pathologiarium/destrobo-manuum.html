@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Синдром Дестробных Наручей — Destrobo Manuum</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inconsolata:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:            #09090b;
+    --bg2:           #0e0e10;
+    --bg3:           #131316;
+    --border:        #1e1e24;
+    --border-accent: #3a2a1a;
+    --text:          #c0b8b0;
+    --text-dim:      #6a5a4a;
+    --text-bright:   #e0d8d0;
+    --accent:        #c87820;
+    --accent2:       #5a2a08;
+    --danger:        #c83010;
+    --warn:          #c89820;
+    --ok:            #5aaa70;
+    --special:       #d4a060;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Libre Baskerville', serif;
+    font-size: 15px;
+    line-height: 1.8;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 50% at 50% 110%, rgba(100, 50, 10, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ══ НАВБАР ════════════════════════════════════════════════ */
+  .wiki-nav {
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+  }
+  .wiki-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+  }
+  .wiki-logo {
+    font-family: 'Inconsolata', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+    text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--border-accent);
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .wiki-logo:hover { background: rgba(255,255,255,0.04); }
+  .wiki-back {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-left: 1px solid var(--border);
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+  .wiki-back:hover { color: var(--text-bright); }
+  .wiki-breadcrumb {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    padding: 0 14px;
+    border-left: 1px solid var(--border);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wiki-breadcrumb span { color: var(--accent); }
+
+  /* ══ ЛЭЙАУТ ════════════════════════════════════════════════ */
+  .layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ══ ШАПКА СТАТЬИ ══════════════════════════════════════════ */
+  .article-header {
+    padding: 52px 0 36px;
+    border-bottom: 1px solid var(--border);
+    animation: fadeDown 0.7s 0.1s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .article-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--special);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .article-label::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--special);
+  }
+
+  h1 {
+    font-family: 'IM Fell English', serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    color: var(--text-bright);
+    line-height: 1.15;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .sci-name {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .article-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+  .meta-item { display: flex; gap: 6px; }
+  .meta-item b { color: var(--text); font-weight: 600; }
+
+  /* ══ СЕТКА КОНТЕНТА ════════════════════════════════════════ */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 40px;
+    padding: 40px 0;
+    align-items: start;
+  }
+  @media (max-width: 750px) {
+    .content-grid { grid-template-columns: 1fr; }
+    .sidebar { order: -1; }
+  }
+
+  /* ══ ИНФОБОКС ══════════════════════════════════════════════ */
+  .infobox {
+    border: 1px solid var(--border-accent);
+    background: var(--bg2);
+    animation: fadeLeft 0.8s 0.3s ease both;
+    position: sticky;
+    top: 56px;
+  }
+  .infobox-title {
+    background: var(--accent2);
+    padding: 10px 16px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+  }
+  .infobox-body { padding: 0; }
+  .infobox-row {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .infobox-row:last-child { border-bottom: none; }
+  .infobox-key {
+    background: var(--bg3);
+    padding: 9px 12px;
+    width: 110px;
+    flex-shrink: 0;
+    color: var(--text-dim);
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+  }
+  .infobox-val {
+    padding: 9px 12px;
+    color: var(--text);
+    flex: 1;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .infobox-val.danger  { color: var(--danger); font-weight: 700; }
+  .infobox-val.warning { color: var(--warn); }
+  .infobox-val.ok      { color: var(--ok); }
+  .infobox-val em      { color: var(--special); font-style: italic; }
+
+  .tags {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border: 1px solid var(--border-accent);
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* ══ ОГЛАВЛЕНИЕ ════════════════════════════════════════════ */
+  .toc {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    animation: fadeIn 0.6s 0.4s ease both;
+  }
+  .toc-title {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+  .toc ol { padding-left: 16px; font-size: 13px; line-height: 2; }
+  .toc a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+  .toc a:hover { color: var(--special); }
+  .toc .sub { padding-left: 16px; list-style: none; font-size: 12px; }
+  .toc .sub li::before { content: '↳ '; color: var(--text-dim); }
+
+  /* ══ ТЕЛО СТАТЬИ ═══════════════════════════════════════════ */
+  .article-body { animation: fadeIn 0.7s 0.25s ease both; }
+  section { margin-bottom: 48px; }
+
+  h2 {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.55rem;
+    color: var(--text-bright);
+    border-bottom: 1px solid var(--border-accent);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  h2 .sec-num {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+
+  p { margin-bottom: 14px; color: var(--text); }
+
+  .lead {
+    font-size: 1.05rem;
+    color: var(--text-bright);
+    line-height: 1.9;
+    border-left: 2px solid var(--accent);
+    padding-left: 18px;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  /* ══ КАРТОЧКИ СТАДИЙ ═══════════════════════════════════════ */
+  .stage-card {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    margin: 20px 0;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .stage-card:hover { border-color: var(--border-accent); }
+
+  .stage-header {
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stage-num {
+    font-family: 'Inconsolata', monospace;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  .stage-card.s1 .stage-num { color: #9a8060; }
+  .stage-card.s2 .stage-num { color: var(--accent); }
+  .stage-card.s3 .stage-num { color: var(--special); }
+  .stage-card.s4 .stage-num { color: var(--warn); }
+  .stage-card.s5 .stage-num { color: #e07030; }
+  .stage-card.s6 .stage-num { color: var(--danger); opacity: 0.9; }
+
+  .stage-title-block h3 { margin: 0; font-size: 1.05rem; color: var(--text-bright); }
+  .stage-subtitle {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .stage-duration {
+    margin-left: auto;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .stage-badge {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    vertical-align: middle;
+    margin-left: 6px;
+    color: var(--text-dim);
+  }
+  .stage-badge.fatal { color: var(--danger); background: #300808 !important; }
+
+  .stage-body { padding: 16px 18px; }
+  .stage-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 12px;
+  }
+  @media (max-width: 600px) { .stage-cols { grid-template-columns: 1fr; } }
+
+  .stage-block-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .symptom-list {
+    list-style: none;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.8;
+  }
+  .symptom-list li { padding: 2px 0 2px 14px; position: relative; }
+  .symptom-list li::before {
+    content: '◦';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 10px;
+    top: 5px;
+  }
+
+  .mechanism-text {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    line-height: 1.75;
+    font-style: italic;
+  }
+
+  /* ══ NOTE / WARNING / SPECIAL BOXES ═══════════════════════ */
+  .note-box {
+    display: flex;
+    gap: 10px;
+    background: rgba(200, 120, 32, 0.06);
+    border: 1px solid rgba(200, 120, 32, 0.2);
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 12px;
+  }
+  .note-icon { color: var(--accent); flex-shrink: 0; font-size: 14px; }
+
+  .warning-box {
+    display: flex;
+    gap: 10px;
+    background: rgba(200, 48, 16, 0.06);
+    border: 1px solid rgba(200, 48, 16, 0.2);
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 12px;
+  }
+  .warning-icon { color: var(--danger); flex-shrink: 0; font-size: 14px; }
+
+  .special-box {
+    display: flex;
+    gap: 10px;
+    background: rgba(212, 160, 96, 0.05);
+    border: 1px solid rgba(212, 160, 96, 0.18);
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .special-icon { color: var(--special); flex-shrink: 0; }
+
+  /* ══ ТАБЛИЦА ЛЕЧЕНИЯ ══════════════════════════════════════ */
+  .treatment-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-top: 16px;
+  }
+  .treatment-table th {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-accent);
+    font-weight: 400;
+  }
+  .treatment-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+  }
+  .treatment-table tr:last-child td { border-bottom: none; }
+  .treatment-table tr:hover td { background: rgba(255,255,255,0.015); }
+
+  .stage-pill {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border: 1px solid var(--border-accent);
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .prog-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .prog-ok   { background: var(--ok); }
+  .prog-warn { background: var(--warn); }
+  .prog-bad  { background: var(--danger); }
+
+  /* ══ ПРОГРЕСС СТАДИЙ ══════════════════════════════════════ */
+  .stage-progress { margin: 20px 0; }
+  .stage-progress-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .stage-track {
+    display: flex;
+    gap: 3px;
+    height: 8px;
+  }
+  .seg {
+    flex: 1;
+    height: 100%;
+  }
+  .seg-1 { background: #9a8060; }
+  .seg-2 { background: var(--accent); }
+  .seg-3 { background: var(--special); }
+  .seg-4 { background: var(--warn); }
+  .seg-5 { background: #e07030; }
+  .seg-6 { background: var(--danger); }
+  .stage-labels {
+    display: flex;
+    gap: 3px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .stage-labels span { flex: 1; text-align: center; }
+
+  /* ══ ФУТЕР ════════════════════════════════════════════════ */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 0;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .footer-note {
+    font-style: italic;
+    font-family: 'IM Fell English', serif;
+    font-size: 12px;
+    color: var(--accent);
+    opacity: 0.6;
+    letter-spacing: 0;
+  }
+
+  /* ══ АНИМАЦИИ ═════════════════════════════════════════════ */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="wiki-nav">
+  <div class="wiki-nav-inner">
+    <a href="index.html" class="wiki-logo">Патологиариум</a>
+    <a href="index.html" class="wiki-back">← Каталог</a>
+    <div class="wiki-breadcrumb">Патологии / <span>Destrobo Manuum</span></div>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <div class="article-header">
+    <div class="article-label">Дестробо-зависимая трансформация · Высокий приоритет</div>
+    <h1>Синдром Дестробных Наручей</h1>
+    <span class="sci-name">Destrobo Manuum Petrifactio</span>
+    <div class="article-meta">
+      <div class="meta-item"><b>Тип:</b> остеокинетическая мутация</div>
+      <div class="meta-item"><b>Стадий:</b> 6</div>
+      <div class="meta-item"><b>Летальность:</b> высокая (при удалении на V–VI ст.)</div>
+      <div class="meta-item"><b>Лечение:</b> только ст. I–III</div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+
+    <main class="article-body">
+
+      <nav class="toc">
+        <div class="toc-title">Содержание</div>
+        <ol>
+          <li><a href="#overview">Общее описание</a></li>
+          <li><a href="#etiology">Этиология и патогенез</a></li>
+          <li><a href="#morphology">Морфология наручей</a></li>
+          <li><a href="#stages">Стадии прогрессии</a>
+            <ul class="sub">
+              <li><a href="#s1">I — Силовой импульс</a></li>
+              <li><a href="#s2">II — Литификация кожи</a></li>
+              <li><a href="#s3">III — Кризис отторжения</a></li>
+              <li><a href="#s4">IV — Укоренение</a></li>
+              <li><a href="#s5">V — Мельничный порог</a></li>
+              <li><a href="#s6">VI — Неконтролируемая мощь</a></li>
+            </ul>
+          </li>
+          <li><a href="#treatment">Лечение и прогноз</a></li>
+          <li><a href="#threat">Угроза для окружающих</a></li>
+        </ol>
+      </nav>
+
+      <!-- §1 ОБЩЕЕ ОПИСАНИЕ -->
+      <section id="overview">
+        <h2><span class="sec-num">§1</span> Общее описание</h2>
+
+        <p class="lead">Destrobo Manuum Petrifactio — прогрессирующая остеокинетическая мутация, при которой ткани кистей и запястий носителя замещаются плотными каменными структурами — так называемыми наручами. Процесс необратим с IV стадии и наделяет носителя разрушительной силой ценой утраты тонкого контроля над конечностями.</p>
+
+        <p>Синдром получил своё название от корня <em>destrobo</em> — разрушать, дробить — и латинского <em>manuum</em> (рук). В народе патологию нередко именуют «каменными кулаками» или «дестробо-болезнью». Характерной особенностью является двустороннее поражение: обе кисти трансформируются синхронно, что исключает компенсацию через доминирующую руку.</p>
+
+        <p>Парадокс синдрома — в его внешней привлекательности для носителя на средних стадиях. Ощущение мощи и нарастающей силы притупляет тревогу, а возможности наручей на IV стадии субъективно воспринимаются как дар, а не болезнь. Именно это откладывает обращение за помощью до точки невозврата.</p>
+
+        <div class="note-box">
+          <span class="note-icon">◈</span>
+          <span>Носители III стадии нередко активно препятствуют медицинскому вмешательству — вплоть до физического сопротивления. Это явление получило обозначение <em>деструктивная резистентность</em> и считается специфическим симптомом синдрома, а не волевым выбором пациента.</span>
+        </div>
+      </section>
+
+      <!-- §2 ЭТИОЛОГИЯ -->
+      <section id="etiology">
+        <h2><span class="sec-num">§2</span> Этиология и патогенез</h2>
+        <p>Природа возбудителя не установлена. Синдром не передаётся контактным или воздушно-капельным путём — все задокументированные случаи возникли спонтанно, без выявленного первичного источника. Пути заражения и точный механизм инициации трансформации остаются предметом дискуссий.</p>
+
+        <p><strong style="color:var(--special)">Гипотеза минерального насыщения.</strong> Согласно наиболее распространённой теории, в организме носителя активируется латентный биоминеральный агент, избирательно связывающийся с тканями запястного канала. Агент провоцирует нетипичный остеогенез — рост не костной, а квазикаменной матрицы, не имеющей аналогов в природе.</p>
+
+        <p><strong style="color:var(--special)">Гипотеза дестробо-резонанса.</strong> Ряд исследователей полагает, что трансформация запускается под воздействием специфических вибрационных частот, характерных для разрушения природных материалов. Носители, профессионально связанные с добычей камня или рубкой леса, составляют непропорционально большую долю задокументированных случаев.</p>
+
+        <p><strong style="color:var(--special)">Гипотеза телесного архетипа.</strong> Маргинальная, но примечательная теория: тело носителя «стремится» к архетипическому образу разрушителя, и синдром является биологическим воплощением этого импульса. Объясняет, почему трансформация так последовательна и функционально завершена, — но не объясняет механизма запуска.</p>
+      </section>
+
+      <!-- §3 МОРФОЛОГИЯ -->
+      <section id="morphology">
+        <h2><span class="sec-num">§3</span> Морфология наручей</h2>
+
+        <p>Наручи — так специалисты и сами носители называют финальную форму трансформированных кистей. Термин закрепился из-за внешнего сходства с тяжёлыми наручными защитными пластинами. По своей структуре наручи представляют собой биоминеральный композит: живые нервные и сосудистые каналы сохраняются внутри плотной квазикаменной оболочки, обеспечивая функциональность конечности.</p>
+
+        <div class="stage-progress">
+          <div class="stage-progress-label">Прогрессия минерализации по стадиям</div>
+          <div class="stage-track">
+            <div class="seg seg-1"></div>
+            <div class="seg seg-2"></div>
+            <div class="seg seg-3"></div>
+            <div class="seg seg-4"></div>
+            <div class="seg seg-5"></div>
+            <div class="seg seg-6"></div>
+          </div>
+          <div class="stage-labels">
+            <span>I</span><span>II</span><span>III</span><span>IV</span><span>V</span><span>VI</span>
+          </div>
+        </div>
+
+        <p>На зрелых стадиях (IV–VI) наручи обретают автономную прочность: они не ломаются при ударах, не поддаются резке стандартными инструментами и выдерживают нагрузки, несовместимые с обычной костью. Примечательно, что носитель при этом не ощущает боли от ударов наручами — болевые рецепторы кожного покрова переходят в притуплённый режим, тогда как проприоцептивная чувствительность сохраняется.</p>
+
+        <p>Удаление наручей — хирургически или механически — возможно только на I–II стадиях без последствий. Начиная с III стадии процедура сопряжена с риском; на V–VI стадиях документально зафиксированы случаи тотального саморазрушения руки после принудительного удаления, а в двух случаях — распространение некроза на туловище.</p>
+      </section>
+
+      <!-- §4 СТАДИИ -->
+      <section id="stages">
+        <h2><span class="sec-num">§4</span> Стадии прогрессии</h2>
+
+        <!-- СТАДИЯ I -->
+        <div class="stage-card s1" id="s1">
+          <div class="stage-header">
+            <div class="stage-num">I</div>
+            <div class="stage-title-block">
+              <h3 style="color:#9a8060; margin:0;">Силовой импульс <span class="stage-badge" style="background:#1e1610">Латентная</span></h3>
+              <div class="stage-subtitle">Субъективный прилив · Нет внешних признаков</div>
+            </div>
+            <div class="stage-duration">
+              Дни 1–14<br>
+              <span style="color:var(--ok);font-size:10px">↻ ПОЛНОСТЬЮ ОБРАТИМО</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Носитель ощущает необъяснимый прилив энергии, локализованный исключительно в кистях и запястьях. Субъективно — как будто руки «налились тяжестью» или стали «тверже». Объективных изменений тканей на этой стадии не обнаруживается; стандартные визуальные и пальпаторные методы не дают отклонений.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>Прилив сил в зоне кистей и запястий</li>
+                  <li>Лёгкое ощущение плотности тканей</li>
+                  <li>Незначительное повышение температуры кожи запястий</li>
+                  <li>Иногда — ощущение покалывания по ребру ладони</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Биоминеральный агент проникает в ткани запястного канала и начинает выстраивать первичную матрицу. На клеточном уровне — активация остеобластоподобных клеток нетипичной природы. Нервные окончания реагируют на изменение плотности межклеточного матрикса, формируя ощущение «твёрдости».</div>
+              </div>
+            </div>
+            <div class="note-box" style="margin-top:14px">
+              <span class="note-icon">⚡</span>
+              <span>Стадии I–II — единственное безопасное терапевтическое окно. Промывание запястного канала специфическим растворителем позволяет полностью вывести агент без последствий для тканей.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- СТАДИЯ II -->
+        <div class="stage-card s2" id="s2">
+          <div class="stage-header">
+            <div class="stage-num">II</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--accent); margin:0;">Литификация кожи <span class="stage-badge" style="background:#2a1a08">Манифестная</span></h3>
+              <div class="stage-subtitle">Изменение цвета и текстуры · Визуально заметно</div>
+            </div>
+            <div class="stage-duration">
+              Дни 15–40<br>
+              <span style="color:var(--warn);font-size:10px">⚠ ОБРАТИМОСТЬ СНИЖЕНА</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Кожа кистей начинает менять цвет в сторону серо-охристого, каменистого оттенка. Текстура становится грубее, напоминая шлифованный песчаник. Сами кисти незначительно увеличиваются в объёме — преимущественно в тыльной части и запястье. Для окружающих изменения очевидны; носитель нередко объясняет их загрязнением кожи или обветриванием.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>Серо-охристая пигментация кожи кистей</li>
+                  <li>Текстура кожи — зернистая, каменистая на ощупь</li>
+                  <li>Увеличение объёма кистей на 10–20%</li>
+                  <li>Снижение тактильной чувствительности тыльной поверхности</li>
+                  <li>Сохранение полной подвижности пальцев</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Биоминеральная матрица выходит на уровень дермы. Меланоциты вытесняются минеральными депозитами, дающими характерный серый оттенок. Подкожный слой уплотняется, постепенно замещаясь квазикаменным композитом с сохранёнными сосудистыми каналами.</div>
+              </div>
+            </div>
+            <div class="warning-box">
+              <span class="warning-icon">⚠</span>
+              <span>Это последняя стадия, при которой удаление агента считается относительно безопасным. Процедура уже требует медикаментозной поддержки и нескольких недель реабилитации, однако полная ремиссия достижима.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- СТАДИЯ III -->
+        <div class="stage-card s3" id="s3">
+          <div class="stage-header">
+            <div class="stage-num">III</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--special); margin:0;">Кризис отторжения <span class="stage-badge" style="background:#2a2010">Критическая</span></h3>
+              <div class="stage-subtitle">Агрессивная резистентность · Финальное окаменение</div>
+            </div>
+            <div class="stage-duration">
+              Дни 41–80<br>
+              <span style="color:var(--danger);font-size:10px">✕ НЕОБРАТИМО</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Носитель испытывает неконтролируемые вспышки агрессии, направленные конкретно против любых попыток воздействия на кисти — медицинских осмотров, перевязок, прикосновений. Биоминеральная матрица завершает поверхностный слой: кожа окончательно приобретает каменный вид и твёрдость.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>Эпизодическая агрессия при угрозе кистям</li>
+                  <li>Полная минерализация наружного слоя кожи</li>
+                  <li>Дальнейшее увеличение кистей</li>
+                  <li>Умеренное снижение мелкой моторики пальцев</li>
+                  <li>Периодическое ощущение жжения в запястьях</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Биоминеральная матрица достигает суставных капсул и начинает интегрироваться с ними. Нейромедиаторный дисбаланс провоцирует защитные поведенческие реакции — мозг воспринимает вмешательство в кисти как угрозу целостности тела. Агрессия — не психиатрический симптом, а нейробиологическая защитная реакция.</div>
+              </div>
+            </div>
+            <div class="special-box" style="margin-top:14px;">
+              <span class="special-icon">◈</span>
+              <span>Попытка принудительного удаления агента на III стадии фиксирует необратимый химический сдвиг в матрице. В 60% задокументированных случаев удаление на этой стадии привело к частичному саморазрушению тканей предплечья.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- СТАДИЯ IV -->
+        <div class="stage-card s4" id="s4">
+          <div class="stage-header">
+            <div class="stage-num">IV</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--warn); margin:0;">Укоренение <span class="stage-badge" style="background:#2a1e08">Адаптивная</span></h3>
+              <div class="stage-subtitle">Интеграция наручей · Обретение контроля</div>
+            </div>
+            <div class="stage-duration">
+              Дни 81–140<br>
+              <span style="color:var(--danger);font-size:10px">✕ КРИТИЧЕСКИ ОПАСНО</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Наручи окончательно приживаются и становятся полноценной частью тела носителя. Нейронная сеть адаптируется к новой структуре: носитель обретает уверенный контроль над наручами и впервые получает доступ к их деструктивному потенциалу — способности разрушать природные материалы с многократно меньшим усилием и без вреда для тела.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Способности и симптомы</div>
+                <ul class="symptom-list">
+                  <li>Полный нейронный контроль над наручами</li>
+                  <li>Разрушение дерева и земли без усилий</li>
+                  <li>Разрушение камня с умеренным усилием</li>
+                  <li>Полная нечувствительность тыльной части кисти к боли</li>
+                  <li>Агрессия против лечения остаётся, но снижается</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Нервные пути полностью ремоделированы под новую структуру. Биоминеральный композит действует как усилитель кинетической нагрузки: векторное давление концентрируется и передаётся в точку удара с коэффициентом многократно выше обычного. Сосудистая система адаптирована — риска ишемии нет.</div>
+              </div>
+            </div>
+            <div class="warning-box">
+              <span class="warning-icon">⚠</span>
+              <span>Удаление наручей на IV стадии с высокой вероятностью вызывает необратимый распад тканей руки. Зафиксированы случаи распространения некроза на плечевой пояс. Хирургическое вмешательство допустимо только как паллиатив при угрозе жизни.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- СТАДИЯ V -->
+        <div class="stage-card s5" id="s5">
+          <div class="stage-header">
+            <div class="stage-num">V</div>
+            <div class="stage-title-block">
+              <h3 style="color:#e07030; margin:0;">Мельничный порог <span class="stage-badge" style="background:#2a1208">Пиковая</span></h3>
+              <div class="stage-subtitle">Техника «мельницы» · Разрушение практически любых природных материалов</div>
+            </div>
+            <div class="stage-duration">
+              Дни 141–220<br>
+              <span style="color:var(--danger);font-size:10px">✕ ЛЕТАЛЬНО ПРИ УДАЛЕНИИ</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">На данной стадии носитель обретает возможность применять так называемую технику «мельницы» — специфическое ротационное движение наручами, при котором биоминеральная матрица входит в вибрационный резонанс. Эффект — мгновенное измельчение любого природного материала в точке контакта, вплоть до обращения в труху или пыль.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Способности</div>
+                <ul class="symptom-list">
+                  <li>Техника «мельницы» — вибрационное разрушение</li>
+                  <li>Измельчение дерева, камня, земли мгновенно</li>
+                  <li>Разрушение практически любых природных материалов</li>
+                  <li>Контроль над техникой — произвольный</li>
+                  <li>Нарастающее притупление болевых рецепторов всей руки</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Биоминеральный композит обретает пьезоэлектрические свойства: при ротационном движении генерирует микровибрацию в диапазоне, разрушающем кристаллическую решётку природных минералов и целлюлозные связи. Частота подбирается нейронной системой автоматически под материал.</div>
+              </div>
+            </div>
+            <div class="special-box" style="margin-top:14px;">
+              <span class="special-icon">◈</span>
+              <span>Носители V стадии описывают «мельницу» как инстинктивно понятную технику — будто навык существовал в них всегда. Обучение не требуется: первое применение происходит рефлекторно, как правило, в момент физического стресса.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- СТАДИЯ VI -->
+        <div class="stage-card s6" id="s6">
+          <div class="stage-header">
+            <div class="stage-num">VI</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--danger); margin:0;">Неконтролируемая мощь <span class="stage-badge fatal">Терминальная</span></h3>
+              <div class="stage-subtitle">Утрата сенсорного контроля · Угроза для окружающих</div>
+            </div>
+            <div class="stage-duration">
+              День 221+<br>
+              <span style="color:var(--danger);font-size:10px">✕ ИЗОЛЯЦИЯ ОБЯЗАТЕЛЬНА</span>
+            </div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">На финальной стадии нейронная калибровка нарушается: носитель теряет способность дозировать силу сжатия наручей. Намеренное лёгкое прикосновение оборачивается переломом; рукопожатие — размозжением костей. Одновременно возобновляется и нарастает фоновая агрессия, теперь не направленная конкретно — а диффузная, ситуативно взрывная.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>Утрата контроля силы сжатия кистей</li>
+                  <li>Неконтролируемые переломы при бытовых касаниях</li>
+                  <li>Диффузная фоновая агрессия</li>
+                  <li>Полная утрата болевой чувствительности рук</li>
+                  <li>Эпизоды неосознанного применения силы во сне</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Нейронная петля обратной связи, регулирующая усилие захвата, разрушается из-за полного замещения проприоцептивных нервных окончаний в кисти. Мозг не получает сигналов о величине прикладываемой силы. Биоминеральный усилитель продолжает работать — но уже без корректирующего контура.</div>
+              </div>
+            </div>
+            <div class="warning-box">
+              <span class="warning-icon">☣</span>
+              <span>Носитель VI стадии представляет неосознанную угрозу для жизни и здоровья окружающих. Изоляция обязательна. Попытки удаления наручей на данной стадии в 100% зафиксированных случаев привели к полному разрушению рук носителя, в двух случаях — к летальному исходу вследствие системного распада тканей.</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- §5 ЛЕЧЕНИЕ -->
+      <section id="treatment">
+        <h2><span class="sec-num">§5</span> Лечение и прогноз</h2>
+        <p>Лечение возможно исключительно на ранних стадиях — пока биоминеральная матрица не достигла суставных структур и не интегрировалась с нервной системой. Начиная с IV стадии любое вмешательство с целью удаления наручей переходит в разряд действий, опасных для жизни носителя. Паллиативная поддержка и меры по изоляции — единственные допустимые протоколы на поздних стадиях.</p>
+        <table class="treatment-table">
+          <thead>
+            <tr>
+              <th>Стадия</th>
+              <th>Прогноз</th>
+              <th>Протокол</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="stage-pill">Стадия I</span></td>
+              <td><span class="prog-dot prog-ok"></span> Благоприятный</td>
+              <td>Промывание запястного канала специфическим растворителем. При раннем вмешательстве — полная ремиссия без последствий. Реабилитация 3–5 дней.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия II</span></td>
+              <td><span class="prog-dot prog-ok"></span> Осторожный</td>
+              <td>Расширенное промывание с медикаментозной поддержкой. Полная ремиссия достижима, но требует 3–5 недель реабилитации. Возможен остаточный пигментный след на коже.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия III</span></td>
+              <td><span class="prog-dot prog-warn"></span> Крайне неблагоприятный</td>
+              <td>Медикаментозное торможение прогрессии. Удаление — только в условиях стационара с хирургической страховкой. Вероятность осложнений высокая. Полная ремиссия маловероятна.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия IV</span></td>
+              <td><span class="prog-dot prog-bad"></span> Опасный</td>
+              <td>Удаление противопоказано. Наблюдение, ограничение доступа к разрушаемым материалам, психологическое сопровождение. Задача — стабилизация поведения носителя.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия V</span></td>
+              <td><span class="prog-dot prog-bad"></span> Без лечения</td>
+              <td>Паллиатив. Изоляция от общества. Формирование безопасной среды с природными материалами как «громоотводом» для деструктивных импульсов.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия VI</span></td>
+              <td><span class="prog-dot prog-bad"></span> Летальный при вмешательстве</td>
+              <td>Строгая изоляция. Любое удаление наручей — смертельно опасно. Дистанционный мониторинг состояния. Взаимодействие с носителем — только через защитные барьеры.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- §6 УГРОЗА -->
+      <section id="threat">
+        <h2><span class="sec-num">§6</span> Угроза для окружающих</h2>
+        <p>На стадиях I–III носитель не представляет прямой физической угрозы — деструктивные способности ещё не сформированы, а агрессия III стадии направлена исключительно против вмешательства в кисти. Угроза для окружающих возникает с IV стадии, когда наручи обретают полноценную разрушительную силу.</p>
+        <p>Особую сложность представляет VI стадия: носитель не осознаёт несоразмерность своих касаний. Бытовые жесты — рукопожатие, похлопывание по плечу, удержание чашки — могут приводить к переломам, размозжениям и иным травмам у окружающих без какого-либо умысла со стороны носителя. Именно эта неосознанность делает VI стадию особенно опасной: носитель не понимает, что наносит вред, и не может произвольно остановиться.</p>
+        <div class="note-box">
+          <span class="note-icon">◈</span>
+          <span>В задокументированных случаях носители VI стадии описывали невозможность «почувствовать» момент, когда хватка становилась разрушительной. «Я просто хотел поддержать его за плечо» — типичное свидетельство. Нейронная обратная связь к этому моменту необратимо нарушена.</span>
+        </div>
+        <div class="warning-box">
+          <span class="warning-icon">⚠</span>
+          <span>При обнаружении носителя с признаками IV стадии и выше — не приближаться на расстояние вытянутой руки, не инициировать физический контакт. Взаимодействие только дистанционно или через физические барьеры. Немедленно уведомить профильный надзорный орган.</span>
+        </div>
+      </section>
+
+    </main>
+
+    <aside class="sidebar">
+      <div class="infobox">
+        <div class="infobox-title">Destrobo Manuum Petrifactio</div>
+        <div class="infobox-body">
+          <div class="infobox-row">
+            <div class="infobox-key">Тип</div>
+            <div class="infobox-val">Остеокинетическая мутация</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Возбудитель</div>
+            <div class="infobox-val"><em>не установлен</em><br>биоминеральный агент</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Пути</div>
+            <div class="infobox-val warning">Не установлены<br>Не контагиозен</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Поражение</div>
+            <div class="infobox-val">Обе кисти и запястья<br><em>всегда двустороннее</em></div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Инкубация</div>
+            <div class="infobox-val">1–14 дней<br><em>субъективная, без внешних признаков</em></div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Стадий</div>
+            <div class="infobox-val">6</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Летальность</div>
+            <div class="infobox-val danger">Высокая при удалении на V–VI ст.</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Лечение</div>
+            <div class="infobox-val warning">Только ст. I–II<br>Осложнённо на ст. III</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Вакцина</div>
+            <div class="infobox-val danger">Отсутствует</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Удаление</div>
+            <div class="infobox-val danger">На V–VI ст. — летально</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Угроза</div>
+            <div class="infobox-val warning">Высокий приоритет (ст. IV+)</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag">лор</span>
+          <span class="tag">дестробо</span>
+          <span class="tag">кисти</span>
+          <span class="tag">камень</span>
+          <span class="tag">трансформация</span>
+          <span class="tag">разрушение</span>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    <div>Патологический Архив · Лор-материал</div>
+    <div class="footer-note">«Сила, которая не слышит себя — уже не сила, а разрушение.»</div>
+  </footer>
+
+</div>
+</body>
+</html>
