@@ -517,6 +517,158 @@
     letter-spacing: 0;
   }
 
+  /* ── Search & Filter ── */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid var(--border-accent);
+    background: var(--bg2);
+    animation: fadeIn 0.6s 0.25s ease both;
+    margin-bottom: 1px;
+    position: relative;
+  }
+
+  .search-icon {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 0 14px;
+    border-right: 1px solid var(--border);
+    height: 46px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+    user-select: none;
+  }
+
+  .search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-bright);
+    font-family: 'Inconsolata', monospace;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    padding: 0 16px;
+    height: 46px;
+  }
+
+  .search-input::placeholder {
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .search-count {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    padding: 0 14px;
+    border-left: 1px solid var(--border);
+    height: 46px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .search-clear {
+    background: none;
+    border: none;
+    border-left: 1px solid var(--border);
+    color: var(--text-dim);
+    cursor: pointer;
+    padding: 0 14px;
+    height: 46px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    transition: color 0.15s;
+    display: none;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .search-clear:hover { color: var(--text-bright); }
+  .search-clear.visible { display: flex; }
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 12px 0;
+    animation: fadeIn 0.6s 0.3s ease both;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+
+  .filter-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    padding-right: 8px;
+    border-right: 1px solid var(--border);
+    margin-right: 4px;
+    flex-shrink: 0;
+  }
+
+  .filter-btn {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--border-accent);
+    color: var(--text);
+  }
+
+  .filter-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(74,154,184,0.08);
+  }
+
+  .no-results {
+    display: none;
+    grid-column: 1 / -1;
+    padding: 48px 24px;
+    text-align: center;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .no-results-glyph {
+    display: block;
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 2rem;
+    color: var(--border-accent);
+    margin-bottom: 12px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .disease-card.hidden { display: none; }
+
   /* ── Animations ── */
   @keyframes fadeDown {
     from { opacity: 0; transform: translateY(-10px); }
@@ -553,6 +705,27 @@
   </div>
 
   <div class="section-label">Каталог болезней</div>
+
+  <!-- Search bar -->
+  <div class="search-bar">
+    <div class="search-icon">⌕ поиск</div>
+    <input class="search-input" id="searchInput" type="text" placeholder="Название, тег, описание...">
+    <div class="search-count" id="searchCount">9 / 9</div>
+    <button class="search-clear" id="searchClear" title="Очистить">✕</button>
+  </div>
+
+  <!-- Tag filters -->
+  <div class="filter-bar">
+    <span class="filter-label">фильтр</span>
+    <button class="filter-btn active" data-tag="all">Все</button>
+    <button class="filter-btn" data-tag="паразит">Паразит</button>
+    <button class="filter-btn" data-tag="нейро">Нейро</button>
+    <button class="filter-btn" data-tag="кости">Кости</button>
+    <button class="filter-btn" data-tag="трансформация">Трансформация</button>
+    <button class="filter-btn" data-tag="вирус">Вирус</button>
+    <button class="filter-btn" data-tag="симбиоз">Симбиоз</button>
+    <button class="filter-btn" data-tag="100%">Летальность 100%</button>
+  </div>
 
   <div class="disease-grid">
 
@@ -736,6 +909,11 @@
       <div class="card-arrow">→ Читать</div>
     </a>
 
+    <div class="no-results" id="noResults">
+      <span class="no-results-glyph">∅</span>
+      Патогены не обнаружены
+    </div>
+
   </div>
 
   <!-- Threat spectrum -->
@@ -792,5 +970,84 @@
   </footer>
 
 </div>
+<script>
+  (function () {
+    const searchInput = document.getElementById('searchInput');
+    const searchClear = document.getElementById('searchClear');
+    const searchCount = document.getElementById('searchCount');
+    const noResults   = document.getElementById('noResults');
+    const filterBtns  = document.querySelectorAll('.filter-btn');
+    const cards       = Array.from(document.querySelectorAll('.disease-card'));
+    const total       = cards.length;
+
+    let activeTag  = 'all';
+    let searchTerm = '';
+
+    function normalize(str) {
+      return str.toLowerCase().trim();
+    }
+
+    function cardMatchesTag(card, tag) {
+      if (tag === 'all') return true;
+      if (tag === '100%') {
+        // match cards that contain 100% letality text
+        return card.textContent.includes('100%');
+      }
+      const tags = Array.from(card.querySelectorAll('.card-tag'))
+        .map(t => normalize(t.textContent));
+      const threat = normalize(card.querySelector('.card-threat')?.textContent || '');
+      return tags.some(t => t.includes(tag)) || threat.includes(tag);
+    }
+
+    function cardMatchesSearch(card, term) {
+      if (!term) return true;
+      const text = normalize(card.textContent);
+      return text.includes(normalize(term));
+    }
+
+    function applyFilters() {
+      let visible = 0;
+      cards.forEach(card => {
+        const tagOk    = cardMatchesTag(card, activeTag);
+        const searchOk = cardMatchesSearch(card, searchTerm);
+        if (tagOk && searchOk) {
+          card.classList.remove('hidden');
+          visible++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      searchCount.textContent = visible + ' / ' + total;
+      noResults.style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    // Search input
+    searchInput.addEventListener('input', function () {
+      searchTerm = this.value;
+      searchClear.classList.toggle('visible', searchTerm.length > 0);
+      applyFilters();
+    });
+
+    // Clear button
+    searchClear.addEventListener('click', function () {
+      searchInput.value = '';
+      searchTerm = '';
+      this.classList.remove('visible');
+      searchInput.focus();
+      applyFilters();
+    });
+
+    // Filter buttons
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', function () {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        activeTag = this.dataset.tag;
+        applyFilters();
+      });
+    });
+  })();
+</script>
 </body>
 </html>
