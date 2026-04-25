@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>moloo4ni</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inconsolata:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:            #080a0e;
+    --bg2:           #0c0f16;
+    --bg3:           #10141e;
+    --border:        #1a2030;
+    --border-accent: #223050;
+    --text:          #9aaccc;
+    --text-dim:      #445570;
+    --text-bright:   #d0dff4;
+    --accent:        #3a7fe8;
+    --accent-dim:    #1e4a9a;
+    --accent-glow:   rgba(58, 127, 232, 0.12);
+
+    /* pathologiarium palette */
+    --path-accent:   #4a9ab8;
+    --path-gold:     #c8a840;
+    --path-border:   #1e242a;
+    --path-border-a: #2a3a4a;
+    --path-bg2:      #0d1014;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    min-height: 100vh;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Libre Baskerville', serif;
+    font-size: 15px;
+    line-height: 1.8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* dual glow — blue left, teal right */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 55% 55% at 20% 50%, rgba(30, 74, 154, 0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 55% 55% at 80% 50%, rgba(20, 60, 80, 0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 30% at 50% 0%, rgba(30, 74, 154, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── nav ── */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    background: var(--bg);
+  }
+  .nav-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+  }
+  .nav-logo {
+    font-family: 'Inconsolata', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--text-bright);
+    text-decoration: none;
+  }
+  .nav-sep {
+    width: 1px;
+    height: 20px;
+    background: var(--border);
+    margin: 0 14px;
+    flex-shrink: 0;
+  }
+  .nav-crumb {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* ── main ── */
+  .page {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 900px;
+    padding: 120px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── hero header ── */
+  .hero {
+    text-align: center;
+    margin-bottom: 64px;
+    animation: fadeDown 0.6s 0.1s ease both;
+  }
+
+  .eyebrow {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+  .eyebrow::before,
+  .eyebrow::after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 52px;
+    background: var(--border-accent);
+  }
+
+  .hero-name {
+    font-family: 'IM Fell English', serif;
+    font-size: clamp(1.6rem, 5vw, 3rem);
+    color: var(--text-bright);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+
+  .hero-desc {
+    max-width: 440px;
+    margin: 0 auto;
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.9;
+    font-style: italic;
+  }
+
+  /* ── divider ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-accent) 20%, var(--border-accent) 80%, transparent);
+    margin-bottom: 48px;
+  }
+
+  /* ── cards grid ── */
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    width: 100%;
+    animation: fadeIn 0.6s 0.3s ease both;
+  }
+
+  @media (max-width: 560px) {
+    .cards { grid-template-columns: 1fr; }
+  }
+
+  /* ── card base ── */
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 36px 36px;
+    text-decoration: none;
+    overflow: hidden;
+    transition: background 0.25s;
+  }
+
+  .card:hover {
+    background: var(--bg2);
+  }
+
+  /* left accent strip */
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    transition: opacity 0.2s;
+  }
+
+  /* hover glow */
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover::after {
+    opacity: 1;
+  }
+
+  /* ── card: БИО ── */
+  .card-bio {
+    background: var(--bg);
+  }
+  .card-bio::before {
+    background: var(--accent);
+  }
+  .card-bio::after {
+    background: radial-gradient(ellipse 80% 60% at 0% 50%, rgba(58, 127, 232, 0.06), transparent 70%);
+  }
+
+  /* ── card: ПАТОЛОГИАРИУМ ── */
+  .card-path {
+    background: var(--bg);
+  }
+  .card-path::before {
+    background: var(--path-accent);
+  }
+  .card-path::after {
+    background: radial-gradient(ellipse 80% 60% at 0% 50%, rgba(74, 154, 184, 0.06), transparent 70%);
+  }
+
+  /* ── card content ── */
+  .card-tag-line {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+  }
+  .card-bio .card-tag-line   { color: var(--accent-dim); }
+  .card-path .card-tag-line  { color: #1e4a5a; }
+
+  .card:hover .card-tag-line  { opacity: 0.9; }
+  .card-bio:hover .card-tag-line  { color: var(--accent); }
+  .card-path:hover .card-tag-line { color: var(--path-accent); }
+
+  .card-title {
+    font-family: 'IM Fell English', serif;
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    color: var(--text-bright);
+    line-height: 1.05;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .card-subtitle {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 13px;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+  }
+  .card-bio .card-subtitle  { color: var(--accent-dim); }
+  .card-path .card-subtitle { color: #2a5a6a; }
+  .card-bio:hover .card-subtitle  { color: var(--accent); }
+  .card-path:hover .card-subtitle { color: var(--path-accent); }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.85;
+    flex: 1;
+    margin-bottom: 32px;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+  }
+
+  .card-meta-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .card-meta-tag {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  .card-arrow {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    transition: transform 0.2s, color 0.2s;
+    white-space: nowrap;
+    margin-left: 12px;
+  }
+  .card-bio .card-arrow  { color: var(--accent-dim); }
+  .card-path .card-arrow { color: #2a5a6a; }
+  .card-bio:hover .card-arrow  { color: var(--accent);      transform: translateX(4px); }
+  .card-path:hover .card-arrow { color: var(--path-accent); transform: translateX(4px); }
+
+  /* ── decorative glyph ── */
+  .card-glyph {
+    position: absolute;
+    right: 28px;
+    top: 28px;
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 4.5rem;
+    line-height: 1;
+    pointer-events: none;
+    opacity: 0.04;
+    transition: opacity 0.3s;
+  }
+  .card:hover .card-glyph { opacity: 0.07; }
+  .card-bio .card-glyph  { color: var(--accent); }
+  .card-path .card-glyph { color: var(--path-accent); }
+
+  /* ── bottom note ── */
+  .bottom-note {
+    margin-top: 40px;
+    text-align: center;
+    animation: fadeIn 0.6s 0.5s ease both;
+  }
+  .bottom-note-text {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+  .bottom-note-quote {
+    margin-top: 10px;
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--accent);
+    opacity: 0.45;
+  }
+
+  /* ── footer ── */
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    border-top: 1px solid var(--border);
+    padding: 14px 24px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    display: flex;
+    justify-content: space-between;
+    background: var(--bg);
+    z-index: 10;
+  }
+
+  /* ── animations ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ── mobile ── */
+  @media (max-width: 480px) {
+    .page { padding: 96px 16px 80px; }
+    .hero { margin-bottom: 44px; }
+    .card { padding: 28px 24px 26px; }
+    footer { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-logo">moloo4ni</span>
+    <div class="nav-sep"></div>
+    <span class="nav-crumb">readme</span>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- hero -->
+  <div class="hero">
+    <h1 class="hero-name">were you looking for one of these?</h1>
+    </p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- cards -->
+  <div class="cards">
+
+    <!-- Pathologiarium -->
+    <a href="https://moloo4ni.github.io/pathologiarium" class="card card-path">
+      <div class="card-glyph">℞</div>
+      <div class="card-tag-line">archive · wiki · lore</div>
+      <h2 class="card-title">Pathologiarium</h2>
+      <div class="card-subtitle">A fictional archive of diseases</div>
+      <p class="card-desc">
+        An encyclopedia of non-existent conditions — syndromes, disorders, and transformations
+        from an original fictional universe. Infernal mutations, parasitic tree-hosts, bone gauntlets.
+        Creative worldbuilding formatted as a medical archive.
+      </p>
+      <div class="card-footer">
+        <div class="card-meta-tags">
+          <span class="card-meta-tag">diseases</span>
+          <span class="card-meta-tag">lore</span>
+          <span class="card-meta-tag">wiki</span>
+        </div>
+        <div class="card-arrow">→ open</div>
+      </div>
+    </a>
+
+    <!-- Bio -->
+    <a href="https://moloo4ni.github.io/bio" class="card card-bio">
+      <div class="card-glyph">§</div>
+      <div class="card-tag-line">profile · links</div>
+      <h2 class="card-title">Bio</h2>
+      <div class="card-subtitle">About the author</div>
+      <p class="card-desc">
+        moloo4ni's personal page — links to socials and a short introduction.
+      </p>
+      <div class="card-footer">
+        <div class="card-meta-tags">
+          <span class="card-meta-tag">author</span>
+          <span class="card-meta-tag">links</span>
+        </div>
+        <div class="card-arrow">→ open</div>
+      </div>
+    </a>
+
+  </div>
+
+
+</div>
+
+<footer>
+  <div>moloo4ni.github.io</div>
+  <div>pathologiarium · bio</div>
+</footer>
+
+</body>
+</html>
