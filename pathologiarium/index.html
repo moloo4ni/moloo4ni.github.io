@@ -1117,6 +1117,352 @@
         applyFilters();
       });
     });
+
+    // ══ СКРЫТЫЙ РЕЖИМ — Протокол 09-A ══════════════════════════════
+    // Активируется: дата 09.04 или поисковый запрос "09a2256"
+    const SECRET_CODE = '09a2256';
+
+    function activateHiddenMode() {
+      document.body.innerHTML = buildHiddenPage();
+      // Дать браузеру отрисовать страницу, затем запустить анимацию
+      requestAnimationFrame(() => {
+        document.querySelector('.vm-wrapper').style.opacity = '1';
+      });
+    }
+
+    function checkDate() {
+      const now = new Date();
+      const month = now.getMonth() + 1; // 1–12
+      const day   = now.getDate();
+      if (month === 4 && day === 9) activateHiddenMode();
+    }
+
+    searchInput.addEventListener('input', function () {
+      if (normalize(this.value) === SECRET_CODE) {
+        activateHiddenMode();
+      }
+    });
+
+    checkDate();
+
+    function buildHiddenPage() {
+      return `
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inconsolata:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+  :root {
+    --bg: #07070a; --bg2: #0c0c11; --bg3: #111116;
+    --border: #1c1c26; --border-accent: #3a2a10;
+    --text: #c8b8a0; --text-dim: #6a5a48; --text-bright: #e8d8c0;
+    --accent: #c8860a; --accent2: #5a3a08;
+    --danger: #c83a1a; --warn: #c8a040; --ok: #5aaa80; --special: #d4a84a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Libre Baskerville',serif; font-size:15px; line-height:1.8; min-height:100vh; }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events:none; z-index:0; opacity:0.5;
+  }
+  body::after {
+    content:''; position:fixed; inset:0;
+    background:radial-gradient(ellipse 70% 50% at 50% 110%, rgba(100,60,10,0.12) 0%, transparent 70%);
+    pointer-events:none; z-index:0;
+  }
+  .vm-wrapper { max-width:1100px; margin:0 auto; padding:0 24px; position:relative; z-index:1; opacity:0; transition:opacity 0.8s ease; }
+  .vm-nav {
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    background:var(--bg); margin:0 -24px; padding:0 24px;
+  }
+  .vm-nav-inner { height:48px; display:flex; align-items:center; gap:0; }
+  .vm-logo {
+    font-family:'Inconsolata',monospace; font-size:12px; font-weight:700;
+    letter-spacing:.22em; text-transform:uppercase; color:var(--text-bright);
+    text-decoration:none; padding:6px 14px; border:1px solid var(--border-accent);
+  }
+  .vm-proto {
+    font-family:'Inconsolata',monospace; font-size:10px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--accent); padding:6px 14px;
+    border-left:1px solid var(--border);
+  }
+  .vm-breadcrumb {
+    font-family:'Inconsolata',monospace; font-size:10px; letter-spacing:.06em;
+    color:var(--text-dim); padding:0 14px; border-left:1px solid var(--border);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .vm-breadcrumb span { color:var(--accent); }
+  .vm-banner {
+    background:#1a0a00; border:1px solid #5a3a08; border-left:3px solid var(--accent);
+    padding:10px 18px; font-family:'Inconsolata',monospace; font-size:10px;
+    letter-spacing:.2em; text-transform:uppercase; color:var(--special);
+    display:flex; align-items:center; gap:12px; margin-top:0;
+  }
+  .vm-banner::before { content:'⬡'; font-size:14px; color:var(--accent); }
+  .vm-header { padding:52px 0 36px; border-bottom:1px solid var(--border); animation:vmFade .7s .1s ease both; }
+  .vm-label {
+    font-family:'Inconsolata',monospace; font-size:10px; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--special); margin-bottom:14px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .vm-label::before { content:''; display:inline-block; width:18px; height:1px; background:var(--special); }
+  .vm-h1 {
+    font-family:'IM Fell English',serif; font-size:clamp(2rem,5vw,3.4rem);
+    color:var(--text-bright); line-height:1.15; margin-bottom:8px; letter-spacing:-.01em;
+  }
+  .vm-sciname {
+    font-family:'IM Fell English',serif; font-style:italic; font-size:1.15rem;
+    color:var(--accent); display:block; margin-bottom:20px;
+  }
+  .vm-meta { display:flex; gap:24px; flex-wrap:wrap; font-family:'Inconsolata',monospace; font-size:11px; color:var(--text-dim); letter-spacing:.06em; }
+  .vm-meta-item { display:flex; gap:6px; }
+  .vm-meta-item b { color:var(--text); font-weight:600; }
+  .vm-grid { display:grid; grid-template-columns:1fr 280px; gap:40px; padding:40px 0; align-items:start; }
+  @media(max-width:750px){.vm-grid{grid-template-columns:1fr;}}
+  .vm-body { animation:vmFade .7s .25s ease both; }
+  section { margin-bottom:48px; }
+  .vm-h2 {
+    font-family:'IM Fell English',serif; font-size:1.55rem; color:var(--text-bright);
+    border-bottom:1px solid var(--border-accent); padding-bottom:8px; margin-bottom:20px;
+    display:flex; align-items:baseline; gap:12px;
+  }
+  .vm-secnum { font-family:'Inconsolata',monospace; font-size:11px; color:var(--text-dim); letter-spacing:.1em; flex-shrink:0; }
+  p { margin-bottom:14px; color:var(--text); }
+  .vm-lead { font-size:1.05rem; color:var(--text-bright); line-height:1.9; border-left:2px solid var(--accent); padding-left:18px; margin-bottom:24px; font-style:italic; }
+  .vm-toc { border:1px solid var(--border); background:var(--bg2); padding:16px 20px; margin-bottom:32px; animation:vmFade .6s .4s ease both; }
+  .vm-toc-title { font-family:'Inconsolata',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-dim); margin-bottom:10px; }
+  .vm-toc ol { padding-left:16px; font-size:13px; line-height:2; }
+  .vm-toc a { color:var(--accent); text-decoration:none; }
+  .vm-toc a:hover { color:var(--special); }
+  .vm-toc .sub { padding-left:16px; list-style:none; font-size:12px; }
+  .vm-toc .sub li::before { content:'↳ '; color:var(--text-dim); }
+  .sc { border:1px solid var(--border); background:var(--bg2); margin:20px 0; overflow:hidden; transition:border-color .3s; }
+  .sc:hover { border-color:var(--border-accent); }
+  .sc-header { padding:12px 18px; display:flex; align-items:center; gap:14px; border-bottom:1px solid var(--border); }
+  .sc-num { font-family:'Inconsolata',monospace; font-size:28px; font-weight:600; line-height:1; flex-shrink:0; opacity:.7; }
+  .sc.s1 .sc-num{color:#8a7a60;} .sc.s2 .sc-num{color:var(--accent);} .sc.s3 .sc-num{color:var(--special);}
+  .sc.s4 .sc-num{color:var(--warn);} .sc.s5 .sc-num{color:#e07040;} .sc.s6 .sc-num{color:var(--danger);opacity:1;}
+  .sc-title-block h3 { margin:0; font-size:1.05rem; color:var(--text-bright); }
+  .sc-sub { font-family:'Inconsolata',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--text-dim); margin-top:2px; }
+  .sc-dur { margin-left:auto; font-family:'Inconsolata',monospace; font-size:11px; color:var(--text-dim); text-align:right; flex-shrink:0; }
+  .sc-badge { font-family:'Inconsolata',monospace; font-size:9px; letter-spacing:.15em; text-transform:uppercase; background:var(--accent2); color:var(--text-bright); padding:2px 8px; margin-left:6px; }
+  .sc-badge.fatal { background:#3a0a0a; color:var(--danger); }
+  .sc-body { padding:16px 18px; }
+  .sc-cols { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:12px; }
+  @media(max-width:580px){.sc-cols{grid-template-columns:1fr;}}
+  .sc-bl { font-family:'Inconsolata',monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; padding-bottom:4px; border-bottom:1px solid var(--border); }
+  .sl { list-style:none; font-size:13.5px; line-height:1.7; }
+  .sl li { padding:3px 0 3px 14px; position:relative; color:var(--text); }
+  .sl li::before { content:'▸'; position:absolute; left:0; color:var(--accent); font-size:10px; top:5px; }
+  .sc.s5 .sl li::before,.sc.s6 .sl li::before { color:var(--danger); }
+  .mech { font-size:13.5px; line-height:1.7; color:var(--text-dim); font-style:italic; }
+  .warn-box { border:1px solid var(--danger); background:rgba(200,58,26,.06); padding:14px 18px; margin:14px 0; font-size:13px; display:flex; gap:12px; align-items:flex-start; }
+  .warn-icon { font-size:16px; flex-shrink:0; margin-top:2px; color:var(--danger); }
+  .note-box { border:1px solid var(--border-accent); background:var(--bg2); padding:14px 18px; margin:14px 0; font-size:13px; display:flex; gap:12px; align-items:flex-start; color:var(--text-dim); }
+  .note-icon { font-size:14px; flex-shrink:0; color:var(--accent); }
+  .spec-box { border:1px solid #3a2a10; background:rgba(200,134,10,.05); padding:14px 18px; margin:14px 0; font-size:13px; display:flex; gap:12px; align-items:flex-start; color:var(--special); }
+  .spec-icon { font-size:14px; flex-shrink:0; }
+  .tt { width:100%; border-collapse:collapse; font-size:13.5px; margin-top:16px; }
+  .tt th { font-family:'Inconsolata',monospace; font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--text-dim); text-align:left; padding:8px 14px; border-bottom:1px solid var(--border-accent); background:var(--bg2); }
+  .tt td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.6; }
+  .tt tr:last-child td { border-bottom:none; }
+  .spill { font-family:'Inconsolata',monospace; font-size:10px; letter-spacing:.1em; background:var(--bg3); border:1px solid var(--border-accent); padding:2px 8px; white-space:nowrap; }
+  .pd { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
+  .pd-ok{background:var(--ok);} .pd-w{background:var(--warn);} .pd-b{background:var(--danger);}
+  .infobox { border:1px solid var(--border-accent); background:var(--bg2); animation:vmFadeL .8s .3s ease both; position:sticky; top:56px; }
+  .infobox-title { background:var(--accent2); padding:10px 16px; font-family:'Inconsolata',monospace; font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--text-bright); }
+  .infobox-row { display:flex; border-bottom:1px solid var(--border); font-size:13px; }
+  .infobox-row:last-child { border-bottom:none; }
+  .infobox-key { background:var(--bg3); padding:9px 12px; width:110px; flex-shrink:0; color:var(--text-dim); font-family:'Inconsolata',monospace; font-size:11px; letter-spacing:.04em; display:flex; align-items:center; }
+  .infobox-val { padding:9px 12px; color:var(--text); flex:1; font-size:12.5px; line-height:1.5; }
+  .infobox-val.danger{color:var(--danger);font-weight:700;} .infobox-val.warning{color:var(--warn);} .infobox-val em{color:var(--special);font-style:italic;}
+  .vm-tags { padding:12px 16px; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:6px; }
+  .vm-tag { font-family:'Inconsolata',monospace; font-size:10px; letter-spacing:.08em; padding:2px 8px; border:1px solid var(--border-accent); color:var(--text-dim); text-transform:uppercase; }
+  footer { border-top:1px solid var(--border); padding:24px 0; font-family:'Inconsolata',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-dim); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+  .footer-note { font-style:italic; text-transform:none; letter-spacing:0; font-family:'IM Fell English',serif; font-size:12px; }
+  @keyframes vmFade { from{opacity:0;transform:translateY(-12px);}to{opacity:1;transform:translateY(0);} }
+  @keyframes vmFadeL { from{opacity:0;transform:translateX(12px);}to{opacity:1;transform:translateX(0);} }
+</style>
+<div class="vm-wrapper">
+  <nav class="vm-nav">
+    <div class="vm-nav-inner">
+      <a href="index.html" class="vm-logo">Патологиариум</a>
+      <span class="vm-proto">Протокол 09-A</span>
+      <div class="vm-breadcrumb">Нейроповеденческие трансформации · <span>Vicinus Morphosis</span></div>
+    </div>
+  </nav>
+
+  <div class="vm-banner">Доступ ограничен · Запись не индексирована · Протокол 09-A · Сведения не подлежат распространению</div>
+
+  <div class="vm-header">
+    <div class="vm-label">Нейроповеденческая архетипизация · Высший приоритет</div>
+    <h1 class="vm-h1">Соседская Метаморфия</h1>
+    <span class="vm-sciname">Vicinus Morphosis Progressiva</span>
+    <div class="vm-meta">
+      <div class="vm-meta-item"><b>Стадий:</b> 5</div>
+      <div class="vm-meta-item"><b>Летальность:</b> ~15% (прямая)</div>
+      <div class="vm-meta-item"><b>Лечение:</b> только стадии I–II</div>
+      <div class="vm-meta-item"><b>Угроза:</b> Высший приоритет</div>
+    </div>
+  </div>
+
+  <div class="vm-grid">
+    <main class="vm-body">
+      <div class="vm-toc">
+        <div class="vm-toc-title">Содержание</div>
+        <ol>
+          <li><a href="#vm-s1">I — Начальная тревога</a></li>
+          <li><a href="#vm-s2">II — Территориальная фиксация</a></li>
+          <li><a href="#vm-s3">III — Архитектурная одержимость</a></li>
+          <li><a href="#vm-s4">IV — Поведенческое замещение</a></li>
+          <li><a href="#vm-s5">V — Полная архетипизация</a></li>
+        </ol>
+      </div>
+
+      <section>
+        <h2 class="vm-h2"><span class="vm-secnum">§1</span> Общие сведения</h2>
+        <p class="vm-lead">Vicinus Morphosis Progressiva — прогрессирующее нейроповеденческое расстройство неустановленной этиологии, при котором личность носителя постепенно вытесняется устойчивым поведенческим архетипом, неформально обозначаемым в полевых записях как «Сосед».</p>
+        <p>Патология характеризуется нарастающей параноидальной бдительностью, компульсивным обустройством жилого пространства, утратой социальной эмпатии и замещением идентичности. Единственный зафиксированный вектор передачи — продолжительный физический контакт с уже трансформированным носителем поздней стадии.</p>
+        <div class="note-box"><span class="note-icon">›</span><span>Носители стадии IV и выше неизменно описывают собственное состояние как «наконец нормальное». Никто из них не сообщал об ощущении утраты себя.</span></div>
+      </section>
+
+      <section>
+        <h2 class="vm-h2"><span class="vm-secnum">§2</span> Клинические стадии</h2>
+
+        <div class="sc s1" id="vm-s1">
+          <div class="sc-header">
+            <div class="sc-num">I</div>
+            <div class="sc-title-block"><h3 style="color:#8a7a60;margin:0;">Начальная тревога <span class="sc-badge">Продромальная</span></h3><div class="sc-sub">Субклиническая фаза · Полная ремиссия возможна</div></div>
+            <div class="sc-dur">2–8 недель<br><span style="color:var(--ok);font-size:10px">✓ ОБРАТИМА</span></div>
+          </div>
+          <div class="sc-body">
+            <p style="font-size:13.5px;margin-bottom:12px;">Носитель начинает уделять повышенное внимание состоянию своего жилья. Возникает лёгкое, рационализируемое беспокойство относительно соседей и посторонних. Стадия практически неотличима от обычного стресса.</p>
+            <div class="sc-cols">
+              <div><div class="sc-bl">Симптомы</div><ul class="sl"><li>Навязчивая проверка замков и окон перед сном</li><li>Непривычный интерес к деятельности соседей</li><li>Лёгкое раздражение при нарушении личного пространства</li><li>Первые эпизоды «осмотра периметра»</li></ul></div>
+              <div><div class="sc-bl">Механизм</div><div class="mech">Предположительно, начальная активация паттерна территориальной бдительности. Когнитивные функции и эмпатия не затронуты. Носитель полностью осознаёт изменения в поведении.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sc s2" id="vm-s2">
+          <div class="sc-header">
+            <div class="sc-num">II</div>
+            <div class="sc-title-block"><h3 style="color:var(--accent);margin:0;">Территориальная фиксация <span class="sc-badge">Активная</span></h3><div class="sc-sub">Первичная трансформация · Лечение ещё возможно</div></div>
+            <div class="sc-dur">1–6 месяцев<br><span style="color:var(--warn);font-size:10px">~ ЧАСТИЧНО</span></div>
+          </div>
+          <div class="sc-body">
+            <p style="font-size:13.5px;margin-bottom:12px;">Носитель начинает активно и систематически обустраивать жилое пространство. Появляются первые признаки архетипизации внешнего вида: предпочтение тёмных нарядов, характерная округлая осанка.</p>
+            <div class="sc-cols">
+              <div><div class="sc-bl">Симптомы</div><ul class="sl"><li>Компульсивная установка замков и засовов</li><li>Характерное изменение силуэта: округлые плечи, короткая шея</li><li>«Шляпная фиксация» — предпочтение головных уборов</li><li>Параноидальное слежение за перемещениями соседей</li><li>Накопление предметов «на случай»</li></ul></div>
+              <div><div class="sc-bl">Механизм</div><div class="mech">Усиление активности территориальных зон коры. Начало перестройки ценностной иерархии: безопасность пространства приобретает приоритет над социальными связями.</div></div>
+            </div>
+            <div class="spec-box"><span class="spec-icon">◈</span><span>Носители II стадии часто демонстрируют вспышки необычайной радушности — угощают соседей, делают неожиданные подарки. Ранний механизм контроля окружения или остаточная эмпатия — не установлено.</span></div>
+          </div>
+        </div>
+
+        <div class="sc s3" id="vm-s3">
+          <div class="sc-header">
+            <div class="sc-num">III</div>
+            <div class="sc-title-block"><h3 style="color:var(--special);margin:0;">Архитектурная одержимость <span class="sc-badge">Прогрессирующая</span></h3><div class="sc-sub">Необратимые изменения идентичности</div></div>
+            <div class="sc-dur">Месяцы–годы<br><span style="color:var(--danger);font-size:10px">✕ НЕОБРАТИМА</span></div>
+          </div>
+          <div class="sc-body">
+            <p style="font-size:13.5px;margin-bottom:12px;">Дом превращается в центр мироздания носителя. Начинаются масштабные, нелогичные строительные работы: скрытые комнаты, коридоры в никуда, двери на высоте второго этажа. Эмпатия критически снижена.</p>
+            <div class="sc-cols">
+              <div><div class="sc-bl">Симптомы</div><ul class="sl"><li>Непрерывная перестройка жилого пространства</li><li>Устойчивый архетипный силуэт: крупное тело, тёмный костюм, шляпа</li><li>Характерная тяжёлая походка</li><li>Заготовка ловушек и систем наблюдения</li><li>Острая реакция на любое проникновение на территорию</li></ul></div>
+              <div><div class="sc-bl">Механизм</div><div class="mech">Пространственная память и территориальный контроль занимают доминирующее положение. Прежняя личность фрагментируется; мотивационное ядро переориентировано на защиту пространства.</div></div>
+            </div>
+            <div class="warn-box"><span class="warn-icon">⚠</span><span>Носители III стадии проявляют непредсказуемую агрессию при нарушении территории. Вербальный контакт возможен, однако диалог о поведении в большинстве случаев приводит к эскалации.</span></div>
+          </div>
+        </div>
+
+        <div class="sc s4" id="vm-s4">
+          <div class="sc-header">
+            <div class="sc-num">IV</div>
+            <div class="sc-title-block"><h3 style="color:var(--warn);margin:0;">Поведенческое замещение <span class="sc-badge" style="background:#3a3010">Критическая</span></h3><div class="sc-sub">Личность вытеснена архетипом</div></div>
+            <div class="sc-dur">Стабильная<br><span style="color:var(--danger);font-size:10px">✕ ЛЕТАЛЬНО (косв.)</span></div>
+          </div>
+          <div class="sc-body">
+            <p style="font-size:13.5px;margin-bottom:12px;">Исходная личность практически полностью вытеснена. Носитель существует в устойчивом архетипном режиме: тёмный закрытый костюм неизменен, шляпа не снимается даже в помещении, движения приобрели характерную тяжёлую размеренность.</p>
+            <div class="sc-cols">
+              <div><div class="sc-bl">Симптомы</div><ul class="sl"><li>Полная архетипная внешность</li><li>Бесшумное перемещение несмотря на массу тела</li><li>Феноменальная пространственная ориентация в лабиринте</li><li>«Соседский взгляд» — не мигая, без эмоций</li><li>Физически превосходит здоровых людей</li></ul></div>
+              <div><div class="sc-bl">Механизм</div><div class="mech">Архетип завершает вытеснение. Носитель убеждён, что всегда был таким. Попытки напомнить о прошлом вызывают острое отрицание. Интеллект сохраняется, но направлен на единственную цель.</div></div>
+            </div>
+            <div class="warn-box"><span class="warn-icon">⚠</span><span>Носители IV стадии опасны при нарушении периметра. Задокументированы случаи длительного преследования. Физический контакт с носителем — вероятный вектор передачи для восприимчивых субъектов.</span></div>
+          </div>
+        </div>
+
+        <div class="sc s5" id="vm-s5">
+          <div class="sc-header">
+            <div class="sc-num">V</div>
+            <div class="sc-title-block"><h3 style="color:var(--danger);margin:0;">Полная архетипизация <span class="sc-badge fatal">Терминальная</span></h3><div class="sc-sub">Архетип окончателен · Контакт запрещён</div></div>
+            <div class="sc-dur">Бессрочная<br><span style="color:var(--danger);font-size:10px">✕ НЕОБРАТИМА</span></div>
+          </div>
+          <div class="sc-body">
+            <p style="font-size:13.5px;margin-bottom:12px;">Носитель становится эталонным воплощением архетипа. Прежней личности не осталось даже следов. Дом — единственная реальность. Тайна — единственный смысл существования.</p>
+            <div class="sc-cols">
+              <div><div class="sc-bl">Симптомы</div><ul class="sl"><li>Полное совпадение с архетипом во всём</li><li>Абсолютная фокусировка на «тайне подвала»</li><li>Появление в неожиданных местах без объяснимого маршрута</li><li>Не нуждается в сне в обычном понимании</li><li>Полное отсутствие вербальной коммуникации</li></ul></div>
+              <div><div class="sc-bl">Механизм</div><div class="mech">Архетипизация завершена. Нейропрофиль стабилен — стадия V является конечной точкой, не переходящей в смерть при отсутствии внешнего вмешательства. Носитель субъективно не страдает.</div></div>
+            </div>
+            <div class="warn-box"><span class="warn-icon">☣</span><span>Носители V стадии не подлежат реинтеграции. Изоляция обязательна. Приближение без специального оборудования категорически запрещено. Длительное пребывание в зоне наблюдения носителя — фактор риска.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="vm-h2"><span class="vm-secnum">§3</span> Лечение и прогноз</h2>
+        <p>Терапевтическое вмешательство эффективно исключительно на стадиях I–II. Начиная со стадии III изменения идентичности становятся необратимыми.</p>
+        <table class="tt">
+          <thead><tr><th>Стадия</th><th>Прогноз</th><th>Протокол</th></tr></thead>
+          <tbody>
+            <tr><td><span class="spill">Стадия I</span></td><td><span class="pd pd-ok"></span>Благоприятный</td><td>Изоляция от источника, поведенческая терапия. Полная ремиссия в 80% случаев.</td></tr>
+            <tr><td><span class="spill">Стадия II</span></td><td><span class="pd pd-w"></span>Осторожный</td><td>Интенсивная терапия. Стабилизация в ~40% случаев. Возврат к прежней личности неполный.</td></tr>
+            <tr><td><span class="spill">Стадия III</span></td><td><span class="pd pd-b"></span>Неблагоприятный</td><td>Замедление прогрессии — единственная достижимая цель. Управляемая изоляция.</td></tr>
+            <tr><td><span class="spill">Стадии IV–V</span></td><td><span class="pd pd-b"></span>Абсолютно необратимый</td><td>Паллиативная поддержка исключена. Обязательная изоляция. Контакт только по протоколу.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2 class="vm-h2"><span class="vm-secnum">§4</span> Угроза для окружающих</h2>
+        <p>Основная угроза носителей IV–V стадий — поведенческая, а не биологическая. Носители не агрессивны в состоянии покоя, однако реакция на нарушение территории непропорциональна и непредсказуема.</p>
+        <div class="note-box"><span class="note-icon">›</span><span>В нескольких случаях соседи носителей IV–V стадий сами демонстрировали продромальные симптомы через 3–7 месяцев совместного проживания. Механизм передачи при этом не был установлен: прямого физического контакта не зафиксировано.</span></div>
+        <div class="warn-box"><span class="warn-icon">⚠</span><span>При обнаружении носителя с признаками III стадии и выше — немедленно покинуть зону прямого наблюдения. Не вступать в дискуссии. Не проникать на территорию. Сообщить в профильное ведомство.</span></div>
+      </section>
+    </main>
+
+    <aside>
+      <div class="infobox">
+        <div class="infobox-title">Vicinus Morphosis Progressiva</div>
+        <div>
+          <div class="infobox-row"><div class="infobox-key">Тип</div><div class="infobox-val">Нейроповеденческая архетипизация</div></div>
+          <div class="infobox-row"><div class="infobox-key">Возбудитель</div><div class="infobox-val"><em>не установлен</em><br>предположительно архетипный резонанс</div></div>
+          <div class="infobox-row"><div class="infobox-key">Пути</div><div class="infobox-val warning">Длительный контакт с носителем IV–V ст.<br>Предположительно — длительное наблюдение</div></div>
+          <div class="infobox-row"><div class="infobox-key">Инкубация</div><div class="infobox-val">2–8 недель<br><em>до выраженных симптомов</em></div></div>
+          <div class="infobox-row"><div class="infobox-key">Стадий</div><div class="infobox-val">5</div></div>
+          <div class="infobox-row"><div class="infobox-key">Летальность</div><div class="infobox-val danger">~15% прямая<br>косвенная — не поддаётся оценке</div></div>
+          <div class="infobox-row"><div class="infobox-key">Лечение</div><div class="infobox-val warning">Только стадии I–II</div></div>
+          <div class="infobox-row"><div class="infobox-key">Вакцина</div><div class="infobox-val danger">Отсутствует</div></div>
+          <div class="infobox-row"><div class="infobox-key">Архетип</div><div class="infobox-val">«Сосед» — параноидальный территориальный страж</div></div>
+          <div class="infobox-row"><div class="infobox-key">Угроза</div><div class="infobox-val warning">Высший приоритет · Поведенческая</div></div>
+          <div class="infobox-row"><div class="infobox-key">Запись</div><div class="infobox-val danger">Не индексирована · Протокол 09-A</div></div>
+        </div>
+        <div class="vm-tags">
+          <span class="vm-tag">архетип</span>
+          <span class="vm-tag">территория</span>
+          <span class="vm-tag">трансформация</span>
+          <span class="vm-tag">сосед</span>
+          <span class="vm-tag">09-a</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    <div>Патологический Архив · Протокол 09-A · Запись не индексирована</div>
+    <div class="footer-note">«Он всегда знал, что ты там. Он просто ждал повода.»</div>
+  </footer>
+</div>`;
+    }
+    // ════════════════════════════════════════════════════════════════
   })();
 </script>
 </body>
