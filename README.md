@@ -30,7 +30,3 @@ bio card with skills and links
 
 **[Pathologiarium](https://moloo4ni.github.io/pathologiarium)**  
 a fictional encyclopedia of diseases — syndromes, disorders and pathologies existing exclusively within an original lore universe
-bio card with skills and links
-
-### **[Pathologiarium](https://moloo4ni.github.io/pathologiarium)**  
-a fictional encyclopedia of diseases — syndromes, disorders and pathologies existing exclusively within an original lore universe
