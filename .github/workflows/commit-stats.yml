@@ -27,7 +27,7 @@ jobs:
 
           AVG=$(( TOTAL / MONTHS ))
 
-          echo "{\"schemaVersion\":1,\"label\":\"commits/month\",\"message\":\"$AVG\",\"color\":\"blue\",\"logo\":\"github\"}" > commit-stats.json
+          echo "{\"schemaVersion\":1,\"label\":\"commits/month\",\"message\":\"$AVG\",\"color\":\"blue\"}" > commit-stats.json
 
       - name: Commit file
         run: |
