@@ -16,18 +16,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Calculate commits per month
+      - name: Calculate commits this month
         run: |
-          TOTAL=$(git rev-list --count HEAD)
-          FIRST=$(git log --reverse --format=%cd --date=format:%Y-%m-%d | head -n 1)
-          NOW=$(date +%Y-%m-%d)
+          COUNT=$(git rev-list --count --since="$(date +%Y-%m-01)" HEAD)
 
-          MONTHS=$(( ( $(date -d "$NOW" +%s) - $(date -d "$FIRST" +%s) ) / 2628000 ))
-          if [ "$MONTHS" -lt 1 ]; then MONTHS=1; fi
-
-          AVG=$(( TOTAL / MONTHS ))
-
-          echo "{\"schemaVersion\":1,\"label\":\"commits/month\",\"message\":\"$AVG\",\"color\":\"blue\"}" > commit-stats.json
+          echo "{\"schemaVersion\":1,\"label\":\"commits/month\",\"message\":\"$COUNT\",\"color\":\"blue\"}" > commit-stats.json
 
       - name: Commit file
         run: |
