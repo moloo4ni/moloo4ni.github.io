@@ -1,12 +1,12 @@
 ## hiii!! i'm moloo4ni
 
-## about me
-
-vibecodin' web stuff · ui/ux design · wiki writin' · drawing
-
 ## about repo
 
 ![Commits/month](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/moloo4ni/moloo4ni.github.io/main/commit-stats.json&style=for-the-badge) ![Repo size](https://img.shields.io/github/repo-size/moloo4ni/moloo4ni.github.io?style=for-the-badge&logo=github)
+
+## about me
+
+vibecodin' web stuff · ui/ux design · wiki writin' · drawing
 
 ## tools i usin'
 
