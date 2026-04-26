@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Синдром Плодоносящего Нутра — Fructifer Parasiticus</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inconsolata:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:            #090e0a;
+    --bg2:           #0e160f;
+    --bg3:           #131c14;
+    --border:        #1a261c;
+    --border-accent: #253a28;
+    --text:          #b0c8b2;
+    --text-dim:      #507055;
+    --text-bright:   #d8f0da;
+    --accent:        #5ab870;
+    --accent2:       #1a3a22;
+    --special:       #a0d890;
+    --danger:        #c83030;
+    --warn:          #c8a030;
+    --ok:            #5aaa80;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Libre Baskerville', serif;
+    font-size: 15px;
+    line-height: 1.8;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 50% at 50% 110%, rgba(20, 60, 25, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wiki-nav {
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+  }
+  .wiki-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+  }
+  .wiki-logo {
+    font-family: 'Inconsolata', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+    text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--border-accent);
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .wiki-logo:hover { background: rgba(255,255,255,0.04); }
+  .wiki-back {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-left: 1px solid var(--border);
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+  .wiki-back:hover { color: var(--text-bright); }
+  .wiki-breadcrumb {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    padding: 0 14px;
+    border-left: 1px solid var(--border);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wiki-breadcrumb span { color: var(--accent); }
+
+  .layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .article-header {
+    padding: 52px 0 36px;
+    border-bottom: 1px solid var(--border);
+    animation: fadeDown 0.7s 0.1s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .article-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--special);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .article-label::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--special);
+  }
+
+  h1 {
+    font-family: 'IM Fell English', serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    color: var(--text-bright);
+    line-height: 1.15;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .sci-name {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .article-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+  .meta-item { display: flex; gap: 6px; }
+  .meta-item b { color: var(--text); font-weight: 600; }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 40px;
+    padding: 40px 0;
+    align-items: start;
+  }
+  @media (max-width: 750px) {
+    .content-grid { grid-template-columns: 1fr; }
+    .sidebar { order: -1; }
+  }
+
+  .infobox {
+    border: 1px solid var(--border-accent);
+    background: var(--bg2);
+    animation: fadeLeft 0.8s 0.3s ease both;
+    position: sticky;
+    top: 56px;
+  }
+  .infobox-title {
+    background: var(--accent2);
+    padding: 10px 16px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+  }
+  .infobox-body { padding: 0; }
+  .infobox-row {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .infobox-row:last-child { border-bottom: none; }
+  .infobox-key {
+    background: var(--bg3);
+    padding: 9px 12px;
+    width: 110px;
+    flex-shrink: 0;
+    color: var(--text-dim);
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+  }
+  .infobox-val {
+    padding: 9px 12px;
+    color: var(--text);
+    flex: 1;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .infobox-val.danger  { color: var(--danger); font-weight: 700; }
+  .infobox-val.warning { color: var(--warn); }
+  .infobox-val.ok      { color: var(--ok); }
+  .infobox-val em      { color: var(--special); font-style: italic; }
+
+  .tags {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border: 1px solid var(--border-accent);
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .toc {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    animation: fadeIn 0.6s 0.4s ease both;
+  }
+  .toc-title {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+  .toc ol { padding-left: 16px; font-size: 13px; line-height: 2; }
+  .toc a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+  .toc a:hover { color: var(--special); }
+  .toc .sub { padding-left: 16px; list-style: none; font-size: 12px; }
+  .toc .sub li::before { content: '↳ '; color: var(--text-dim); }
+
+  .article-body { animation: fadeIn 0.7s 0.25s ease both; }
+  section { margin-bottom: 48px; }
+
+  h2 {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.55rem;
+    color: var(--text-bright);
+    border-bottom: 1px solid var(--border-accent);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  h2 .sec-num {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+
+  p { margin-bottom: 14px; color: var(--text); }
+
+  .lead {
+    font-size: 1.05rem;
+    color: var(--text-bright);
+    line-height: 1.9;
+    border-left: 2px solid var(--accent);
+    padding-left: 18px;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .stage-card {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    margin: 20px 0;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .stage-card:hover { border-color: var(--border-accent); }
+
+  .stage-header {
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stage-num {
+    font-family: 'Inconsolata', monospace;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  .stage-card.s1 .stage-num { color: #508858; }
+  .stage-card.s2 .stage-num { color: var(--accent); }
+  .stage-card.s3 .stage-num { color: var(--special); }
+  .stage-card.s4 .stage-num { color: var(--warn); }
+  .stage-card.s5 .stage-num { color: #d07840; }
+  .stage-card.s6 .stage-num { color: var(--danger); opacity: 0.85; }
+
+  .stage-title-block h3 { margin: 0; font-size: 1.05rem; color: var(--text-bright); }
+  .stage-subtitle {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .stage-duration {
+    margin-left: auto;
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .stage-badge {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--accent2);
+    color: var(--text-bright);
+    padding: 2px 8px;
+    margin-left: 6px;
+  }
+  .stage-badge.fatal {
+    background: #3a1010;
+    color: var(--danger);
+  }
+
+  .stage-body { padding: 18px 20px; }
+  .stage-body > p { font-size: 13.5px; margin-bottom: 12px; }
+
+  .stage-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 12px;
+  }
+  @media (max-width: 600px) {
+    .stage-cols { grid-template-columns: 1fr; }
+  }
+
+  .stage-block-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .symptom-list {
+    list-style: none;
+    padding: 0;
+    font-size: 13px;
+    line-height: 1.75;
+  }
+  .symptom-list li { padding: 3px 0; }
+  .symptom-list li::before {
+    content: '·';
+    color: var(--accent);
+    margin-right: 7px;
+    font-weight: bold;
+  }
+
+  .mechanism-text {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.75;
+  }
+
+  .note-box {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: rgba(90, 184, 112, 0.06);
+    border: 1px solid rgba(90, 184, 112, 0.18);
+    padding: 12px 14px;
+    font-size: 13px;
+    margin-top: 14px;
+  }
+  .note-icon { color: var(--accent); flex-shrink: 0; font-size: 15px; margin-top: 1px; }
+
+  .warning-box {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: rgba(200, 160, 48, 0.07);
+    border: 1px solid rgba(200, 160, 48, 0.2);
+    padding: 12px 14px;
+    font-size: 13px;
+    margin-top: 14px;
+  }
+  .warning-icon { color: var(--warn); flex-shrink: 0; font-size: 15px; margin-top: 1px; }
+
+  .danger-box {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: rgba(200, 48, 48, 0.07);
+    border: 1px solid rgba(200, 48, 48, 0.22);
+    padding: 12px 14px;
+    font-size: 13px;
+    margin-top: 14px;
+  }
+  .danger-icon { color: var(--danger); flex-shrink: 0; font-size: 15px; margin-top: 1px; }
+
+  .special-box {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: rgba(160, 216, 144, 0.05);
+    border: 1px solid rgba(160, 216, 144, 0.15);
+    padding: 12px 14px;
+    font-size: 13px;
+    margin-top: 14px;
+  }
+  .special-icon { color: var(--special); flex-shrink: 0; margin-top: 1px; }
+
+  /* Сценарии 6-й стадии */
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 700px) {
+    .scenario-grid { grid-template-columns: 1fr; }
+  }
+
+  .scenario-card {
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    padding: 14px 16px;
+  }
+
+  .scenario-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .scenario-title {
+    font-family: 'IM Fell English', serif;
+    font-size: 1rem;
+    color: var(--text-bright);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .scenario-body {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .scenario-lethal {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--danger);
+    margin-top: 10px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(200,48,48,0.2);
+  }
+
+  /* Таблица лечения */
+  .treatment-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 16px;
+  }
+  .treatment-table th {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: var(--bg3);
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-accent);
+  }
+  .treatment-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .treatment-table tr:last-child td { border-bottom: none; }
+  .treatment-table tr:hover td { background: rgba(255,255,255,0.015); }
+
+  .stage-pill {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 2px 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border-accent);
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .prog-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .prog-ok   { background: var(--ok); }
+  .prog-warn { background: var(--warn); }
+  .prog-bad  { background: var(--danger); }
+
+  /* Прогресс-трек стадий */
+  .stage-progress { margin: 20px 0; }
+  .stage-progress-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .stage-track {
+    display: flex;
+    gap: 3px;
+    height: 10px;
+    margin-bottom: 6px;
+  }
+  .seg {
+    flex: 1;
+    height: 100%;
+    opacity: 0.75;
+  }
+  .seg-1 { background: #508858; }
+  .seg-2 { background: var(--accent); }
+  .seg-3 { background: var(--special); }
+  .seg-4 { background: var(--warn); }
+  .seg-5 { background: #d07840; }
+  .seg-6 { background: var(--danger); }
+  .stage-labels {
+    display: flex;
+    gap: 3px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+  .stage-labels span { flex: 1; text-align: center; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .footer-note {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--text-dim);
+    text-transform: none;
+    letter-spacing: 0;
+    opacity: 0.7;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(12px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="wiki-nav">
+  <div class="wiki-nav-inner">
+    <a href="index.html" class="wiki-logo">Патологиариум</a>
+    <a href="index.html" class="wiki-back">← Архив</a>
+    <div class="wiki-breadcrumb">Паразитарные · <span>Fructifer Parasiticus</span></div>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <div class="article-header">
+    <div class="article-label">Паразитарное · Эндогенный органогенез · Высший приоритет</div>
+    <h1>Синдром Плодоносящего Нутра</h1>
+    <span class="sci-name">Fructifer Parasiticus — F.P.</span>
+    <div class="article-meta">
+      <div class="meta-item"><b>Тип:</b> Паразитарный органогенез</div>
+      <div class="meta-item"><b>Стадий:</b> 6 (+ 3 сценария ст. VI)</div>
+      <div class="meta-item"><b>Летальность:</b> 0% (без лечения) / высокая (при лечении на ст. VI)</div>
+      <div class="meta-item"><b>Лечение:</b> Только ст. I–IV</div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+
+    <main class="article-body">
+
+      <nav class="toc">
+        <div class="toc-title">Содержание</div>
+        <ol>
+          <li><a href="#overview">Общее описание</a></li>
+          <li><a href="#etiology">Этиология и патогенез</a></li>
+          <li><a href="#mechanism">Плодовщик: морфология</a></li>
+          <li><a href="#stages">Стадии прогрессии</a>
+            <ul class="sub">
+              <li><a href="#s1">I — Инициация роста</a></li>
+              <li><a href="#s2">II — Первичное формирование</a></li>
+              <li><a href="#s3">III — Мышиная фаза</a></li>
+              <li><a href="#s4">IV — Кулачная фаза</a></li>
+              <li><a href="#s5">V — Гепатическая экспансия</a></li>
+              <li><a href="#s6">VI — Диссеминация (3 сценария)</a></li>
+            </ul>
+          </li>
+          <li><a href="#treatment">Лечение и прогноз</a></li>
+          <li><a href="#threat">Угроза для окружающих</a></li>
+        </ol>
+      </nav>
+
+      <!-- §1 ОБЩЕЕ ОПИСАНИЕ -->
+      <section id="overview">
+        <h2><span class="sec-num">§1</span> Общее описание</h2>
+
+        <p class="lead">Fructifer Parasiticus — паразитарный синдром, при котором возбудитель инициирует рост аномального органа — плодовщика — в полости носителя, подчиняя весь метаболизм организма его развитию. Патоген использует носителя исключительно как инкубатор: болезнь сама по себе не летальна. Смерть наступает лишь при попытках лечения на финальной стадии.</p>
+
+        <p>Возбудитель закрепляется в тканях носителя и в течение нескольких недель начинает секретировать сигнальные молекулы, перепрограммирующие мезенхимальные клетки на создание нового образования — плодовщика. Этот псевдоорган не является ни опухолью, ни паразитическим телом в классическом понимании: он обладает собственной васкуляризацией, секреторной активностью и, на поздних стадиях, способностью вытеснять и частично замещать органы брюшной полости.</p>
+
+        <p>Ключевой парадокс синдрома — его взаимоотношение с летальностью. Носитель, не предпринимающий попыток лечения, остаётся жив на всех стадиях: патоген эволюционно заинтересован в сохранении хоста. Попытки хирургического или фармакологического вмешательства на стадии VI активируют защитные механизмы возбудителя, которые действуют разрушительнее самой болезни.</p>
+
+        <div class="note-box">
+          <span class="note-icon">◈</span>
+          <span>В народной традиции ряда изолированных общин носители F.P. на поздних стадиях воспринимались как «стельные» — состояние считалось сакральным, а попытки изгнать «плод» карались общественным осуждением. Это непреднамеренно снижало летальность в таких популяциях до нуля.</span>
+        </div>
+      </section>
+
+      <!-- §2 ЭТИОЛОГИЯ -->
+      <section id="etiology">
+        <h2><span class="sec-num">§2</span> Этиология и патогенез</h2>
+        <p>Природа возбудителя не установлена с точностью. По косвенным данным — эндопаразит, способный к длительному латентному существованию в тканях хоста. Предполагается биологическое происхождение, связанное с симбиотическими микроорганизмами, утратившими мутуалистический характер взаимодействия. Возбудитель демонстрирует высокую адаптивность: при угрозе уничтожения на поздних стадиях активирует отдельный набор деструктивных реакций, свидетельствующих о наличии примитивной защитной стратегии.</p>
+        <p>Передача происходит контактным путём через плодовую жидкость — биологический секрет, выделяемый плодовщиком на стадии VI. В зависимости от сценария VI стадии, жидкость выбрасывается с кашлем, рвотой или через споровые структуры. Инкубационный период до начала первых диагностируемых изменений — от 2 до 6 недель.</p>
+      </section>
+
+      <!-- §3 МЕХАНИЗМ -->
+      <section id="mechanism">
+        <h2><span class="sec-num">§3</span> Плодовщик: морфология</h2>
+
+        <p>Плодовщик — термин, принятый для обозначения аномального псевдооргана, инициируемого возбудителем. Он не является злокачественным новообразованием: его рост строго регулируется патогеном и остановится на определённом размере без дополнительных стимулов.</p>
+
+        <div class="stage-progress">
+          <div class="stage-progress-label">Рост плодовщика по стадиям</div>
+          <div class="stage-track">
+            <div class="seg seg-1"></div>
+            <div class="seg seg-2"></div>
+            <div class="seg seg-3"></div>
+            <div class="seg seg-4"></div>
+            <div class="seg seg-5"></div>
+            <div class="seg seg-6"></div>
+          </div>
+          <div class="stage-labels">
+            <span>I</span><span>II</span><span>III</span><span>IV</span><span>V</span><span>VI</span>
+          </div>
+        </div>
+
+        <p>Орган обладает собственной сосудистой сетью, питаемой от кровотока носителя. На стадии V он приобретает выраженную секреторную функцию — вырабатывает плодовую жидкость, насыщенную вирулентными частицами возбудителя. Жидкость по составу не схожа ни с одним известным биологическим секретом: она гипертонична, содержит сигнальные молекулы, вызывающие иммунный паралич в месте контакта, и огромное количество инфекционных агентов.</p>
+
+        <p>При попытке удаления плодовщика возбудитель запускает экстренный протокол некроза прилегающих тканей — предположительно, как механизм, лишающий атакующую сторону возможности провести операцию с приемлемыми потерями для хоста. Этот феномен наблюдается исключительно на стадии VI и лишь при инструментальном или химическом вмешательстве.</p>
+      </section>
+
+      <!-- §4 СТАДИИ -->
+      <section id="stages">
+        <h2><span class="sec-num">§4</span> Стадии прогрессии</h2>
+
+        <!-- Стадия I -->
+        <div class="stage-card s1" id="s1">
+          <div class="stage-header">
+            <div class="stage-num">I</div>
+            <div class="stage-title-block">
+              <h3 style="color:#508858; margin:0;">Инициация роста <span class="stage-badge" style="background:#162218">Латентная</span></h3>
+              <div class="stage-subtitle">Закладка плодовщика · Перераспределение ресурсов</div>
+            </div>
+            <div class="stage-duration">2–6 нед.<br><span style="color:var(--ok);font-size:10px">↻ ОБРАТИМО</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Возбудитель закрепляется в брюшной полости и инициирует секрецию факторов роста, перепрограммирующих местные ткани. Носитель начинает ощущать хроническое лёгкое истощение — организм переключает метаболические ресурсы на строительство нового объекта. Внешне это неотличимо от обычного недомогания.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>Хроническая усталость без видимых причин</li>
+                  <li>Повышенный аппетит при снижении массы тела</li>
+                  <li>Лёгкое ощущение давления в нижней части живота</li>
+                  <li>Субфебрильная температура (37.1–37.4°C)</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Возбудитель секретирует миметики IGF-1 и VEGF, запуская локальный ангиогенез и дифференцировку мезенхимальных клеток. Митохондриальный цикл клеток-предшественников перестраивается на производство строительных субстратов плодовщика.</div>
+              </div>
+            </div>
+            <div class="note-box" style="margin-top:14px">
+              <span class="note-icon">&gt;</span>
+              <span>Стадия I — единственное терапевтическое окно с высокой вероятностью полного выздоровления. Антипаразитарные протоколы при раннем начале дают ремиссию в более чем 90% случаев. Диагностика затруднена: симптомы неспецифичны.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Стадия II -->
+        <div class="stage-card s2" id="s2">
+          <div class="stage-header">
+            <div class="stage-num">II</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--accent); margin:0;">Первичное формирование <span class="stage-badge" style="background:#1a3020">Субклиническая</span></h3>
+              <div class="stage-subtitle">Размер мизинца · Первая пальпация</div>
+            </div>
+            <div class="stage-duration">3–8 нед.<br><span style="color:var(--warn);font-size:10px">⚠ ОБРАТИМОСТЬ СНИЖЕНА</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Плодовщик достигает размера мизинца и становится пальпируемым при глубокой абдоминальной пальпации. На этой стадии его структура уже сформирована: плотная оболочка, рудиментарные сосуды, начало собственной иннервации. Носитель испытывает ощущение «инородного присутствия» в животе — тупое, непостоянное давление.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>Ощутимое уплотнение при самопальпации</li>
+                  <li>Снижение толерантности к физическим нагрузкам</li>
+                  <li>Изменение пищевых предпочтений (тяга к углеводам)</li>
+                  <li>Дискомфорт при наклонах и поворотах корпуса</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Плодовщик формирует гликогеновые депо, активно извлекая глюкозу из портальной крови. Печень начинает компенсаторно усиливать глюконеогенез — отсюда изменение пищевых паттернов носителя.</div>
+              </div>
+            </div>
+            <div class="warning-box">
+              <span class="warning-icon">⚠</span>
+              <span>Последнее окно для относительно безопасного хирургического удаления. Начиная со стадии III, плодовщик формирует коллатеральные сосуды, делающие операцию значительно более рискованной.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Стадия III -->
+        <div class="stage-card s3" id="s3">
+          <div class="stage-header">
+            <div class="stage-num">III</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--special); margin:0;">Мышиная фаза <span class="stage-badge" style="background:#1e3518">Активная</span></h3>
+              <div class="stage-subtitle">Размер мыши · Выраженная симптоматика</div>
+            </div>
+            <div class="stage-duration">4–10 нед.<br><span style="color:var(--danger);font-size:10px">✕ НЕОБРАТИМО</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Плодовщик достигает размера небольшой мыши. Его масса уже ощутимо влияет на расположение внутренних органов: кишечник смещается, могут возникать давление на мочевой пузырь и периодические боли в пояснице. Внешне живот носителя незначительно увеличен — симметрично и равномерно.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>Видимое увеличение объёма живота</li>
+                  <li>Частые позывы к мочеиспусканию</li>
+                  <li>Боли в пояснице при длительном стоянии</li>
+                  <li>Периодическая тошнота после еды</li>
+                  <li>Заметное снижение мышечной массы (катаболизм)</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Плодовщик переходит к массированному потреблению аминокислот. Возбудитель секретирует факторы, подавляющие mTOR в скелетной мускулатуре, перенаправляя белковый ресурс на рост органа. Иммунный ответ стойко подавлен.</div>
+              </div>
+            </div>
+            <div class="special-box">
+              <span class="special-icon">◈</span>
+              <span>На данной стадии удаление плодовщика технически возможно, но сопряжено с высоким операционным риском из-за развитой сосудистой сети. Часть задокументированных случаев показывает, что попытки иссечения приводили к обильным кровотечениям без активации некрозного протокола — последний запускается только на стадии VI.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Стадия IV -->
+        <div class="stage-card s4" id="s4">
+          <div class="stage-header">
+            <div class="stage-num">IV</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--warn); margin:0;">Кулачная фаза <span class="stage-badge" style="background:#3a2a08">Критическая</span></h3>
+              <div class="stage-subtitle">Размер кулака · Высокое потребление ресурсов</div>
+            </div>
+            <div class="stage-duration">6–14 нед.<br><span style="color:var(--danger);font-size:10px">✕ КРИТИЧЕСКИ</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Плодовщик достигает размера сжатого кулака взрослого человека. Деформация брюшной стенки становится очевидной. Органы значительно смещены. Носитель испытывает постоянный дискомфорт, дыхание затруднено из-за давления на диафрагму. На этой стадии плодовщик начинает активно вырабатывать первые предшественники плодовой жидкости.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>Отчётливая деформация живота</li>
+                  <li>Одышка при физической активности</li>
+                  <li>Хронические боли в животе</li>
+                  <li>Выраженное истощение</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Плодовщик запускает гепатотропную конкуренцию: его метаболические запросы начинают конфликтовать с функцией печени. Возможно начало лёгкой желтухи при сдавлении желчных протоков.</div>
+              </div>
+            </div>
+            <div class="warning-box">
+              <span class="warning-icon">⚠</span>
+              <span>Последний рубеж относительно безопасного медицинского вмешательства. После перехода на стадию V операция становится исключительно паллиативной мерой. На стадии VI любое вмешательство может запустить летальные защитные реакции патогена.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Стадия V -->
+        <div class="stage-card s5" id="s5">
+          <div class="stage-header">
+            <div class="stage-num">V</div>
+            <div class="stage-title-block">
+              <h3 style="color:#d07840; margin:0;">Гепатическая экспансия <span class="stage-badge" style="background:#301808">Финальная</span></h3>
+              <div class="stage-subtitle">Размер печени · Возможное замещение органа</div>
+            </div>
+            <div class="stage-duration">Постоянно<br><span style="color:var(--danger);font-size:10px">✕ НЕОБРАТИМО</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Плодовщик достигает размеров печени и в ряде задокументированных случаев начинает её активно вытеснять — вплоть до поглощения органа и принятия части его функций. Печень при этом атрофируется, а плодовщик частично берёт на себя детоксикацию, производство белков и желчи — с переменным успехом. Носитель с замещённой печенью способен жить, однако качество жизни резко снижено.</p>
+            <div class="stage-cols">
+              <div>
+                <div class="stage-block-label">Симптомы</div>
+                <ul class="symptom-list">
+                  <li>Сильное увеличение живота</li>
+                  <li>Желтуха (при вытеснении, но не замещении печени)</li>
+                  <li>Глубокое истощение, кахексия</li>
+                  <li>Нарушения свёртывания крови</li>
+                </ul>
+              </div>
+              <div>
+                <div class="stage-block-label">Механизм</div>
+                <div class="mechanism-text">Плодовщик секретирует гепатотоксины направленного действия, ускоряющие апоптоз гепатоцитов в зоне прилегания. Параллельно его эпителиальный слой экспрессирует ограниченный набор печёночных ферментов — обеспечивая неполноценное, но частичное функциональное замещение.</div>
+              </div>
+            </div>
+            <div class="special-box">
+              <span class="special-icon">◈</span>
+              <span>Случаи полного гепатического замещения зафиксированы в ~30% наблюдений поздней стадии V. Носители с замещённой печенью, как правило, демонстрируют более мягкий переход к стадии VI, поскольку плодовщик обеспечивает себя ресурсами напрямую, минуя конкурентное потребление.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Стадия VI -->
+        <div class="stage-card s6" id="s6">
+          <div class="stage-header">
+            <div class="stage-num">VI</div>
+            <div class="stage-title-block">
+              <h3 style="color:var(--danger); margin:0;">Диссеминация <span class="stage-badge fatal">Терминальная · 3 сценария</span></h3>
+              <div class="stage-subtitle">Выброс плодовой жидкости · Критическая угроза заражения</div>
+            </div>
+            <div class="stage-duration">Дни — недели<br><span style="color:var(--danger);font-size:10px">☣ ВМЕШАТЕЛЬСТВО = СМЕРТЬ</span></div>
+          </div>
+          <div class="stage-body">
+            <p style="font-size:13.5px; margin-bottom:12px;">Плодовщик достигает зрелости. Накопленная плодовая жидкость, насыщенная возбудителем, начинает выбрасываться наружу через один из трёх анатомических путей. Выбор сценария, по всей видимости, определяется конституцией носителя и случайными факторами микросреды. Без вмешательства носитель выживает — патоген не заинтересован в гибели инкубатора. Любое медицинское вмешательство на этом этапе запускает аварийный протокол патогена.</p>
+
+            <div class="scenario-grid">
+              <div class="scenario-card">
+                <div class="scenario-label">Сценарий I · Лёгочный</div>
+                <div class="scenario-title">Кашлевой выброс</div>
+                <div class="scenario-body">Плодовая жидкость заполняет лёгкие через диафрагмальные протоки. Носитель испытывает сильный, болезненный и неконтролируемый кашель. С каждым приступом — выброс заражённой жидкости наружу. Без лечения приступы постепенно стихают по мере опустошения плодовщика.</div>
+                <div class="scenario-lethal">☣ При лечении: патоген вызывает молниеносный некроз лёгочной ткани — полное разрушение лёгких за несколько часов</div>
+              </div>
+              <div class="scenario-card">
+                <div class="scenario-label">Сценарий II · Желудочный</div>
+                <div class="scenario-title">Рвотный выброс</div>
+                <div class="scenario-body">Плодовая жидкость заполняет желудок. Носитель испытывает неконтролируемую рвоту и резкое усиление выработки желчи. Желудочно-кишечный тракт становится каналом выброса возбудителя. Умеренно заразен при контакте с рвотными массами.</div>
+                <div class="scenario-lethal">☣ При лечении: патоген блокирует либо выработку желчи полностью, либо синтез защитного слизистого барьера — вызывая тяжёлые химические ожоги желудка изнутри</div>
+              </div>
+              <div class="scenario-card">
+                <div class="scenario-label">Сценарий III · Ауральный</div>
+                <div class="scenario-title">Споровая плесень</div>
+                <div class="scenario-body">Плодовая жидкость заполняет ушные каналы, вызывая стремительный рост грибковоподобных структур — «плесени». Живёт кратко, но за это время производит миллиарды спор. Наиболее заразный сценарий из всех трёх.</div>
+                <div class="scenario-lethal">☣ При лечении: антигрибковые агенты провоцируют экспоненциальное ускорение спорообразования — взрывной выброс концентрированных спор в радиусе нескольких метров</div>
+              </div>
+            </div>
+
+            <div class="danger-box" style="margin-top:18px;">
+              <span class="danger-icon">☣</span>
+              <span><b>Протокол безопасности:</b> при идентификации носителя на стадии VI — немедленная изоляция, нулевое медицинское вмешательство, наблюдение до естественного завершения диссеминации. Любая попытка лечения на этой стадии переводит ситуацию из управляемой в неуправляемую.</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- §5 ЛЕЧЕНИЕ -->
+      <section id="treatment">
+        <h2><span class="sec-num">§5</span> Лечение и прогноз</h2>
+        <p>Ключевая особенность F.P. — принципиально иная логика летальности по сравнению с большинством патогенов. Болезнь не убивает носителя сама по себе: патоген эволюционно заинтересован в его выживании. Летальность возникает исключительно как следствие медицинского вмешательства на стадии VI, когда возбудитель активирует защитные механизмы, несовместимые с жизнью.</p>
+        <table class="treatment-table">
+          <thead>
+            <tr>
+              <th>Стадия</th>
+              <th>Прогноз</th>
+              <th>Протокол</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="stage-pill">Стадия I</span></td>
+              <td><span class="prog-dot prog-ok"></span> Благоприятный</td>
+              <td>Антипаразитарная терапия. При раннем начале — полная ремиссия в 90%+ случаев. Рекомендуется курс 4–6 недель под контролем.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия II</span></td>
+              <td><span class="prog-dot prog-ok"></span> Осторожный</td>
+              <td>Комбинация антипаразитарной терапии и малоинвазивного хирургического вмешательства. Риски операции умеренные. Ремиссия достижима.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия III</span></td>
+              <td><span class="prog-dot prog-warn"></span> Сомнительный</td>
+              <td>Хирургическое удаление сопряжено с высоким риском кровотечения. Антипаразитарные препараты показывают снижение эффективности. Возможна частичная ремиссия.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия IV</span></td>
+              <td><span class="prog-dot prog-warn"></span> Неблагоприятный</td>
+              <td>Последний рубеж хирургии. Операция высокорискованная, требует специализированной бригады. Цель — удаление плодовщика до запуска секреции плодовой жидкости.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия V</span></td>
+              <td><span class="prog-dot prog-bad"></span> Паллиативный</td>
+              <td>Медицинская поддержка функций организма. Хирургия крайне рискованна. Приоритет — изоляция и наблюдение до перехода на стадию VI.</td>
+            </tr>
+            <tr>
+              <td><span class="stage-pill">Стадия VI</span></td>
+              <td><span class="prog-dot prog-bad"></span> <b style="color:var(--danger)">ВМЕШАТЕЛЬСТВО ЛЕТАЛЬНО</b></td>
+              <td>Нулевое медицинское вмешательство. Изоляция носителя. Обеспечение условий для безопасной диссеминации. Без лечения — носитель выживает.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- §6 УГРОЗА -->
+      <section id="threat">
+        <h2><span class="sec-num">§6</span> Угроза для окружающих</h2>
+        <p>На стадиях I–V носитель практически незаразен: возбудитель не выделяется в среду в значимых количествах. Угроза возникает исключительно на стадии VI, когда плодовая жидкость с возбудителем выбрасывается наружу.</p>
+        <p>Уровень заразности кардинально варьируется в зависимости от сценария. Сценарий III (ауральный) представляет экстремальную угрозу: споровые структуры распространяются воздушно-капельным путём и сохраняют жизнеспособность во внешней среде в течение нескольких часов. Один носитель в сценарии III способен заразить множество людей в замкнутом пространстве за одну «волну» спорообразования.</p>
+        <div class="note-box">
+          <span class="note-icon">&gt;</span>
+          <span>Задокументировано, что носители в стадии VI сценария I (кашлевой) нередко избегают изоляции, поскольку кашель воспринимается как симптом банальной инфекции. Это делает раннее выявление критически важным: к моменту, когда природа кашля становится очевидной, заражение окружающих уже может произойти.</span>
+        </div>
+        <div class="warning-box">
+          <span class="warning-icon">⚠</span>
+          <span>При обнаружении носителя с признаками стадии VI — немедленная изоляция, защитные средства класса P3 для персонала, полный запрет на медицинское вмешательство до специального разрешения. Попытки лечения персоналом без осведомлённости об этом протоколе приводили к гибели носителей и вспышкам заражения персонала.</span>
+        </div>
+      </section>
+
+    </main>
+
+    <aside class="sidebar">
+      <div class="infobox">
+        <div class="infobox-title">Fructifer Parasiticus</div>
+        <div class="infobox-body">
+          <div class="infobox-row">
+            <div class="infobox-key">Тип</div>
+            <div class="infobox-val">Паразитарный органогенез<br><em>эндогенный псевдоорган</em></div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Возбудитель</div>
+            <div class="infobox-val"><em>не установлен</em><br>предположительно эндопаразит</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Пути</div>
+            <div class="infobox-val warning">Контакт с плодовой жидкостью<br>Вдыхание спор (сц. III)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Инкубация</div>
+            <div class="infobox-val">2–6 недель<br><em>до первых симптомов</em></div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Стадий</div>
+            <div class="infobox-val">6 (+ 3 сценария ст. VI)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Летальность</div>
+            <div class="infobox-val danger">0% (без лечения на ст. VI)<br>Высокая при вмешательстве</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Лечение</div>
+            <div class="infobox-val warning">Только стадии I–IV</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Вакцина</div>
+            <div class="infobox-val danger">Отсутствует</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Угроза</div>
+            <div class="infobox-val warning">Высший приоритет (ст. VI)</div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Псевдоорган</div>
+            <div class="infobox-val">Плодовщик<br><em>до размера печени</em></div>
+          </div>
+          <div class="infobox-row">
+            <div class="infobox-key">Особое</div>
+            <div class="infobox-val">Патоген сохраняет носителя живым · некроз только как защита</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag">паразит</span>
+          <span class="tag">органогенез</span>
+          <span class="tag">плодовщик</span>
+          <span class="tag">споры</span>
+          <span class="tag">инкубатор</span>
+          <span class="tag">некроз</span>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    <div>Патологиариум · Вымышленный архив · Авторский лор-материал</div>
+    <div class="footer-note">«Природа не убивает тех, кто ей нужен.»</div>
+  </footer>
+
+</div>
+</body>
+</html>
