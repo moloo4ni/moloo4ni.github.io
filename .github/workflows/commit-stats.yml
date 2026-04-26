@@ -1,0 +1,38 @@
+name: Update commit stats
+
+permissions:
+  contents: write
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Calculate commits per month
+        run: |
+          TOTAL=$(git rev-list --count HEAD)
+          FIRST=$(git log --reverse --format=%cd --date=format:%Y-%m-%d | head -n 1)
+          NOW=$(date +%Y-%m-%d)
+
+          MONTHS=$(( ( $(date -d "$NOW" +%s) - $(date -d "$FIRST" +%s) ) / 2628000 ))
+          if [ "$MONTHS" -lt 1 ]; then MONTHS=1; fi
+
+          AVG=$(( TOTAL / MONTHS ))
+
+          echo "{\"schemaVersion\":1,\"label\":\"commits/month\",\"message\":\"$AVG\",\"color\":\"blue\",\"logo\":\"github\"}" > commit-stats.json
+
+      - name: Commit file
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add commit-stats.json
+          git commit -m "update commit stats" || exit 0
+          git push
