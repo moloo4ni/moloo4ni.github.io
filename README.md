@@ -9,7 +9,7 @@ vibecodin' web stuff · ui/ux design · wiki writin' · drawing
 ![Claude](https://img.shields.io/badge/Claude-D97757?style=for-the-badge&logo=claude&logoColor=white) ![Figma](https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white) ![VSCodium](https://img.shields.io/badge/VSCodium-2B2D42?style=for-the-badge&logo=vscodium&logoColor=white) ![Krita](https://img.shields.io/badge/Krita-203859?style=for-the-badge&logo=krita&logoColor=white)
 
 ## things i HATE!!
-![Any Tiling WM](https://img.shields.io/badge/any%20tiling%20wm-000000?style=for-the-badge&logo=linux&logoColor=white) ![Kitty](https://img.shields.io/badge/kitty-000000?style=for-the-badge&logo=kitty&logoColor=white) ![Debian](https://img.shields.io/badge/debian-A81D33?style=for-the-badge&logo=debian&logoColor=white)
+![Any Tiling WM](https://img.shields.io/badge/any%20tiling%20wm-111111?style=for-the-badge&logo=i3&logoColor=white) ![Kitty](https://img.shields.io/badge/kitty-000000?style=for-the-badge&logo=gnometerminal&logoColor=white) ![Debian](https://img.shields.io/badge/debian-A81D33?style=for-the-badge&logo=debian&logoColor=white)
 
 ## projects
 
